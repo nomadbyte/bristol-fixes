@@ -1,0 +1,132 @@
+
+    0.60.11 24 Jan 2013 Maintenance release
+    0.60.10 27 Apr 2012 Maintenance release
+    0.60.9 25 Oct 2011 Maintenance release, fanning linear potentiometers
+    0.60.8 23 Dec 2010 Maintenance release, Hammond optimisations.
+    0.60.7 22 Oct 2010 Maintenance release, minor features
+    0.60.6 11 Aug 2010 Geometry configuration options, maintenance release
+    0.60.5 08 Jun 2010 Maintenance release
+    0.60.4 23 May 2010 Maintenance release
+    0.60.3 12 May 2010 Maintenance release
+    0.60.2 28 Apr 2010 Command Line Interface Changes, maintenance release
+    0.60.1 23 Apr 2010 Command Line Interface Changes
+    0.60.0 19 Apr 2010 Command Line Interface
+
+    0.50.8 05 May 2010 Maintenance updates
+    0.50.7 22 Apr 2010 CV Keyboard Tracking Frequency Control for ARP
+    0.50.6 08 Apr 2010 Multiple IO Channels for audio/CV, more NRP Controller Support, Jack Session Manager maintenance
+    0.50.5 03 Apr 2010 Jack Session Manager Immediate fixes
+    0.50.4 02 Apr 2010 Jack Session Manager Support
+    0.50.3 17 Mar 2010 Band limited oscillator corrections, filter optimisation, GUI enhancements.
+    0.50.2 06 Feb 2010 Real time processing enhancements
+    0.50.1 22 Jan 2010 Usability enhancments, LADI level 1 compliance, process distribution
+
+    0.40.8 22 Jan 2010 Maintenance release
+    0.40.7 22 Nov 2009 Maintenance release
+    0.40.6 28 Sep 2009 Maintenance release
+    0.40.5 23 Jul 2009 Distributed processing maintenance release
+    0.40.4 06 Jun 2009 Audio Driver Mainenance Release
+    0.40.3 25 May 2009 Maintenance release, B3 stuck notes.
+    0.40.2 05 May 2009 Maintenance release, usability improvements.
+    0.40.1 25 Apr 2009 Commodore C64 SID emulator
+
+    0.30.9 02 Apr 2009 Bristol BassMaker, massive filter optimisations.
+    0.30.8 20 Mar 2009 Maintenance release, ARP 2600 fixes.
+    0.30.7 02 Mar 2009 Baumann BME-700
+    0.30.6 22 Feb 2009 Monophonic note precedence key logic.
+    0.30.5 01 Feb 2009 Maintenance release?
+    0.30.4 20 Jan 2009 Korg Poly-800
+    0.30.3 19 Dec 2008 Crumar Trident, PWM and Sync fixes, Polysix improvements
+    0.30.2 15 Dec 2008 Crumar Stratus
+    0.30.1 03 Dec 2008 Voyager Electric Blue, Moog Sonic 6.
+
+    0.20.10 27 Nov 2008 Maintenance release.
+    0.20.9 14 Nov 2008 Maintenance release.
+    0.20.8 28 Sep 2008 New filters, normalised gains, diverse fixes
+    0.20.7 29 Aug 2008 Sequential Circuits Pro-One, Scala tonal mapping tables, overhaul of the Prophet-10
+    0.20.6 13 Jun 2008 Bandwidth limited oscllators. UI Heartbeats, GUI scaling.
+    0.20.5 20 Apr 2008 First release of the Jupiter-8 emulation, GUI prealiasing, Vasiliy Basic's Mini memory suite.
+    0.20.4 26 Mar 2008 Arpeggiating OBXa, fixes, synchronised threads.
+    0.20.3 05 Mar 2008 Integrated a new Crumar Bit-100 emulation
+    0.20.2 25 Feb 2008 Integrated a few Crumar Bit emulations.
+    0.20.1 20 Jan 2008 First release of the 0.20 stream
+
+    0.10.13 19 Jan 2008 Maintenance release.
+    0.10.12 03 Dec 2007 Maintenance release.
+
+    0.10.11 27 Oct 2007 Arpeggiator written into the MIDI library.
+
+Added arpeggiation (actually an arpeggiating sequencer) into MIDI library.
+
+    0.10.10 XX Oct 2007 Bass pedalboard integration for Hammond.
+
+Added a third manual to the hammond.
+Built in the GM-2 MIDI controller mappings to a range of the emulations.
+
+    0.10.9 16 Sept 2007 Reworked installation procedures, Vox-300
+
+Vox dual manual 300.
+
+    0.10.8 01 Sept 2007 Realistic Concertmate, recolorations, fixes
+
+Developed a Realistic/Moog Concertmate MG1.
+Diverse fixes and recolorations.
+
+    0.10.7 29 July 2007 added roadrunner electric piano
+
+Two rounds of GUI optimisation have improved the CPU load by a couple of orders
+of magnitude.
+
+Added a grey scale option.
+
+Added antialiasing features (that had been previously dropped as too CPU
+intensive, now quite reasonable).
+
+    0.10.5 06 June 2007 added roadrunner electric piano
+
+The Roadrunner is an emulated organ circuit electric piano, many of these were
+released in the 70's and complemented the string machines. They used clock 
+divided organ circuitry and simple envelope generators per key to groom to 
+something approaching a piano envelope.
+
+Diverse minor bugfixes.
+
+    0.10.4 24 May 2007 added Solina string machine
+
+Potentials:
+Some of the diverse synth memories are damaged.
+ARP 2600 has damaged vertical patch cables.
+Move the key mappings and controller mappings to .mcm file as they are static.
+Removed clipping in new keyclick generation.
+
+    0.10.3 18 May 2007 added the following
+
+Modifications to configure.ac and Makefile.am to correct autotools errors.
+Corrected use of --exec_prefix for configure process.
+
+Note velocity, Poly and Channel Pressure curve mappings from file. Global.
+Note integer index mapping in same configuration file. Global.
+Note Microtonal tunings. Global settings - affects the whole engine.
+
+Note velocity map - per emulation.
+Note microtonal map - per emulation.
+
+B3 key noise generated per bus with configurable delays and gain per contact.
+Reverse controller motion of hammond drawbars (mappings?).
+
+Controller mapped value curves for lin/log/exp/parabolic with inverse table.
+
+Resolved issues with use of '-jack' flag as opposed to '-audio jack'.
+
+More keyboard velocity curves of which one mapping per emulation.
+
+Pitch bend damaged by microtonal mapping implementation, fixed.
+
+    0.10.2: 10 May 2007
+
+Changes to automake configuration files for installation prefixes.
+
+    0.10.1: 4 May 2007
+
+Probable first distribution of the bristol version using GNU autotools.
+

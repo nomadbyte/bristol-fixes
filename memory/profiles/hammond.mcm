@@ -1,0 +1,178 @@
+#
+# The midi control mapping file. This is used by the engine to define a static
+# selection of midi mappings for the runtime for each emulation. There is a
+# separate 'global' mapping file for the engine that are applied before these
+# mappings:
+#
+# $BRISTOL/memory/profiles/midicontrollermap
+#
+# You are strongly advised NOT TO EDIT THIS FILE, but to make a private copy
+# in $HOME/.bristol/memory/profiles, or if you have defined your own DB in
+# $BRISTOL_CACHE/memory/profiles since that way any changes can be undone by
+# removing the private file and hence reverting back to the factory default.
+#
+# This file is read once when the emulation is started.
+#
+# microTonalMap: <midi_key> <frequency>
+# velocityMap: <velocity> <gain>
+#
+# There is no default microTonalMap, the engine has an internal evenly tempered
+# scale that is used if the private map is not defined. If you want to have
+# a true microtonal mapping then it will really have to be defined for each
+# key, I don't have any interpolation routines as the scale is undefined.
+#
+# This microtonal map has priority over the engine mapping as it is specific to
+# just one emulation. Also, if a microtonal map is defined then pitch bend will
+# currently not operate. The pitch bend is evenly tempered and as such the 
+# results for any microtonal map is undefined as the scale is not defined.
+#
+#
+#
+#
+# The velocity map is linearly interpolated which has a few implications: you
+# may only have to define the inflexion points, however if you want smooth
+# curves you will have to define each of the 128 velocity values that are used
+# in noteon/noteoff events. The emulation only has a single table of gain
+# levels for each key.velocity index, the engine by contrast has two tables,
+# one for each on/off event however that is an integer map, not a gain map.
+#
+# The engine mapping is applied before the emulation mapping given here. There
+# are reasonable arguments to make this table logarithmic - you are welcome to
+# do so. There are no limits to the values here other than negative values are
+# not mapped, so this table can also be used to compensate for volume levels.
+#
+velocityMap: 0 0.000001
+velocityMap: 127 1.0
+
+#
+# The default microtonal map, ie, the bristol ET scale for the midi key range:
+#
+#microTonalMap: 0 8.175813
+#microTonalMap: 1 8.661969
+#microTonalMap: 2 9.177032
+#microTonalMap: 3 9.722719
+#microTonalMap: 4 10.300812
+#microTonalMap: 5 10.913375
+#microTonalMap: 6 11.562312
+#microTonalMap: 7 12.249844
+#microTonalMap: 8 12.978281
+#microTonalMap: 9 13.750000
+#microTonalMap: 10 14.567624
+#microTonalMap: 11 15.433875
+#microTonalMap: 12 16.351625
+#microTonalMap: 13 17.323938
+#microTonalMap: 14 18.354063
+#microTonalMap: 15 19.445437
+#microTonalMap: 16 20.601625
+#microTonalMap: 17 21.826750
+#microTonalMap: 18 23.124625
+#microTonalMap: 19 24.499687
+#microTonalMap: 20 25.956562
+#microTonalMap: 21 27.499999
+#microTonalMap: 22 29.135249
+#microTonalMap: 23 30.867750
+#microTonalMap: 24 32.703251
+#microTonalMap: 25 34.647875
+#microTonalMap: 26 36.708126
+#microTonalMap: 27 38.890875
+#microTonalMap: 28 41.203249
+#microTonalMap: 29 43.653500
+#microTonalMap: 30 46.249249
+#microTonalMap: 31 48.999375
+#microTonalMap: 32 51.913124
+#microTonalMap: 33 54.999998
+#microTonalMap: 34 58.270498
+#microTonalMap: 35 61.735500
+#microTonalMap: 36 65.406502
+#microTonalMap: 37 69.295751
+#microTonalMap: 38 73.416252
+#microTonalMap: 39 77.781749
+#microTonalMap: 40 82.406498
+#microTonalMap: 41 87.307001
+#microTonalMap: 42 92.498498
+#microTonalMap: 43 97.998750
+#microTonalMap: 44 103.826247
+#microTonalMap: 45 109.999996
+#microTonalMap: 46 116.540995
+#microTonalMap: 47 123.471001
+#microTonalMap: 48 130.813004
+#microTonalMap: 49 138.591502
+#microTonalMap: 50 146.832504
+#microTonalMap: 51 155.563498
+#microTonalMap: 52 164.812997
+#microTonalMap: 53 174.614001
+#microTonalMap: 54 184.996997
+#microTonalMap: 55 195.997499
+#microTonalMap: 56 207.652494
+#microTonalMap: 57 219.999993
+#microTonalMap: 58 233.081990
+#microTonalMap: 59 246.942002
+#microTonalMap: 60 261.626007
+#microTonalMap: 61 277.183004
+#microTonalMap: 62 293.665009
+#microTonalMap: 63 311.126996
+#microTonalMap: 64 329.625994
+#microTonalMap: 65 349.228003
+#microTonalMap: 66 369.993993
+#microTonalMap: 67 391.994999
+#microTonalMap: 68 415.304989
+#microTonalMap: 69 439.999986
+#microTonalMap: 70 466.163981
+#microTonalMap: 71 493.884004
+#microTonalMap: 72 523.252014
+#microTonalMap: 73 554.366008
+#microTonalMap: 74 587.330018
+#microTonalMap: 75 622.253993
+#microTonalMap: 76 659.251987
+#microTonalMap: 77 698.456005
+#microTonalMap: 78 739.987987
+#microTonalMap: 79 783.989998
+#microTonalMap: 80 830.609977
+#microTonalMap: 81 879.999971
+#microTonalMap: 82 932.327961
+#microTonalMap: 83 987.768008
+#microTonalMap: 84 1046.504028
+#microTonalMap: 85 1108.732015
+#microTonalMap: 86 1174.660035
+#microTonalMap: 87 1244.507985
+#microTonalMap: 88 1318.503975
+#microTonalMap: 89 1396.912010
+#microTonalMap: 90 1479.975973
+#microTonalMap: 91 1567.979995
+#microTonalMap: 92 1661.219954
+#microTonalMap: 93 1759.999942
+#microTonalMap: 94 1864.655922
+#microTonalMap: 95 1975.536016
+#microTonalMap: 96 2093.008057
+#microTonalMap: 97 2217.464030
+#microTonalMap: 98 2349.320071
+#microTonalMap: 99 2489.015970
+#microTonalMap: 100 2637.007949
+#microTonalMap: 101 2793.824020
+#microTonalMap: 102 2959.951946
+#microTonalMap: 103 3135.959990
+#microTonalMap: 104 3322.439908
+#microTonalMap: 105 3519.999884
+#microTonalMap: 106 3729.311845
+#microTonalMap: 107 3951.072031
+#microTonalMap: 108 4186.016113
+#microTonalMap: 109 4434.928060
+#microTonalMap: 110 4698.640142
+#microTonalMap: 111 4978.031941
+#microTonalMap: 112 5274.015898
+#microTonalMap: 113 5587.648040
+#microTonalMap: 114 5919.903892
+#microTonalMap: 115 6271.919981
+#microTonalMap: 116 6644.879816
+#microTonalMap: 117 7039.999768
+#microTonalMap: 118 7458.623689
+#microTonalMap: 119 7902.144063
+#microTonalMap: 120 8372.032227
+#microTonalMap: 121 8869.856121
+#microTonalMap: 122 9397.280283
+#microTonalMap: 123 9956.063882
+#microTonalMap: 124 10548.031797
+#microTonalMap: 125 11175.296080
+#microTonalMap: 126 11839.807785
+#microTonalMap: 127 12543.839961
+

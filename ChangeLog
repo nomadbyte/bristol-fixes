@@ -1,0 +1,2993 @@
+﻿
+    0.60.11 23 Jan 2013 Maintenance release
+
+This release incorporates changes to the build process submittedd to the project
+by Philippe Didier and the Mageia packers team.
+
+It has no new features, it is intended to improve compatability with different
+build processes.
+
+    0.60.10 27 Apr 2012 Maintenance release
+
+Voices are given a small random detune. Pitchbend would lose this delta which
+put the voices back in tune as soon as the pitchwheel moved. That altered the
+width of the sound so added in the code necessary to maintain the delta values.
+audiothread.c
+
+Added in 'hi-res' skins for some of the emulators. This changes the rendering
+to include a vector graphic stage where text and some line are rendered. It 
+makes the images far more scalable, ie, you can fullscreen them now without
+getting pixel smashing.
+
+Retuned the Mini filters. Fixed fastest attack rate to 0.5ms, the envelopes 
+were getting very 'ticky'. Increased the default Mini release stage to similar
+values as note off were ticky unless Release was selected.
+
+Jack MIDI configurations would only respond correctly on channel #1. Any other
+channel would have the synth respond to the Jack MIDI messages but lose tracking
+from the GUI, lose CC into the GUI as the channel identifiers could be lost in
+the internal messaging.
+
+    0.60.9 25 Oct 2011 Maintenance release, fanning linear potentiometers
+
+Reworked the envelope to default linear attack and with gentler control of the
+decay/release times. The linear attack was a Moog thing but was not universally
+appreciated - it does not work very well for long attack times. Several synth
+manufacturers preferred the use of exponential for this and other reasons.
+The actual envelope code does not have linear or exponential attack as a fixed
+value, it can be configured by the emulator although at the moment they all just
+take the default setting, now linear. There is a ./configure option to have them
+default to exponential rather than linear: --enable-exp-attack 
+
+It is now also possible to build with an alternative ADSR max ramp duration,
+the following will give you a maximum ramp of 30 seconds, default is 10.
+./configure BRISTOL_RAMP_RATE=30
+These changes were to correct an anomaly in the previous design where the
+actual ramp was a function of the sampling rate, hence if you step up to 96KHz
+or even 192KHz for the improved sound quality then the ramp times would change
+(now fixed). If you want to use very long attack times then exponential attack
+will give arguably better results, that is admittedly opinion.
+
+NOTE that these envelope changes will affect existing patches to some extent.
+
+Added code to have fanning linear pots. The further the mouse is from the axis
+of the pot the finer the value changes become.
+
+Resolved a error in midinote.c that broke the scala file support. A patch was
+posted to SFDN a long while ago now, this just rolls it into a release.
+
+MIDI Program Change events were not being filtered by channel - they were being
+tracked as OMNI. Applied same change to Bank Select. Have not tested all the
+multilayered synths, they have exceptions since some use separate memory
+indeces and some use combined settings.
+
+Reconfiguring the continuous controllers as things like inverse mappings were
+failing. The issue was that both the engine and GUI might be using the same
+mapping file, dual inversion negated the effect. Corrected this with only doing
+the mapping in the GUI but added a token called modWheel for the 'mcm' file to
+allow the engine to have alternative curves for the modulation wheel.
+
+The request to have an inverted modWheel requires the following: Start the
+engine with -tracking to prevent the GUI tracking some events. Edit mini.mcm
+and add in
+
+modWheel: 127 0.001
+modWheel: 0 127.0
+
+This file is emulator global, ie, to have different settings with the same
+synth then a user would have to configure different bristol cache variables.
+A better way to do this might be to have an ALSA event manager in front of the
+bristol emulators.
+
+Ported over some note loss fixes from the 0.70 (smartphone) stream where with
+excessive system load there were lost notes. This was never actually reproduced
+on Linux so will discuss the fix with end users. The original change resolved
+the issue when seen on a 600MHz ARM A8 on Maemo/N900 from Nokia and which were
+also tested/confirmed on Android. It concerned signalling between the note
+allocation code and the ADSR envelope states.
+
+The multilayered synths would lose tracking of the PitchWheel - the pitch was
+correctly calculated but only applied to the first bristolAudio structure in 
+the chain.
+
+The Polysix gives click/tick at high frequencies and mods. The cause was the
+change from the precached buffers to recalculated buffers. The code was changed
+to have the buffers always calculated/cached on note events as a fix to the 
+existing band limited oscillator code. The code change was only the prophetdco
+but it could be pushed into the other oscillators.
+
+The BME noise mix was all but silent, readjusted the gain settings for the mix.
+
+The Pro1 and Prophet10 saved sequencer memory was not reloaded on restart. Had
+to apply changes to a few different parts of the arpeggiator/sequencer code.
+
+Gain levels seemed low on the ARP 2600 and the Direct Out final stage gain left
+a signal that was almost inaudible.
+
+Added the option to use a memory barrier over the jack ringbuffer. The issue
+is that the JRB can be demonstrated to fail on ARM CPU due to them having weak
+memory ordering. Intel should not be affected. AMD is a marginal case. The 
+config option is --enable-memory-barrier which defaults to no barrier since
+most of the installs will probably be on Intel.
+
+    0.60.8 23 Dec 2010 Maintenance release, Hammond optimisations.
+
+Made some changes to the way bristolrc is handled. If the file exists then a
+seach is made for two tokens, PREARGS and POSTARGS. If they don't exist then 
+the same default behaviour takes place: all the contents are concatenated into
+a set of options that are inserted before all the user parameters. If either
+of these tokens are found then PREARGS are inserted before the user parameters
+and POSTARGS are appended to the whole net commandline to the GUI and engine.
+This gives a lot more flexibility to override default behaviour, for example:
+
+PREARGS=-count 1024 -rate 48000
+POSTARGS=-jackstats -jack -multi 0
+
+Using such contents then the command 'startBristol -mini' would be expanded to
+
+startBristol -count 1024 -rate 48000 -mini -jackstats -jack -multi 0
+
+A part of the reason for the above change was that there were reports of issues
+with the ARP 2600 and period sizes less than 1024. The culprit appeared to be
+the -multi option, this defaulted to 4 for the 2600. Changed it to default to
+zero with a need to then explicitly reconfigure it. The reconfigure can now be
+automated in POSTARGS. The diverse Bristol front end appliations such as 
+monoBristol provide user arguments to the startup script, the current bristolrc
+definitions can provide capabilities to extend how they operate as there are now
+pre and post arguments that encapsulate the frontend parameters.
+
+This release is noted as including hammond optimisations, these are not with
+respect to CPU load, rather with respect to accuracy of the emulation:
+
+Adjusted the B3 Preacher Compression code to provide a more pronounced non-
+linear amplification. The results are interesting/different. It mixes well 
+with the new gearbox generated for a clean tonewheel (mostly sinewaves with
+no crosstalk) and a mild crosstalk gearbox with some sliced tonewheel harmonics.
+The control is not continuous, there are 3 stages which are selected as the
+rotary changes position, this would normally be represented with radiobuttons
+however the GUI previously only had a rotary control so this was used to prevent
+a big reordering of the options panel layout.
+
+The new tonewheel gearbox are in the factory shadow profiles, per default as
+below. To test them then copy the target gearbox to your private memories
+(these are the defaults, your installation may be different):
+
+	source: /usr/local/share/bristol/memory/profiles/tonewheel*
+	dest: ~/.bristol/memory/profiles/tonewheel
+
+Also made few alterations to the B3 VC algorithm changing the tap gains and 
+LC filter values, altered the tap selections for the different 1/2/3 settings
+and adjusted the selector mode to reconfigure LC and phase (which work in
+combination) rather than the actual tapping points. More work could be done
+but these do now give some different characteristics where previously VC3 was
+the only useful setting. [Note: it would actually be quite easy to make even
+further improvements here by using an alternative filter algorithm into the 
+different taps. The current one is a rooney which has weak phase modification,
+it is similar to the original in as much as that could only introduce about
+1ms of phase change however bristol has other algorithms that would give better
+phase changes by frequency which would be closer to the Hammond vibra. The
+current code overcomes the rooney limitation by taking the phase changed filter
+signal (which has a phase change that is dependent on frequency) with an
+additional phase change that is time constant. The issue is efficiency, the 
+rooneys are single pole and come almost for free. ffs]
+
+Reintroduced some B3 code to give contact delays for each drawbar. The delay
+is configured in the tonewheel file and is then a function of velocity. The
+tonewheel file defines the maximum sample delay before any given harmonic is
+activated and this delay is reduced depending on velocity. It is also possible
+to configure a click sample per bus out of 4 available however the author
+will state that none of the samples is accurate: click, thump, shelf, etc, is
+not an accurate emulation. Depending on which source is considered authoritative
+then the Hammond click may be a pure function of tonewheel position and its
+activation point. This code emulates that effect with the option of adding in
+extra effect as a combination of the tonewheel file samples and the overall
+click setting. Note that the 'click' level does not affect the cut in points
+of the harmonics, reducing the 'click' level will not affect the tick sound 
+when a drawbar contact is finally made. The harmonics do not have a constant
+phase as per the original however the tonewheel file can override that to
+emulate the L and M series spinets. With the current code, pressing a key very
+slowly should result in the delays between the different busses being almost
+audible, an effect that reduces with velocity. The configured Click is reduced
+when the vibrachorus is on as is also heard on the originals.
+
+This click code has actually been available for a few years, it was removed as
+it affected other developments for gearbox optimisation. This optimisation was
+to 'post generate' the tonewheels: if a harmonic was not needed then it would
+never be generated. This was not condusive to busbar delays so now the decision
+has been taken to drop the CPU optimisation in preference of a more accurate
+rendition. At the same time the tonewheel damping was corrected so that, under
+control of the Damp option, the summed levels of any given wheel is not linear
+but is a function of the number of times it is tapped. It is noted here that
+if no click is desired, at all, then the 'preacher' algorithm should be 
+disabled at which point notes are generated from zero point as per many of
+the commercial emulators. Several of the later Hammond models reduced/eliminated
+key click using various techniques, disabling the Preacher would give results
+closer to the B2XX series organs. Disabling the preacher removes the damping,
+busbar offsets, and all the other features of the tonewheel file.
+
+Adjusted the click code to introduce changes to the bus offset delays by key
+as well as velocity. The existing code used a single profile per gearbox but no
+two keys would have had the same contact profile as this was based on aging of
+the springs: the code now has semi-random delay selection. The 'semi' refers to
+code that will select the same offsets if the same key is sounded sequentially,
+this is how Jimmy Smith used to play key click with the same key - now the
+delays for that sequential key do not change (they will if intermediate notes
+are sounded which he also did and potentially the delay offsets may be prebuilt
+for the whole keyboard rather than calculated, ffs). The different bus delays
+only affect timing not the actual effect so if 'Click' is non-zero then the
+sample selection per bus will be constant even though the delay changes. Now,
+another affect of the bus delays is that if playing quickly it is possible that
+a note will start and stop before even all the harmonics have sounded, this is
+another trick of Smith when he played notes to not traverse the complete travel
+of the key: not all harmonics would actually make contact and this is also
+possible with bristol (depending on velocity, buffer size and configured bus
+delays).
+
+Added a -keytoggle flag, it affects GUI behaviour where a key is released when
+the mouse button is released. Previously the key state latched which was useful
+for polyphonic emulators but not necessarily for the monophonic ones. The
+default operation is now not to latch the keys, this option overrides the new
+default behaviour to give latching keys again.
+
+There were some sticky keys and note 'ticks' when using the monophonic synths
+with -nnp (no note preference). The polyphonic note logic could completely kill
+notes when overvoice and if a keyoff event occurs for a voice on the new list
+then some of the flags would get damaged. None of this happens with monophonic
+note preference or with polyphonic synths (well, the ticks may still happen if
+the polyphony is exceeded but get burried in the mix of multiple voices, ffs).
+
+Bug report on some emulators defaulting to only one semitone of pitchwheel
+depth. This turns out to be emulator aliases: the interface recognises some
+alias names but it could not set defaults except on exact names. Incorporated
+some changes to accept the known emulator aliases too.
+
+Feature request that the SID should acknowledge pitchbend wheel as well as or
+instead of pitchbend on the modwheel. Not a big change and the issue with the
+MOD wheel is that it was difficult to tune having no notch. Currently both 
+controls can affect pitch but the modwheel can be turned on/off selectively.
+
+There was a window when the global configuration options would not be sent to
+the engine, a race condition. The result would be no output signal.
+
+There was another race condition in the GUI library which for now has been
+patched. The actual fix is a little larger but it will be left for future 
+research.
+
+Found a bug in the MIDI handling code for NOTE_ON velocity zero being mapped
+to NOTE_OFF velocity 64. When the ringbuffer was introduced the check moved to
+the wrong side of the ringbuffer causing an endless loop at 100% CPU, for 
+some emulators quite a lot of nasty random noise and potential system 'hang'
+for certain CPU configurations with RT scheduling. This had not been reported
+which means either people did not bother or the use of NOTE_ON velocity zero
+is not widely used.
+
+Release 0.60.7 had an undocumented feature, undocumented because it was not
+that big but it did go into the manual page. The option -jackstats will prevent
+bristol from attempting to find out the current jack server settings, these
+parameters would instead be defined with -count and -rate. This change fixes
+some issues with jack connections, with LADI, and makes the GUI start a bit
+faster as it does not have to poll the server from the script then reconnect
+to the server from the audio thread.
+
+The BME-700 Glide on/off switch was not active.
+
+Roadrunner Vibrato was too deep, by a long way. Scaled back the tremelo at the
+same time. Gentle vibrato was still possible but not under mouse control, it 
+had to be done with keyboard accel/deccel.
+
+    0.60.7 22 Oct 2010 Maintenance release, minor features
+
+Added in an option called -memdump which will copy all memories for a given
+synth (specified with -emulate) to a target location. That location is then used
+as the session cache so further changes will be made to the dumped memories. 
+That is intentional: this can be used with Session Management using a target
+location in the session directory so that the session will include all of the
+synth memories. The copy operation of the user memories only happens once when
+the directory is created.
+
+Added in an option call -neutral, this will initialise the emulator with the
+value zero for all parameters. This provides a clean sheet from which to start
+sound generation. The code is generic and there are some exceptions to where
+it is applied: the organs and pianos do not implement the option, some of the
+synths are exceptions too (P800, BitOne, DX) as they have a non-intuitive 
+interface that does not lend itself to being zeroed. For testing the few that
+do not implement the option then '-load -1' can be used as a potential 
+alternative.
+
+Added a runcom file "bristolrc" located in ${BRISTOL_CACHE}/bristolrc which
+may contain the parameters that are always provided on the command line. The
+parameters will be placed before the command line arguments so that they can
+be overridded but they provide the possibility to simplify the command line
+that needs to be specified when bristol is invoked. The variable BRISTOL_RC
+can override the default location and the -rc option will circumvent it.
+
+The size of the voice table is now a configure time parameter. There were some
+requests for optimisation and reducing the size of these tables is a small one.
+./configure BRISTOL_VOICECOUNT=32 is the default. This is not the max table
+size which continues to be 128 voices: the -voices option is a runtime parameter
+that can be used to increase the size of the table above the VOICECOUNT limit,
+this ./configure option is just the default.
+
+Resolved an issue with the filter tuning of a few of the emulators, they were
+using an incorrect keyboard tracking value which meant that with the filter at
+high emphasis there was discordance in the oscillator vs filter waveform
+frequencies.
+
+Reworked the summary text for small changes to some of the synth names: they 
+are sometimes different from the switches used to start them however the actual
+name is required to be able to use emulate correctly. The -summary list will
+list the emulators that have been finished, --summary will list all of them
+even though a selection do not actually operate yet.
+
+Removed the empty pop-up menus. The code is still there however it is no longer
+called by either GUI or library. There were diverse requests to stop posting
+them as they had no purpose.
+
+Added an initialisation watchdog timer. If the audio thread does not activate
+in this period then the engine will gracefully exit rather than just hang 
+around waiting for somebody to talk to him. The default timer is 30 seconds 
+but can be changed with the '-watchdog <s>' parameter.
+
+The ARP Axxe was about a semitone out of tune. The cause was the logic behind
+the pitch buttons which was broken.
+
+Glide parameter settings could be lost on restart, the 'glidemax' parameter was
+not being correctly initialised so remained as zero.
+
+Remedied a test failure for the jackd binary. If jack is requested as the audio
+interface then we need to connect to it to find the correct sampling rates and
+period sizes. The check for failure of this request was broken.
+
+Fixed a very arbitrary race condition between the audio and midi threads
+causing segfaults which only happens during initialisation with heavily loaded
+CPU. Doubt if this will have been seen outside of development as the window
+was extremely small.
+
+There was a spurious 'newline' debug message when active sense was detected from
+a keyboard. Bristol does not support active sensing (except from the GUI) and
+whilst these messages did not cause any issue with the synth operation they 
+were a great annoyance for the command line interface users. The print statement
+was put under a debug flag.
+
+    0.60.6 11 Aug 2010 Geometry configuration options, maintenance release
+
+Was requested to implement a -geom option which would minimally allow for window
+placement onto the screen. This seemed very reasonable so incorporated it. The
+option will also take width and height parameters such as 500x200+100+100 and
+where necessary break aspect ratio and configure antialiasing. If only one of
+width/height is given then aspect ratio is maintained, and options such as
++100+100 will just affect window positioning. Options like -geom 640 will just
+set the pixel width, maintain aspect ratio and take default placement, possibly
+invoking antialiasing as well.
+
+Randomised the TCP port numbers used to link the GUI to the bristol engine.
+There remained an issue with the Jack Session Manager and configurations that
+used multiple invocations of bristol: the TCP port identifiers would conflict
+causing one of them to fail on reload. I think the option '-host unix:1234' is
+a work around the issue as long as '1234' was always unique per bristol but
+this only works on localhost as it uses unix domain sockets rather than TCP
+domain. The longer term solution was to randomise the port numbers in the range
+1024 to 16383, the transient service ports since otherwise there is still a
+window for error if the TCP ports are not closed down cleanly (although that
+is now finally a rare occurence). The port identifier can still be overridden
+and will be inherrited by the JSM interface.
+
+Resolved a few issues with different device drivers. OSS was actually broken for
+a while due to incorrect flags and buffers and there were a few ALSA anomalies 
+although they were inadvertently correct.
+
+Was requested to add a manual page for bristoljackstats for part of the debian
+hurdles. Took the chance to also remove two ancillary binaries which generated
+notes but were only for QA testing, not general distribution.
+
+Added an option called -sleep which stalls the init process for <n> seconds.
+This was too easy not to implement and may help to overcome what looks like a
+race conditition when using a session manager to restart multiple Bristol 
+clients.
+
+Corrected some ./configure options so that they correctly check for jack and
+alsa header files rather than just the packages and libraries before including
+them in the build. This change included adjusting the default drivers so that
+OSS is configured when jack and alsa are not available.
+
+    0.60.5 08 Jun 2010 Maintenance release
+
+Fixed an issue with the SID where double clicking on the memory Load button 
+would turn on the soft chip debug code. This was a development feature that was
+not intended to be distributed.
+
+The -mono noise mod was originally just the literal noise source, this is not
+a great mod and does not mimic the original which I think used a S&H circuit 
+on the noise source clocked by Osc3. Reworked this into the emulator anyway,
+the sonic qualities are better. This should actually also be put into a few of
+the other emulators (Prophets too for example).
+
+The monophonic note logic no longer respected -nnp due to incorrect flag
+management. This needed to be corrected as it was backing off to HNP which 
+implied that the engine ran constantly.
+
+Discarded a check in the ShmImage code so that the check for support in the
+server was dropped. Most servers which apparantly support the SHM structures
+seemed to be responding negatively to the capabilities request which caused
+backoff to the Pixmap interface. The current situation is that when compiled
+with SHM support brighton will attempt to use it. If the server really has 
+issues with that then the -pixmap options will have to be requested manually.
+
+Resolved a timing issue that can occur at startup, the event manager needed to
+wait for positive status on the control interface before proceeding. Only 
+affected single core systems due to threading, and was naturally intermittent.
+
+Failure to initialise the operating gain of the envelope when in some monophonic
+note conditions could result in apparant loss of signal until the note states
+were fully completed. This would manifest itself as either no output, low output
+or even as lost notes over MIDI channels.
+
+Midi debug flags were not being parsed correctly in the engine. Should not have
+affected runtime as it was only a debug which is not usually active.
+
+Changed the startBristol shell to request /bin/sh in place of /bin/bash.
+
+    0.60.4 23 May 2010 Maintenance release
+
+Coded an interface into the X11 SHM extensions under the configure switch
+--enable-shmimage, some that was needed since the latest X11 servers have 
+dropped their support for XImage interfaces. This left only Pixmap which works
+but is rather slow.
+
+Added an option to restrict the rotary controller tracking to pure mouse up/down
+rather than geometric positioning. This was on request and is -rud or -rotaryUD,
+the value will be a fraction of the current window height. The code will respect
+notched controls and similar stepped rotary types.
+
+There was a bug in the event forwarding code that would damage intermittent
+messages. The issue was masked for a few reasons: the key events did not use
+this code path, controller events would be generated in such high volumes that
+the loss was not visible. Program change was affected, also tacked on code to
+address bank change events which were previously not distributed to the engine
+although the way MIDI does bank management is not really consistent with bristol
+memory management: bristol tends to work with banks of 8 or 10 memories as per
+the old synths. MIDI runs with banks of 128 memories and the result will be some
+overlap. It works as long as a single access method is used.
+
+Added -stop as a method to reap any existing bristol processes. It will kill the
+audio process if running which will result in any GUI dying due to the active
+sensing. All processes will be terminated which may not be the target action if
+multiple engine are being used, the options 'startBristol -kill -mini' will then
+only terminate the engine and GUI associated with the mini emulator. This is
+also not infallible as one engine could be running multiple emulators however
+the goal was really just to terminate a daemonified engine rather than do any
+really intelligent process management.
+
+Added -cache as a runtime option to allow specification of the cache path for 
+memories and profiles.
+
+    0.60.3 12 May 2010 Maintenance release
+
+Reincorporated code for channel pressure recognition. It had been dropped from
+an earlier release due to dumping core when applying the channel change to all
+the voices associated with that channel. Also fixed up some issues with the
+poly pressure handling, I think it was want to hit 100% CPU. This was also
+ported back to 0.50.8.
+
+Fixed a bug that had been reported a while ago against the MG1/Realistic of
+corruption of the GUI image and loss of sound. The GUI corruption was due to
+incorrect bounds checking on some bitmap manipulations which were corrected,
+a fix that is applicable to all the emulators. There were a couple of other 
+specific issues with the MG1 and RhodesBass that had other consequences, also
+fixed. This was ported back to 0.50.8.
+
+Added in another velocity map: no velocity sensitivity. That should have been
+there from the first implementation of maps but I think I got carried away with
+the ability to add hundreds of different curves that this got swept aside. It
+can now be requested with '-curve 0' to give something like a -3dB constant
+velocity level for all struck keys. Ported back.
+
+Put the autozoom feature under a configure time option --disable-autozoom, some
+issues were reported where it would be apparantly get activated unexpectedly,
+ie, the windows would constantly flip in size even though the -autozoom was not
+given as a run time option. The ./configure option also removes the Enter/Leave
+tracking which was the more probable cause of the error. There may still be 
+some issues with KDE4.4 that were reported. This code was tested against 4.3
+and it does deliver a lot of seemingly superfluous ConfigureNotify which were
+giving the window a Postage Stamp effect. Filtered out the ludicrously small 
+window sizes that were being proposed.
+
+Added a preinstalled version check to the build scripts to exit configure early
+if bristol is already on the system. The issue is that library directories may
+be different between the two, most notably when the system package manager has
+been used to installed as a part of the OS. It can be overridden with the flag
+--disable-version-check although I did consider hiding this under an obfuscated
+parameter name as the issue has come up several times now.
+
+Fixed a core dump that could happen without the X11 libraries and a window
+request that failed. This would always happen unless the -window option was
+given.
+
+The Explorer and Voyager mod bus ramp was actually coded as a square wave. It's
+S&H was also very low. This also lead to more changes in the filter cutoff vs.
+keyboard tracking, it is now a bit less bipolar.
+
+This version includes a manual page, a common one for bristol, brighton and
+startBristol.
+
+    0.50.8 05 May 2010 Maintenance updates
+
+Reincorporated code for channel pressure recognition. It had been dropped from
+an earlier release due to dumping core when applying the channel change to all
+the voices associated with that channel. Also fixed up some issues with the
+poly pressure handling, I think it was want to hit 100% CPU. This was ported
+back from 0.60.
+
+Fixed a bug that had been reported a while ago against the MG1/Realistic of
+corruption of the GUI image and loss of sound. The GUI corruption was due to
+incorrect bounds checking on some bitmap manipulations which were corrected,
+a fix that is applicable to all the emulators. There were a couple of other 
+specific issues with the MG1 and RhodesBass that had other consequences, also
+fixed. This was ported back from 0.60.
+
+Added in another velocity map: no velocity sensitivity. That should have been
+there from the first implementation of maps but I think I got carried away with
+the ability to add hundreds of different curves that this got swept aside. It
+can now be requested with '-curve 0' to give something like a -3dB constant
+velocity level for all struck keys. Also back ported.
+
+    0.60.2 28 Apr 2010 Command Line Interface Changes, maintenance release
+
+Added a play mode to the CLI. It can be activated with ':set play' and provides
+an alternative key path directly to the frontend to send midi note events. The
+code is only monophonic due to the way the raw interface works - there are no
+qwerty key 'off' events so they have to be interpreted. It does allow for quick
+testing of patches without having to resort to having a keyboard attached to 
+the engine. Exit from 'play' mode is as with the others, either escape or ':'
+which at the moment cannot be remapped, something that might be an issue for
+internationalisation.
+
+Andrew requested monophonic sustain pedal support. This does not really fit
+into a monophonic instrument: if all notes sustain then with note precedence
+the only note heard will be at the outer one. Using sustain with a polyphonic
+assignment algorithm over one voice works. For the HNP and LNP another 
+algorithm was added that holds the other extreme note - the lowest with HNP or
+the highest with LNP - this is the note that will fall back when no other keys
+are held during sustaining notes. When a more extreme note is played it then
+becomes the 'extreme' note.
+
+Julien reported some lost note events which was a bit disconcerting. Reproduced
+an issue where the events were not lost but their triggers could be: if a noteOn
+event arrived it would set the trigger flags. If a noteOff occured in the
+same sample period it would clear these flags which is incorrect for the 
+monophonic note logic. (to be confirmed). This required a couple more patches
+for glide errata reported separately and largely related to inversion of the
+glide rate when the pitch wheel was moved causing Inf to be generated.
+
+Colin Fletcher requested that something be done about the device names in jack
+and eventually ALSA midi. The fix is not straightforward as the engine does not
+know a priori what it has to emulate when it opens the MIDI interface. The 
+current feature is that the engine recognise the -emulate <synth> and use the
+synth name here for all registrations. Added to this another alias called
+-register <name> which will set both audio and MIDI devices names to the given
+name and can be used to override other settings.
+
+Extended the CLI midi command set to include 'set midi controller <id> <value>'
+to give access to the MIDI controller interface. May be of limited operational
+use but as a debuging tool it is very helpful - with alias supported it can be
+used to generate NRP, RP and the rest. This was implemented to debug Andrews
+issues with CC #64 (sustain) and used it to also debug Juliens issue by the 
+same manipulation of the sustain flags.
+
+Cleaned up the build processes so that they really do not need X11-dev to be
+installed. The previous releases did require the X11 headers due to some stray
+ifdef in the brighton header files, even if --disable-x11 was requested. Now,
+for the correct build process it is necessary to define --disable-ximage too
+although the ximage is really informational only, ie, it would not be compiled
+anyway without X11 being enabled. It was left in as it gives an error message
+regarding the missing X11-dev headers. May remove that in the future.
+
+Cleaned the code up to remove the size warnings. They were almost uniquely on 
+printf statements. The only remaining warnings should be for some unused 
+variables which can be cleaned up later, and my explicit warnings for some
+potential issues that may need to be taken care of (again, at a later date).
+
+    0.60.1 23 Apr 2010 Command Line Interface Changes
+
+This release is primarily a cleanup to the CLI, first released in 0.60.0.
+There were a few bugs that became evident, some incorrect cursor positioning
+and hence occasional garbled output. A couple of CLI features were also added 
+which include extensions to the completion and the ability to add commands to
+the accelarated keycodes in ESC mode.
+
+Finalised the CLI command completion code such that it can pretty much complete
+the whole tree with reasonable help information available.
+
+Changed the CLI alias variable replacement such that variable $i is the param
+of that index from the alias command line, the previous syntax was a little bit
+unusual where a $ would just take the current variable index and % would make
+the variable increment.
+
+set alias trans Osc1 Transpose=$2; Osc2 Transpose=$1
+set alias
+       trans: Osc1 Transpose=$2; Osc2 Transpose=$1
+transpose 1.0 0.2
+
+This will set Osc to 1-Octave transpose and Osc2 to 5-Octaves
+
+Added the capability to set CLI key codes in ESC mode to call any :insert mode
+command. The interesting feature is to be able to configure aliases in the
+CLI and then give then single key accelerator codes:
+
+1. set cli q quit
+2. set alias panic set midi panic
+2. set cli p panic
+3. set alias clidata set cli
+3. set cli ? clidata
+
+The first will allow the use of 'q' to exit the emulator, trivial example but
+the point is that the CLI :insert mode command 'quit' is now available in ESC
+mode. The second one is potentially more useful, it links the ESC mode char p
+into a MIDI panic event which causes alls- notes-off. The third one adds a help
+function to escape mode: if you now type '?' it will list the CLI accelerator
+keys and their functions.
+
+This cli/alias feature can also be used to provide seach accelerators for
+selected synth parameters:
+
+set alias vol Volume
+set cli v vol
+
+Now when in ESC mode the single key 'v' will take the Cursor to the Volume
+control rather than having to /search for it or use the Cursor left/right 
+motion. Several of these can be constructed to allow fast navigation through 
+the parameters, one to jump to filter parameters, another to envelope, etc.
+
+Added some options for changing parameters from the :insert mode in addition to
+the <Variable>=<value> that was implemented in 0.60.0. The new modes are '+' to
+increment by 1%, ++ to increment by the 'set accel' value, and +=<value> to
+increment in given steps. Decrement have similar actions too:
+
+mini mem 0 chan 1 # Tune=0.5
+00 Tune                     :  500
+mini mem 0 chan 1 # Tune+
+00 Tune                     :  510
+mini mem 0 chan 1 # Tune++
+00 Tune                     :  610
+mini mem 0 chan 1 # Tune+=0.09
+00 Tune                     :  700
+mini mem 0 chan 1 # Tune-
+00 Tune                     :  690
+mini mem 0 chan 1 # Tune--
+00 Tune                     :  590
+mini mem 0 chan 1 # Tune-=0.09
+00 Tune                     :  500
+
+Some of the same syntax was added into the 'set brighton device <p> <o> <val>'
+such that where previously value was an exact value it can now take +=<f> and
+-=<f> to give relative changes to variables. This has some value for a few of
+the synths (poly800, bit series) where different panels may be required for
+data entry and parameter selection. The Poly800 has now been populated with
+text names for its panel parameters however to make it useful please contact
+the author to get hold of a suitable set of aliases for changing the data entry
+controls.
+
+
+The ARP Odyssey emulator now has a 'Dual' option on one of the VCO. This will
+make one VCO assign itself HNP and the other LNP to get two note logic. This
+is not really dual voice as there is still only one set of filters and amps. It
+is not a feature of the original, it kind of emulates another emulator. To
+prevent unexpected results the code is not applied when in polyphonic operation
+as it relies on the monophonic note logic to decide which are the highest and
+lowest notes being held down. The feature is gimpy but more fun could probably
+be had by starting two independent Odyssey on the same engine and midi channel
+then applying HNP to one, LNP to the other.
+
+Several changes were again added to the log file processes to remove a race 
+condition on file open status. This only showed up on multicore configurations.
+
+Patched up some compilation directive errors for FreeBSD distributions, also
+removing a stray ALSA header that should have been placed under a compilation
+ifdef for removing its support. This was primarily for debian support.
+
+    0.60.0 19 Apr 2010 Command Line Interface
+
+Bristol now has a command line interface available from '-cli'. If the code is
+built with --disable-x11 then it can be compiled without any X11 dependencies.
+When built with X11 then specifying '-cli' will open both the CLI and the GUI.
+
+The CLI is based on a VI type interface and will respond to the arrow cursor
+keys: each parameter is available with Left/Right, and it's value can be changed
+with Up/Down for accelerated control.
+
+When started it is in escape mode and will also respond to the following keys:
+
+CLI: h left
+CLI: l right
+CLI: ^k incmin
+CLI: k inc
+CLI: K incmax
+CLI: ^j decmin
+CLI: j dec
+CLI: J decmax
+CLI: M memUp
+CLI: m memDown
+CLI: r read
+CLI: w write
+CLI: x toggle
+CLI: / search
+CLI: u up
+CLI: d down
+CLI: U fineup
+CLI: D finedown
+CLI: : insert
+
+These mappings are saved in the synth profile and can be edited to change the
+them: '~/.bristol/memory/profiles/<synth>'. These mappings are additional which
+means the above values represent the default mappings that always exist. There
+is a keyword 'none' which will disable any key operations that you do not want.
+They call also be configured from the command line with 'set cli <k> <action>'.
+
+Typing ':' goes the the VI style command line in insert mode and will accept 
+the following commands:
+
+GUI commands:
+
+        find: [free|load] synth memory search
+        read: load synth memory at the configured index
+       write: save current synth settings to memory
+      import: [path [mem]] read a file and save to memory
+      export: [path [mem]] save synth memory to external file
+        help: this screen
+         set: [line|debug]
+        midi: command set to engine (X)
+       debug: [on|off] CLI and engine debug settings (CLI only)
+     bristol: [cont/op/value|register] - operator commands
+    brighton: [panel|p/d/v] - GUI management commands
+         cli: [list|<key> action] navigation key management
+       alias: command aliases, %/$ signs will be remapped parameters
+        quit: exit application, terminate the emulator
+
+The command line has a history buffer of the most recent 50 commands and any
+consequtive duplicates are supressed. When in ':insert' mode then the cursor
+motion keys will nagivate this history and give command line editing. The keys
+'^p' and '^n' are also history forward and history backwards respectively.
+There is a variable called 'set history <n>' which will limit the number of
+history lines that are ever displayed, either with the 'history' or the
+'set history' command, this is for small displays. The command line can be
+edited with ^W (kill-word), ^U (Kill-Line), ^A (start-of-line) and ^E (end-of-
+line).
+
+The shell command line history can be re-executed with :!<n>, :<n><TAB> 
+will complete the line from the history buffer and leave it available for 
+editing.
+
+When in ':insert' mode the <TAB> key will list available commands and complete
+them where possible. Commands strings do not have to be complete to be executed,
+they only need to be unique. If a command cannot be found from the above list
+with the <TAB> key then the current line is used as a lookup into the synth
+parameter list with the following syntax:
+
+: LFO<TAB>
+: Osc 3 LFO
+: Osc 3 LFO=0.5
+
+The tabbed search here is for the given string anywhere in the synth parameter
+name, not at the start of the name. If the string is not unique then the matches
+are listed.
+
+When in Escape mode it is possible to search the emulator parameters with the
+VI '/search' key and TAB is also available.
+
+/lfo - find all parameters that contain the word lfo, complete if only one
+/^lfo - find all parameters that start with lfo, complete if only one
+
+To toggle from ':insert' mode to ESC mode either type ^C (Control-C) or <ESC>.
+
+The CLI is available for the following emulators:
+
+    Mini
+    Explorer
+    Voyager
+    Odyssey
+    Axxe
+    B3
+    BME700
+    Realistic
+    Juno
+    Jupiter
+    PolySix
+    MonoPoly
+    OB-X
+    OB-Xa
+    Pro1
+    Prophet5
+    Prophet52
+    Prophet10
+    Sonic-6
+    Stratus
+    Trilogy
+    Sidney
+    Solina
+    Vox
+    VoxM2
+    RoadRunner
+    Rhodes
+    Rhodesbass
+
+The arp2600, bm, bit1, bit99, bit100, dx and poly800 have not been converted
+and are for future study. The bit and Poly need a separate interface due to
+their input methods. The 2600 needs some method of representing the patch cable
+configuration. Now the CLI can still be requested for all of the emulators but
+only those listed above have (almost) descriptive text for each parameter.
+
+There are a few CLI variables that can be set:
+
+set history <n>
+set savehistory on
+set line <n> [CLI line width]
+set accel <f> [Controller acceleration for Cursor motion]
+
+The savehistory option will overwrite the emulator profile file with every 
+'quit' commands. The 'line' option defaults to 80 columns but is configurable
+for small Braille displays.
+
+The CLI supports alias definitions:
+
+set alias trans Osc1-Transpose=%
+
+The command 'trans 0.5' will cause a transpose request to be made to the 
+engine. Multiple commands can be aliased together using ';' between them.
+Multiple parameters can be set such as
+
+set alias trans Osc1-Transpose=%; osc2-transpose=%
+trans 0.2 0.5
+
+Here, the '%' is replaced with the alias options on the second line, each 
+% will move the argument list forward. The command will send two different
+transpose events to the engine. Conversely:
+
+set alias trans Osc1-Transpose=$; osc2-transpose=$
+trans 0.2
+
+Here the '$' does not move the variable forward so the same value is taken.
+This will cause the same transpose value to different oscillators. Any defined
+aliases will be added to the list of available commands and shown in the help
+menu, as will the list of <ESC> mode keyboard shortcuts. Aliases can be deleted
+with 'set noalias <name>'.
+
+The CLI prompt can be configured. Typical values could be plain text for the
+emulator type but there are also variables available:
+
+set prompt mini
+set prompt %algo%: 
+or more usefully
+set prompt "mini %memory%: "
+will give
+mini 99:
+
+The tokens 'channel', 'algo' and 'panelid' are also recognised.
+It is also possible to give the name of any of the synth variables in the prompt
+too in which case they are evaluated:
+
+set prompt "%algo% mem %memory% chan %channel% # "
+mini mem 23 channel 2 #
+
+set prompt "%algo% layer %PanelSwitch%: "
+obxa layer 0: 
+
+
+
+Fixed an aged issue with the Explorer/Voyager that they produce no sound by 
+default and even then they are very, very noisy. Not sure why it never got 
+reported. The noise was originally due to injection to make the filters self
+oscillate but become noise after one of the many normalisation rounds.
+
+After integration of the CV IO for the ARP it was time to change the diverse
+Keyboard Tracking inputs for the oscillators and filter. Up to now they had been
+inactive, the tracking was integral to the operators. Now they can be remapped
+from any of the other outputs which gave some facilities to get modwheel to 
+frequency mapping and improve the filter keybaord tracking.
+
+Change the MIDI device selection such that '-midi alsa' configures a SEQ 
+interface rather than ALSA raw. This has caused a few error reports from people
+who have not got the expected result. Selecting a raw ALSA interface is now done
+with '-midi rawalsa' or '-midi alsaraw'.
+
+    0.50.7 22 Apr 2010 CV Keyboard Tracking Frequency Control for ARP
+
+After integration of the CV IO for the ARP it was time to change the diverse
+Keyboard Tracking inputs for the oscillators and filter. Up to now they had been
+inactive, the tracking was integral to the operators. Now they can be remapped
+from any of the other outputs which gave some facilities to get modwheel to 
+frequency mapping and improve the filter keybaord tracking.
+
+Several changes were again added to the log file processes to remove a race 
+condition on file open status. This only showed up on multicore configurations.
+This was a 0.60 backported fix.
+
+Backported the 0.60 fix for an aged issue with the Explorer/Voyager that they
+produce no sound by default and even then they are very, very noisy. Not sure
+why it never got reported. The noise was originally due to injection to make
+the filters self oscillate but become noise after one of the many normalisation
+rounds.
+
+Patched up some compilation directive errors for FreeBSD distributions, also
+removing a stray ALSA header that should have been placed under a compilation
+ifdef for removing its support.
+
+Since the release of 0.60 this stream is now in maintenance only.
+
+    0.50.6 08 Apr 2010 Multiple IO Channels for audio/CV, more NRP Controller Support, Jack Session Manager maintenance
+
+Made the audio engine allow for registration of multiple ports into Jack. This
+gives the stereo in/out that always existed plus up to 16 additional ports which
+will be used according to the emulator requirements. In the short term this will
+only be the ARP 2600 which will register 4 extra IO for CV inputs. Future code
+will probably be the mixer that has been kind of waiting around for a while now.
+The option '-multi <n>' specifies the number of channels that will be opened to
+the jack daemon. The input and output signal levels can have a correction 
+applied to them, -migc and -mogc each take a floating point which will adjust
+the gain on the signal, applying it to all channels. The default gains are 1.0.
+
+The signals for this IO are normalised to +/-1.0f although the ARP shouldn't
+have issues with a wider signal range. The tests executed in house used two ARP
+both connected up to Jack, one driving CV into the other such that the Envelope
+from the first was applied to the filter of the second for example. The signal
+levels were within the range 0..1.0f from the envelope however AC signal will
+have a negative range too. That may be an issue for some other targets that do
+not want their CV to go negative so outputs 3 and 4 have a DC normalised signal
+with clipping below zero. Extensions to the CV configurations for the other 
+emulators is for future study. The issue is not how to get the signals into or
+out of the emulators but a question of how the routing should be defined. For
+the ARP 2600 the signals can be patched as required.
+
+A part of the IO functionality testing was done with session built by the Jack
+Session Manager so that two ARP 2600 could be loaded and signals passed between
+them. This lead to a number of fixes to parts of the naming structures, not
+really bugs, just things that would only really have come to light when running
+multiple instances of bristol with jack and jsm. The fixes included removing
+any auto-connection options if there were any jsm options present, renaming the
+windows so that the title includes the device name from the Jack interface to
+help identify windows in duplicated setups, more small adjustments to the 
+parameters parsed to the JSM command line, some changes to the import and
+export routines used to load the JSM saved memories.
+
+Recoded the GUI NRP support so that it can track NRP parameters. It requires 
+the GUI be started with the -gnrp option. The code does not support ganging:
+tying multiple GUI devices to the same NRP however that may change presently.
+The existing CC control registration can be used for that purpose. The NRP
+support is naturally affected by all the usual limitations of NRP: they are 
+assigned to MIDI channels not device targets (which SYSEX does do). This means
+if two devices are on the same MIDI channel it is up to the user to ensure that
+the NRP they use do not have conflicting actions. The NRP mappings are saved in
+the same profile as the emulator CC, CM and keyboard mappings. Per default the
+mapping table size has 128 entries which matches the CC counts and should be
+enough for any of the current emulators. A parameter -nrpcc can be used to 
+change the table size.
+
+The emulator settings will now be taken from the emulator header files rather
+than pure runtime switches. This imposes the use of the '-emulate' option which
+previously had this function. The choice was based on a discussion with Andrew
+Coughlan: if we are emulating then consider defaulting the closest match to the
+original, users can override options afterwards. This means a Hammond will start
+with the maximum voice count available, for example, but a Mini Moog will start
+with just one voice, highnote precedence. Changing the number of voices after
+definition of the emulator can make the Mini run as a polyphonic instrument if
+desired. The algorithm search is strict, ie, only the emulator names from
+'startBristol -summary' are recognised. This is in contrast to the remaining
+parameters that do take some aliases (-arp is the same as -arp2600 for example).
+
+Needed to suppress a few more options from the command line presented by bristol
+to the Jack session manager. These were port, rate and count which are all 
+dynamic parameters anyway. Not supressing them lead to their duplication and
+some undesirable side effects of that.
+
+Renormalised the trilogy output signal after some advice on their levels. 
+Changed the configure flags to include options for separate default audio and
+MIDI drivers - Jack audio and ALSA MIDI was quite popular.
+
+Fixes some repainting issues with the vertical sliding controls, they left a
+trace of noise on the way down.
+
+    0.50.5 03 Apr 2010 Jack Session Manager Immediate fixes
+
+The code now can actually save and reload sessions on request of the jack
+session manager API. 0.50.4 will be delisted.
+
+Added a -import flag which will take a file and load it into the synth at init
+time. This may fail if the memory was for another emulator however it can ease
+file/memory interchange. The memory is not directly saved into the bristol cache
+but still needs to be saved to some (free) memory location in the emulator. The
+flag is actually an alias for -jsmfile which was required to do the same for
+the jack session manager.
+
+Added in runtime options to support keyboard splits. Not sure why this took so
+long as it is a base requirement but as it is also possible from a master 
+controller it never made it yet. The two options are -highkey and -lowkey and
+apply to single emulators. Error checking is minimal: values outside of the 
+7-bit MIDI note range are not checked, low > high is not checked, ie, it is 
+possible to build configurations that will not work. They will not break the
+emulator but no response will be heard.
+
+    0.50.4 02 Apr 2010 Jack Session Manager Support
+
+Installed the svn jackd version with session management support to start work
+on coding the interface. It required a few changes, not just to the way that
+the jack interface had to work but also to the bristol message passing to allow
+for arbitrary strings to be exchanged rather then just control and operator 
+data. Similar to the LADI code, the session requests come into the engine, it
+then has to take care of redistribution to the GUI where save operations are
+actually executed. The interface is perhaps not quite what JSM expects but that
+is purely a bristol internal working issue: Jack session requests come into
+the engine only, they are translated into bristol session requests and then
+distributed as required - to the GUI. Bristol session management includes the
+capabilities to both save and recall setup however the save and recall source
+can only be the bristol cached content, not from an arbitrary file. to overcome
+this, when a save request is sent from the engine to the GUI, it extracts the
+file path. Memory is saved to a private entry in the cache and then this private
+file is moved (exported) from the cache to the target location. The load request
+works similarly although Load requests do not come from JSM which does not have
+this feature. The engine command line parses the -jsmfile option and sends a
+session message to the GUI to import and then open it. There is the -jsmuuid
+option which is used by the session manager to direct the aplication to
+register with the given ID. There is one additional option which is -session
+which will disable all session management, including LADI.
+
+Removed the incorrectly remaining 1/2 sample phase correction from the reworked
+Huovilainen filters for the non-resampling algorithms. These are called when
+the samplerate exceeds 80KHz as the point where the filter quality starts to 
+degrade is far above the audible operating range of the filter. These have not
+been widely tested and an override could make sense.
+
+The OB-X filter code needed some corrections for the performance changes, the 
+code was there by the command line options were different matches. Also added
+some more frequency corrections for keyboard tracking of the filter.
+
+Resolved an error in the jack ringbuffer management. The buffer would fill up
+and give 'ringbuffer exhausted' messages under specific circumstances: running
+as a headless server with last GUI detached whilst still receiving MIDI events.
+The fix was belts and braces, the buffer is reset in the audio thread if it is
+idling without emulators and the ringbuffer is also stopped with the last of
+the emulator to exit, restarted when new ones are created.
+
+The GUI still had some legacy support for controller registration against things
+like RP, NRP, DE. This is supposed to be disabled if -nrp is given however the
+flag was not being honoured. This is a kind of workaround, a bigger fix would
+be to correctly register them however that leads to some issues with table sizes
+that will be left for future study. This whole area is a grizzly part of MIDI
+and should really be resolved with an alternative protocol.
+
+The default build is now without the semaphores, they can be re-enabled on 
+request at configure time. Also added a config option for the default drivers,
+the can default to alsa or take an option to use Jack as the default.
+
+The mini emulator GUI would show key motion for midi channel and channel+1, this
+was caused by an incorrect key panel flag. The engine did not respond on both 
+channels, just the frontend.
+
+The Rhodes emulators stopped working due to some code that looks for the skins
+not functioning on their internal contructions.
+
+    0.50.3 17 Mar 2010 Band limited oscillator corrections, filter optimisation, GUI enhancements.
+
+Corrected (most) of the previous restrictions on band limited oscillators,
+namely that they were precomputed tables rather than dynamically limited. They
+did give different signals than the mathematically built infinite bandwidth
+waves (-blo 0) however they did not really prevent aliasing at the highest
+frequencies. The code now does cut in bandwidth limits depending on a few run
+time parameters:
+
+    -blo n         - maximum number of harmonics to map, defaults to 31
+    -blofraction f - upper frequency limit as fraction of samplerate (0.8)
+
+The code will attempt to stuff as many harmonics up to 'n' such that the 
+fractional limit is not broken. Using values > 1.0 will lead to pretty wild
+aliasing, lower values will thin out the sound but exhibit fewer artifacts at
+the higher frequencies. The default value is admittedly above nyquist, this is
+a tradeoff between distortions and waveform content. The code uses precomputed
+tables for all frequencies where freq*n does not exceeded f.
+
+Reworked the Huovilainen filters to move the expensive maths into the feedback
+loop only. This reduces filter CPU requirements by about 90%, naturally at the
+cost of some quality. The net results of the changes do not degrade quality that
+excessively and due to the amount of reports of CPU exhaustion there are new
+filter options: -lwf are the chamberlains, -hwf are the original heavyweight
+Huovilainen and the default are the optimised ones. These are all run time
+parameters per emulator. There is still the overriding -glwf option to enforce
+all the emulators to use the lwf option globally. There is further filter option
+which is -wwf, these use about half the CPU of the -hwf filters, they use the
+same overall architecture however use a different but also more efficient non-
+linearity giving a 50% lower CPU footprint. The default filters may also be 
+requested with the option -nwf, normalweight fiters.
+
+Added some new corrections for the filter frequency tracking and especially
+keyboard tracking changed considerably. It can now be played in tune when at
+full resonance and can self oscillate at some settings.
+
+The window now has a zoom accelerator under '<Shift> Enter'. This will toggle
+between native window size and full screen. The native size the the one at 
+which it was created including applying any scaling parameters. The code will
+introduce some image antialiasing when it scales to full screen, this remains
+after returning to native size.
+
+Used the same code to have window scaling accelerators: '<Shift> +' will make
+the window about 10% bigger, '<Shift> -' will make it similarly smaller.
+
+With the zoom accelerators coded it was then possible to add in the -autozoom
+feature such that when the mouse enters the synth window it is maximized and
+when the mouse leaves it is minimised. Both windows remain active however they
+can reduce screen clutter. Width and scale will define the minimum and maximum
+window sizes.
+
+Added an option -width to speficy the minimum starting window size. This works
+in conjuction with -autozoom and -scale so that between them they set the min
+and max resize limits. There is no corresponding 'height' option, the height
+of the window will follow the aspect ratio for the emulator. The option only
+works with autozoom, if that feature is not required then the -scale option
+should be used to set the actual window size.
+
+Fixed the responses to FocusIn and FocusOut, they were silently dropped in the
+earlier code releases but were now needed for the autozoom capability. With
+these in place the opaque resize aspect ratio management was changed such that
+the resize results in the window getting morphed to fit the window and then
+aspect ratio being enforced after the resize has finished.
+
+Glide and pitch bend did not work together: glide was cut as soon as pitch was
+altered. The fix was a one line change to the frequency assignments, previously
+target and current were set by the pitchwheel, the change was only to adjust the
+current.
+
+There was an issue with logging to the user home directory, in most cases the
+log file would be opened truncated and never used as destination for output
+messages.
+
+    0.50.2 06 Feb 2010 Real time processing enhancements
+
+Added code for Jack Sample Accurate replay. This was a compromise for a useful
+if awkward feature to implement in bristol: it is only implemented in the
+bristol envelope code such that note_on events will be sample synchronised
+to the offsets reported by Jack MIDI events. All other events will be period
+synchronised as the Jack MIDI events are handled in the audio stream so are at
+least guaranteed to occur within the given period even running at double speed,
+etc. There is no intention to synchronise all the audio generation code and as
+this is working as an emulator that is not considered relevant - the original
+instruments all had free running oscillators and as such were did not have any
+kind of synchronisation to note changes. We are not going to attempt to have the
+exact same sound come out at the exact same point however the major state 
+transition at note on will happen at the desired timepoint. Some of the
+emulators already had trigger synchronised LFO, these are now also sync to note
+offsets from Jack although the net effect will probably not be much due to these
+being low frequency hence low rate of change over the Jack frame offset reported
+in the note event.
+
+Placed the use of sem_init under a complation flag, preferring sem_open instead,
+improves portability except that sem_open requires root privileges and PAM does
+not seem to support any security permissions for this. To use the sem_open call
+then './configure --enable-sem-open'.
+
+This last change was probably superfluous as code was also added to remove the
+necessity for the semaphores in the first place. They cause issues with the RT
+threads and so incorporated a ringbuffer for note events from the MIDI thread
+to the audio thread. This adds a little extra processing but not excessive.
+This is a compilation time option, './configure --disable-semaphore', it will 
+eventually become the default sequence or potentially put under run time 
+options. The code was not completely trivial as the system needed to be able to
+distinguish between where events came from, and if jack then checks were needed
+to see if it was from a single registration or multiple registrations - the
+former actually ends up with two threads that can recieve messages, the MIDI
+thread fielding events from the GUI (including note events) and the audio
+thread itself - the sample ringbuffer code only supports singular TX/RX of the
+ring. Added some flags to the messages buffers to indicate source and make
+the choice of direct handling from audio thread messages or indirect handling
+via the ringbuffer under other circumstances.
+
+Coded a second ringbuffer for event forwarding. To ensure low latency then it
+was not advisable that the RT threads did event forwarding to TCP however this
+is needed to get event tracking from engine to GUI. The second ring buffer is
+for the path from the audio and MIDI threads to the otherwise idle parent thread
+who then does the forwarding from the ring buffer.
+
+Fixed an issue where inability to find the bristol profile files would result 
+in total loss of output signal. The cause was failure to default the velocity
+and frequency tables when the configuration files were not found.
+
+Removed some compilation flags that were specific to my system ready for 
+distribution. Version 0.50.1 probably had compatibility issues due to these.
+
+    0.50.1 22 Jan 2010 Usability enhancments, LADI level 1 compliance, process distribution
+
+Implemented code for LADI level 1 compliance. This required a few changes, not
+just to accept SIGUSR1 to save state but also to have this possible in the 
+engine and GUI. For the GUI this meant adding startBristol code to exec the
+GUI (or engine for that matter) rather than fork it, then have it trap the
+signal and save a state file. For this to work in the engine, seeing as it does
+not maintain state, it requires the signal be trapped and later a message sent
+to the GUI to save the state. This last one caused diverse issues that needed to
+be resolved to clean up some SYSEX handling. The code will accept options to
+field LADI only in the engine, only in the GUI, or the both. The default is to
+field in the engine. There is an option for the state file memory index. At the
+moment bristol does not keep an arbitrary state file: the call is a tack into
+the existing memory save routines so that memory, chord and sequence information
+is also saved, this code section only accepts an integer which is the memory
+index. If both -ladi memory location and a -load options are given then the
+LADI state memory will be loaded if it exists, otherwise the -load memory will
+be activated and then becomes the template for the LADI state file.
+
+Reworked part of the Jack audio library on request of Nedko for LADI support so
+that the client interface is only opened once, in the audio thread. Without this
+he was seeing both audio and MIDI threads opening an interface and this did not
+map into his registration routines and PID mapping. Previous 
+releases incorporated separate Jack registration requests in the audio and
+MIDI threads using different symbolic names. This worked however was a bit
+cumbersome for LADI support. The MIDI code can now reuse the audio registration 
+from the audio thread, just adding an extra MIDI port to it. This became the
+default Jack behaviour with a -jdo option to enable Jack Dual Open if still
+needed later. The operation of the -jack flag also changed to configure Jack
+drivers for both audio and MIDI. Prior to this the -jack flag only configured
+the defaults for the audio interface and kept the ALSA (-midi seq) option for
+the MIDI interface. The previous functionality can still be requested with
+the flags '-jack -midi seq' or just '-audio jack'.
+
+Integrated several keyboard accelerators, these were requested as a set of
+usability enhancements. The include ^S, save, ^L, reload, ^X, exchange two 
+memories, ^K, print the list of shortcuts, ^H/^?, print help information which
+is the text writeup for the emulator. The actual readme is now built from this
+output. Parts of this code (specifically the save routines) were used for the
+LADI state save routines.
+
+Cleaned up some issues with the MIDI interface flags, the readonly input to 
+bristol needed to be configured as an output into ALSA, something that was 
+being mixed up. This may be ported back to 0.40. Affected midithread.c and 
+midiSeqDevMan.c only.
+
+There was a bug in the memory file management code that cause a spurious
+directory 'memory' to be created in the users home directory if the emulator
+did not have a private memory path. It was also created in $HOME/.bristol as
+well, correctly, however the code did not return on the first creation.
+
+The BRISTOL_LOG_CONSOLE environment variable was changed to be a true/false
+flag. The run time equivalent option -console should now be honoured under all
+circumstances which was not the case previously.
+
+Cleaned up the closedown procedures for the situation that jack decides the
+process is 'zombified' (sic) when it is actually under CPU pressure. It used
+to leave the engine hanging around. The issue was not always obvious due to 
+alternative TCP port selection but it was still wrong. The processes should
+now exit more gracefully although jack could be a bit more flexible here as
+the cause of the original hanging processes was libjack blocking disconnects
+from a process it had flagged as 'zombified' (sic).
+
+Added key handlers for left and right arrow to give more controller tracking.
+The Up/Down keys already moved controllers, with shiftkey accelerators, the
+Left/Right now give more movement than up/down.
+
+Integrated another fix for loss of keyRepeat functionality on exit: there was
+a window where repeat could be turned back off if the mouse re-entered the GUI
+window before engine negotiation had completed.
+
+The following changes would have been in 0.50.0 had it been released:
+
+This is actually a new software stream, the changes required to give correct
+distributed processing were sufficient to be kept separate from the 0.40
+release even though there do not appear to be a great number of features.
+
+This release 0.50, is going out first as unstable. Many fixes for bugs found
+whilst working on this code were put back into the 0.40.7 release which is now
+considered to be stable. Having said that, this release is the first to include
+some form of quality assurance. The process of SQA rotates around the 
+distribution capabilities: a single engine is started in one window, and then
+a scripted procedure runs sequentially through every emulator, starting and
+stopping every 10 seconds (roughly). During the whole process note events are
+being sent to the engine and redistributed to the GUI. The SQA test is only
+considered to have passed if it runs without any form of misbehaviour. Typical
+cycles are somewhere over 2000 iterations.
+Failure includes any crash the GUI or engine, loss of audible signal, exhaustion
+of any of the library resources (handles, devices, etc), memory leakage or any
+recognisable memory corruption. This is neither the simplest nor the most
+complex test procedure. The first iteration just restarted a single emulator
+1000 times, after that it became starting all of them, and then adding note
+generation. There are two other scenarios that will be in a final test sequence
+(at a later date) which will include multiple synth pairing and also program
+change events. The multiple synth pairings will be interesting, it should
+involve generating notes to every possible pair of layered synths (about 1200
+cycles) including stopping and starting all of them each time on the same
+engine.
+
+Added a -log option that causes output redirect to a file. Will first attempt
+to log to /var/log/<process>.log if permitted, otherwise it will attempt
+~/.bristol/log/<process>.log with file truncation if logging is to the home
+directory. As a part of this operation the whole logging mode was altered such
+that a separate thread now takes control of stdin/stdout and stderr, timestamps
+the output messages before printing them. Finalised this with a -daemon option
+that detaches the controlling terminal and implies -log and -server. It is noted
+that -daemon holding open files in a users home directory is potentially not
+optimal so this mode would best be used as root with open files in /var/log.
+It is possible to override the use of the log thread by setting an environment
+variable BRISTOL_LOG_CONSOLE, this prevents the thread creation and continues
+to output to your TTY.
+
+Had to rework the brighton thread management to allow for asynchronous MIDI
+event distribution. It may need more testing so will go out as unstable - there
+were quite large alterations required but it lead to better general thread
+management in the GUI: it no longer exits forcefully on window requests or
+interrypts, it flags the threads to exit gracefully. The changes all passed
+through the SQA hurdles discussed above.
+
+Finalised the event redistribution code so that only the GUI or the engine
+need to be aconnected to a real midi interface (or sequencer interface). Events
+arriving on this interface are redistributed to tcp ports, ensuring that the 
+GUI and engine always track the same events. There is an override of this 
+functionality using -forward (discussed below) and forwarding is on by default.
+
+Added an option -sysid to specify the MIDI SYSEX system ID for communication.
+This needs to be entered as a 32 bit hex value. It will override the default of
+0x534C6162. This followed an interesting discussion on LAU regarding controller
+identifiers. The theoretical collisions that could happen should not have 
+affected bristol since SYSEX is only used over the TCP connection from GUI to
+engine however the feature was cool enough to get implemented. For those who
+are interested, the default SYSID is 'SLab' in hex, the bristol MIDI interface
+extended from the SLab design.
+
+An issue was reported with -voices 1 not giving any sound. This turned out to
+be true and the workaround (now the fix) is to use -hnp or -lnp with either the
+-mono flags or when voices=1. The code also now configures the note precedence
+automatically (although it can be overridden). [And the last note precedence
+code should also now be fixed too. nc.]
+
+Fixed a spurrious compilation issue when Jack drivers are not found. Code was
+still attempting to make a library call that was not compiled into that library.
+
+Reworked exit conditions so that the processes can return reasonable status
+back to the caller. That was not the case with the GUI and even if it was then
+the startBristol script needed to still consider these exit status.
+
+Did a cleanup of the build process to remove some spurious warnings that should
+not have cause any issues with the code but did make the pedantic compiler churn
+out messages. The remaining output should primarily be for my own warning 
+statements and a few unused variables/routines in the unfinished emulators.
+
+Added an option -window to prevent posting of the GUI window. This is for SQA
+testing where each emulator is started in turn in a constant cycle of thousands
+of iterations, this spares a few cycles and allows other work to take place 
+without the sometimes irritating window focus changes.
+
+Inserted some exclusion code on the midi signalling not to dispatch callbacks
+for physical midi events, nor forward them, during some critical code sections,
+notably starting and stoping emulators. Also had to clean up some deallocation
+of the voices as there was a 'hole' in the code where a NULL baudio would
+prevent a voice from being freed up, ever.
+
+Added some NRP commands to request remote event forwarding. This is used by
+the GUI to prevent the engine from duplicating events into two possible TCP
+pipes (dual manual keyboards), and by the GUI to selectively do the same for
+its interfaces. This resulted in changing the -forward flag to be a global
+engine setting, -localforward for the GUI to the engine (local in the sense
+that the GUI is per definition local, the engine may be remote), and then a
+-remoteforward option for engine to GUI settings. The latter two will only
+affect the single emulation which means some GUI can request copies and others
+decline them. This flag does not affect the existing -tracking option which 
+simply governs whether the GUI keyboard will respond to MIDI note on/off 
+messages. The forwarding of events covers more than just note on/off, most
+notably program change and modulation events are needed even if tracking is
+turned off.
+
+Fixed an issue of incorrect shadow rendering from resizing withdrawn panels.
+When they are finally exposed the shadow contained the unsized instance.
+
+Fixed two issues with the bassmaker operation, the first step after pressing
+start was not being sounded and LED status is not cleared on restart. The LED
+status of the last Stop point was not being cleared. Additionally the shadow
+rendering was faulty when panel selection changed with resized windows.
+
+Cleaned up a compilation flag that could still cause it to fail if Jack was not
+included in the system or build process.
+
+Reworked the audio library so that ALSA devices are just drained and prepared
+when a read or write error occurs. Previously they were closed and reopened
+which is a rather ugly overhead, plus there were obvious chances that it used
+to incur some memory leakage. The new code changes some of the data preload
+processes which now have to be pushed down into the library. The previous
+method can still be compiled by giving the --disable-drain option to the
+configure script for cases that give problems with the new method.
+
+A failure in limits checking lead to a potential memory corruption issue in the
+continuous controller code and NRP handling. This could have been the cause of
+the original issues reported around NRP causing the engine to fail. Irrespective
+of this, though, there are too many possible collisions here as the NRP address
+space is common across a given MIDI channel making its use rather hazardous.
+
+A couple of the emulators were exhibiting fairly random segmentation faults, 
+indicative of memory corruption. Ran up valgrind to give some input into the
+causes and there were diverse issues that had to be taken care of. A part of
+the cause was the controller ID damages given above, there were diverse changes
+to the emulator code as there were a few errors in buffer pointer management
+that resulted in some emulations leaking quite voluminous amounts of memory
+each time they were invoked, and some small leaks on things like audio device
+restarts where buffered name space was not being reutilised. There was one
+case of a bristol audio structure being reused after it had been freed, this
+was introduced when the emulator destruction code was moved from the MIDI
+thread to the audio thread for other unrelated problems. Valgrind still reports
+some minor memory leaks however these are almost uniquely related to the ALSA
+library interfacing where structure ownership is not really that clear and are
+typically bits of memory that are not really lost, they are just not freed on
+exit, and since the audio drain feature was added then the audio device is not
+longer reopened when xruns occur. These remaining bits can be reviewed later
+as the loss is still small, it does not appear to increment over time and does
+not affect functionality yet. In total there were about 15 changes related to
+corruption rather than leakage although not all of them would have caused
+segmentation faults as they were not all write operations, some were read.
+These would have caused intermittent noise (ticks) and potentially wild
+modulation, especially of the DX FM operators.
+
+Removed an issue with the libbristolmidi ALSA SEQ interface handling for the
+channel identifier, it was not correctly being merged across resulting in all
+channels converging onto zero.
+
+There was a small timing window where GUI failure could result in dangling
+emulators (headless). Active sense will only start after a sense message is
+received, so if this first message does not get there then the emulator does
+not detect GUI failure. The engine now always starts ActiveSense, the GUI
+has to turn it off if not enabled.
+
+There was a ludicrous amount of debug messaging added to track down all of the
+above problems and rather than remove it all for the release, they were buried
+under a -debug flag that defaults to 'off'. Values of '-debug 12' or greater
+are not advised as they will debug every period of samples.
+
+The B11 library stops key repeat on window entry and reenables on LeaveNotify,
+this is use to make sure the QWERTY keyboard tracking functions as expected. 
+With some window managers (reported against fvwm) the window Destroy function
+only sends a wmDelete request and no LeaveNotify as the window exits which 
+would result in loss of key repeat. The command 'xset r on' fixes that however
+submitted a fix to turn repeat back on under these circumstances too, and added
+in some X11 event debuging at -debug 9 or higher.
+
+Finally continued to resolve what I would call minor issues although that is
+subjective. Engine compilation did not include config.h, the Solina had very
+different gain on its harmonics, some of the bitmaps needs improved drop shadow
+rendering, the MIDI processing would terminate with the first emulator to exit,
+ie, the MIDI library was not reactivated, etc.
+
+Removed potential segfault in midiNoteOn(). Put the speaker holes back into the
+ARP 2600, vertically as there was a shortage of realestate but having them puts
+the gravity back into the image.
+
+Fixed an issue with the flagging defaults for the -alsa flag, it was taking
+ALSA rawmidi rather than the usual target of ALSA SEQ. This would fail the 
+option completely. It could still be made to work with -alsa -midi seq, or by
+not using any specific driver options as the defaults were correct.
+
+Updated diverse parts of the GPL compliance, bringing all the files up to
+version 3 of the license and including the disclaimer events where necessary.
+
+Bristol version 0.50.0 was never distributed, the release was rolled up into 
+0.50.1.
+
+    0.40.8 22 Jan 2010 Maintenance release
+
+Fixed an issue with the flagging defaults for the -alsa flag, it was taking
+ALSA rawmidi rather than the usual target of ALSA SEQ. This would fail the 
+option completely. It could still be made to work with -alsa -midi seq, or by
+not using any specific driver options as the defaults were correct.
+
+Jack MIDI opening sequences had a potential window to fail in which case the
+interface would not be activated.
+
+There are no further fixes from 0.50.1 that will be ported back to 0.40.8 as 
+they are now primarily related to new features in the 0.50 stream.
+
+The 0.50 stream will also be created at the same time, as such this download
+may not be of interest to many people, ie, installing this may duplicate the
+effort later.
+
+    0.40.7 22 Nov 2009 Maintenance release
+
+Fixed some compilation flags that could still cause the build to fail if Jack
+drivers were not included in an installation. This is a backport from 0.50 for
+compatibility purposes.
+
+The sid.c code had as issue with debuging being executed without suitable
+checks on the handle. Could cause a crash which has now been fixed.
+
+The XPM reader had a couple of issues with parameter naming collisions and its
+file naming for temporary files used for decompression could also fail if more
+than a single GUI intialised at the same time.
+
+Had to implement some extra local memory sanity checks before calling the
+emulator operate() code. Depending on timing these may still be null as the
+emulator initialises.
+
+The bristol BassMaker would give incorrect panel rendering when panel selections
+were made on a resized window. This could have affected other emulators as well.
+
+The BassMaker would jump the first step of a sequence.
+
+The BassMaker did not correctly clear the LED status of the stop position.
+
+There was a hole in the voice management code that would prevent a voice from
+ever being freed up if it had a null baudio. This could happen if a voice is
+still active as an emulator is terminated.
+
+Cleaned up a compilation flag that could still cause compilation to fail if
+Jack was not included in the system or build process.
+
+A failure in limits checking lead to a potential memory corruption issue in the
+continuous controller code and NRP handling.
+
+Removed an issue with the libbristolmidi ALSA SEQ interface handling for the
+channel identifier, it was not correctly being merged across resulting in all
+channels converging onto zero.
+
+A couple of the emulators were exhibiting fairly random segmentation faults, 
+indicative of memory corruption. Ran up valgrind to clear up a few memory leaks
+of small amounts of memory on things like audio device restarts and also to 
+track down the corruption. It was partly the controller ID damages given above
+however the baudio structure was getting freed before its ultimate use which
+could intermittently lead to further damage. There are still some minor memory
+leaks however these are related mostly to ALSA library interfacing where
+structure ownership is not really that clear. This can be reviewed later as
+the loss is still small and does not affect functionality yet. In total there
+were about 15 changes, not all of them would have caused segmentation fauls as
+they were not all write operations, some were read. These would have caused
+intermittent noise (ticks) and potentially wild modulation, especially of the
+DX FM operators.
+
+The B11 library stops key repeat on window entry and reenables on LeaveNotify,
+this is use to make sure the QWERTY keyboard tracking functions as expected. 
+With some window managers (reported against fvwm) the window Destroy function
+only sends a wmDelete request and no LeaveNotify as the window exits which 
+would result in loss of key repeat. The command 'xset r on' fixes that however
+submitted a fix to turn repeat back on under these circumstances too, and added
+in some X11 event debuging at -debug 9 or higher.
+
+Removed potential segfault in midiNoteOn().
+
+    0.40.6 28 Sep 2009 Maintenance release
+
+Resolved a name resolution issue that would cause the split/layer keyboard
+emulators to fail. The dual manual ones should have worked. The workaround was
+to default the hostname when null but the actual fix is to request the same
+destination host in all cases, something that will now only go into 0.50.
+
+Included some memory packs for the trilogy and polysix emulators.
+
+    0.40.5 23 Jul 2009 Distributed processing maintenance release
+
+Added an option to startBristol, -gui, which will prevent the GUI from being
+started and invoke the engine with all the resolved bristol variables. This
+will allow for easier distribution of the applications with GUI and engine on
+different hosts which was always a part of the design but was never really made
+that accessible. This can be used in conjunction with the -server flag which
+will leave the engine active even when the last emulator has disconnected.
+Running as a server lead to a few issues that were anticipated - constantly
+reconnecting GUIs would exhaust various engine tables that were not being
+cleaned up correctly as this had never been widely used. The file descriptor
+table was not being cleaned up, the handle and device tables similarly. There
+was an issue with SID selection of the EXIT requests not being correctly matched
+causing the wrong emulators to be disconnected, and with failure to correctly
+close input file descriptors on active sense failure requiring a small change
+to the device reading logic. It was finally possible to run a test script to
+reconnect nearly a thousand times, without failure, all emulators still audible
+and so moved to released code.
+
+Several issues arose whilst building the application without ALSA drivers. This
+is supported, especially now that Jack MIDI is integrated, however since ALSA
+turned 1.0 the coding has been a bit lax, assuming that ALSA was available and
+integrated. The result was that building without ALSA might fail and that even
+when compiled there were issues with device open() requests. Resolved these and
+added the flags required to accept note events over the control link so that
+GUI keyboard events are still tracked even if the ALSA code is not integrated.
+
+Was requested to remove all OSS dependencies from the build process as well.
+This was a little more work than ALSA since that was always intended to be a
+build option, OSS by contrast was always anticipated to be present. Had to 
+clean up some of the socket toolkit header files and some erroneous definitions
+in the midi library that was being flagged by some more meticulous compilers.
+
+Reworked the TCP addressing code to accept -host <hostname:port> where hostname
+can naturally be a IP address or (non)canonical hostname. The port option can
+be used with the -engine flag to connect the GUI to a specific host where the 
+engine is running, remotely: it is an alternative to the -port flag however
+it is still advised to actually use -port for other reasons.
+
+There was some general code cleanup from the request to have bristol function
+on a system that had neither OSS nor ALSA installed. This was never anticipated 
+and making it possible brought other issues to light.
+
+The Trilogy had a very unequal mixing section, the organ gain was too quiet 
+and the synth section too loud. These were evened out.
+
+The Trilogy also had some rather unusual use of volume controls. To reduce
+CPU load the synth would not run the organ and string sections unless they had
+a non-zero gain. This achieved its affect however the result was that if the
+gain was zero at note_on then the voice was always muted (it actually just fell
+through the note logic and turned itself off). The fix was to always run the
+oscillator divider circuit envelopes under all circumstances to engage the note
+logic. The audio generation code is still skipped as it would be silent anyway
+when the gain is set to zero.
+
+    0.40.4 06 Jun 2009 Audio Driver Mainenance Release
+
+Added an autodetect for Jack where a small program will connect to the daemon
+and find out the sampling rate and period size. These are then given to bristol
+as parameters preventing unexpected mismatches later.
+
+Fixed a watermark issue with the ALSA drivers, the high available threshold was
+too low which causes the library to report false overruns. Since these come
+back as a failed write operation the bristol audio library was restarting the
+audio devices. The diagnostics reported this as a broken pipe.
+
+Resolved a typo in the ALSA drivers that damaged the periodsize and buffersize
+matching. Caused cyclic ticks in the output stream depending on hardware and
+ALSA driver versions.
+
+Changed the activesense period to 3s and timeout to 15s. There are issues when
+running with RT scheduling where the GUI may get starved when there is a lot
+of audio activity causing the engine to give a false positive of a GUI failure.
+Since active sense is really there to make sure everything exits gracefully 
+when there really is a failure then the timers need to be more flexible to 
+cater for situations of high CPU load. [0.40.5: as a side note, this only 
+really affected a system if it had cpu-speed ondemand, or was massively over-
+loaded, neither of which are optimal for audio processing.]
+
+    0.40.3 25 May 2009 Maintenance release, B3 stuck notes.
+
+The Bristol B3 was exhibiting stuck notes, fairly arbitrarily however the
+issue was not reproducable on the development system. After a ludicrous number
+of debug builds to get different statistics the cause turned out to be the B3
+postOpts which manipulated the voice flags and the resolution was to extend
+the semaphore coverage to include emulator postopts. Theoretically it would 
+be possible to have just changed the B3 code however the engine that hosts 
+the emulator should not be open to flag abuse in the voices and the voices
+are allowed to manipulate these flags. The actual cause was a race condition
+that only really exhibited itself on multicore/HT systems.
+Thanks to Andrew Coughlan and Damon Chaplin for the report and debuging
+output to isolate this issue. As the problem was not reproducible on the 
+development system (single core) then tracking down the cause required a
+number of different debug revisions and a great deal of patience and output
+logging from the people involved.
+
+Releases 0.40.1 and 0.40.2 will be removed from the download site.
+
+The bristol shutdown procedures were not really compliant with the Jack API
+definitions, they would not deactivate/unregister the active handles before
+exiting. This does not work very well with multiapp environments, it causes
+a subgraph timeout in the API. Changed the shutdodwn code sequences so that
+the last exit operation will clean up the emulators in the audio thread and
+let the MIDI thread then unregister jack and exit so that all parties are
+happy. Also added some diagnostic output in the event that ports cannnot be
+registered - this happens if Jack has a lot of application ports to deal 
+with so the additional message makes sense. Also coded in jack_client_open()
+to replace the now deprecated jack_client_new() previously being used.
+
+The Sidney emulator was about 1/2 a semitone out. After a lot of delving into
+the correctness of the code without much success (ie, it seemed correct) it 
+turned out the C64 had different versions for NTSC and PAL, with different
+CPU clock speeds. The frequency tables were built from data taken from what had
+to be a confused manual since they did not match up for the clock speeds. When
+the due correction was applied (0.985 to 1.02 and finally 1.023MHz) it was
+finally pitched correctly.
+
+The trigger events for the SID MOD Env were not really correct. Any accepted
+note_on event would cause them to trigger however in light of the way voice
+separation happens it really required that the Env was only triggered if it 
+would have a affect on the given voice. There were a few cases, voice goes
+via the filter and env modulates the filter or if the Env modules the voice
+that is being activated. Added the logic. Voice-2 arpeggiating never triggers
+the envelope, only its own envelope.
+
+Increased the minimum Sidney arpeggiation step, it was a ludicrous 0.3 ms, it
+is now a more reasonable 16ms. Maximum stays the same at roughly 250ms.
+
+The Sidney emulator had an issue with some memories and its keymode settings,
+the indexes were not converged correctly resulting in the radio buttons not
+working normally (double selected radio buttons).
+
+The OB-Xa 4-pole filter was incorrectly mixing its feedback loop, silencing
+the output signal. The 2-pole worked correctly.
+
+The MIDI library was altered such that all messages now carry a sequence
+number, it's only u32 but its only use is debugging events and with the typical
+event rates this will last far longer than any session. Also finally fixed the
+event timestamps which were previously just null.
+
+The midi and audio threads had different scheduling algorithms, one was FIFO
+the other RR. Since the two threads used semaphores for a critical code
+section for note events then there existed the possibility that the midi thread
+could cause large delays to the audio thread by taking the semaphore and then
+getting pre-empted. The fix was pragmatic, both thread have been made FIFO
+with different priorities. A full fix would also have been to adjust the
+thread priorities in the critical code however the current fix works except
+when there are multiple RT programs running and that should only be the case
+if they are all audio threads.
+
+    0.40.2 05 May 2009 Maintenance release, usability improvements.
+
+This is primarily maintenance for the last couple of releases including fixes
+to the SID emulator and some ARP improvements.
+
+The SID synth has more key assignment modes, both arpeggiating, visible in the
+GUI as Arpeg 1 and Arpeg 2. They will split the keyboard at MIDI note number 52
+then assign two voices to one half and one voice to the other. Arpeg-1 has its
+function on the upper half, leaving the lower half as a duophonic synth
+allowing an arpeggiated chord as rythm for a bass sequence. Arpeg-2 will do the
+opposite, it will arpeggiate on the lower half allowing for arpeggiated rythm
+with a duophonic lead solo. These were seen as an improvement over the previous
+but the results need to be reported back.
+
+Bristol will now check the system for the availability of the TCP control port,
+defaulting to 5028. The application behaviour has always been that an engine is
+attempted every time the application starts and correctly speaking if a user
+wants to work multitimbral then the second request should be given the -engine
+option. Without this flag it still worked but was sloppy, the second engine
+would fail to get its control port and so would exit, the second GUI would
+still connect to the first engine and start a second emulator. The current
+behaviour is that each time the application is started it will look for the port
+availability and if it is already taken then an upwards scan is done from the
+port number looking for a free socket. The port can be specified explicitly
+with the -port option if fixed ports are required however this is not a real
+requirement if the -audiodev is used with Jack, for example, to specify the
+registration identifier for the new engine. If no engine is requested the GUI
+will just attempt to connect to the specified port although arguably it should
+check to see if the port is open - this is kind of done implicitly when the GUI
+attempts to connect to the port.
+
+Extended the BRISTOL_AUTOCONN by adding the following environment variables,
+BRISTOL_AUTO_LEFT, BRISTOL_AUTO_RIGHT and BRISTOL_AUTO_IN. If these are set
+they will be searched in the relevant ports list and then connected up. This
+only happens in conjunction with AUTOCONN. On my systems this was tested by
+setting them to system:playback_1, system:playback_2 and system:capture_1
+resprectively, and by leaving them unset. Will see how much use they are,
+since they are environement variables then to be useful they would have to
+be scripted.
+
+Submitted code to repaint transparency layer devices when windows sizes are 
+changed. This affects shadow layers and transparencies (such as the ARP 2600
+patch cables). Prior to this the objects painted on to this layer were lost
+which was confusing with the ARP at least. The effort to do this was considered
+preferential to the alternative which was to fix the window size once defined,
+not allow resizing and just have the -scale option at startup.
+
+There were some compilation issues due to the SID test program not having the
+correct dependencies. Removed sidtest from the distribution, it is no longer
+required, it was only used to exercise the bristol softSID chip until it was
+integrated into an emulator, now done.
+
+Known issues are that the Pro-10 would fail on some systems. This is a very
+specific issue as some systems have been reported not to suffer from the
+issue. A workaround is in place however a longer term resolution will have to
+be sought and a bug is open against the issue.
+
+    0.40.1 25 Apr 2009 Commodore C64 SID emulator
+
+This release introduces an emulator for the Commodore C64 6581 SID audio chip.
+The implementation has a digital access method to program the chip registers
+and an 'analogue' access method to extract the audio signal. The oscillators
+and envelopes are implmented with integer functions as the original was partly
+digital, and then the filters are in floating point to emulate the analogue
+components. Specifics of the chip will be in the README file presently.
+
+Two of these chips were then used for a bespoke synth, the -sid. This is not
+based on any original design but exercises the SID emulator. One of the two
+chips gives the audio output, the second gives signals for modulation: one
+LFO, one Env and one noise source which can be as an input to a S&H circuit.
+This design uses a few different voice allocation routines, monophonic, three
+voice polyphonic plus some combination algorithms to give access to the high
+frequency arpeggiation used often in the C64 where a single voice would do a
+fast scan of several frequencies to give chords and widen out the sounds. Each
+of the three voices can be programmed independently.
+
+Added an environnment variable, BRISTOL_AUTOCONN, which when set will direct
+the jack library to autoconnect its ports to the first IO found. This will not
+be much use for general users however it will make testing easier.
+
+Fixed an issue where the emulations would fail unless started on midi
+channel 1. The issue was caused by the Globals settings using a system
+connection id rather than the negotiated midi channel for setting up
+diverse defaults tables.
+
+    0.30.9 02 Apr 2009 Bristol BassMaker, massive filter optimisations.
+
+Coded a 16 step, 4 page sequencer along the lines of the SQ-10 to generate
+bass lines, hence the pun. The overall feature set it pretty sparse since this
+is not intended to be a general purpose sequencer. Each step has a note,
+transpose, volume for the MIDI note and a Control option to send fine tune, 
+mod or another MIDI note on a second channel, plus the triggers can be skipped
+to join notes. The control features have not been widely tested and may need 
+some fixes. Also the fine tune and glide when applied to the Control setting
+are a little dependent on the emulator, something that can be altered if the
+is a demand. A full description is in the README file.
+
+Colin Fletcher optimised the huovilainen filter code, first factoring out kfc
+to reduce the number of multiplications being executed, then continueing with
+completely factoring out v2, and since it was generally used as a divider
+function this was a considerable CPU overhead. This delivered a massive 
+improvement in the CPU utilisation, not only of the filter but the emulator
+generally due to the filter being so CPU intensive. The factoring out of v2
+was ingenious since it was not immediately evident from the code that this
+would have been possible.
+Testing this also corrected some anomalies in the OBXa filter selection code.
+
+About 5 superfluous variables were stripped out of the filter code to reduce
+parameter popping and actually improve readability providing minor improvements
+in the filter efficiency.
+
+Applied noise injection code generally to prevent filter denormals with low
+to zero input signal. This is quite efficient noise generation code so should
+not have a big affect on the optimisations and prevent 100% from denormals.
+
+Another optimisation was applied to the filter for higher sample rates which
+removes the internal oversampling. At the higher rates this delivers around 40%
+reduced load and should not result in any loss in quality since it only applies
+when playing at 88kHz or greater where the filter response is still good to
+over 20kHz without resampling. Not all the emulators will actually use this
+code modification since it is only in B_FILTER2 which is sparsely deployed at
+the moment, something that will change as the different modifications are
+qualified. The result of all these optimisations is that this filter code
+should be about as fast at 96kHz as the previous one was at 48kHz, and as the
+filter code currently uses the vast majority of the emulator cycles then it is
+probably possible to run any of them now at the higher sample rates with 
+little affect on net load.
+
+Applied some reduced EQ to the Hammond B3 Bright signal levels. This kept the
+same rough profile however the overall signal level was far in excess of the 
+existing normal gearbox. This was required due to some big reductions in the
+crosstalk levels of the normal gearbox leaving bright as too loud. The changes
+to the crosstalk was required since the net amount was superfluous and
+although it brings some nice overdriven sounds it was excessive for both of
+the configurations to have that amount.
+
+Bristol no longer implements any Jack port auto-connect per default. After a
+trail of submits to LAU there were very good arguments as to why having
+default connections always being applied is a dangerous feature. The auto-
+connect remains but has to be requested with '-autoconn' although admittedly
+this does make it a fairly superfluous feature.
+
+The VOX Continental M2/Super/300 was silent. The global parameters page had
+zero set for all parameters that needed corrections to the memory loading code
+to force the save settings into the active set.
+
+The Polysix emulation would clip excessively with the modgroup was routed
+fully to the VCA. The signal gain from the LFO would result in an overdriven
+output. Reduced all the respective output stage signal levels, which are still
+quite strong anyway, and also some of the tremelo depth when mod routed. This
+will have a minor effect on some patches.
+
+Incorporated Andrew Coughlan's manual page for the Polysix emulator.
+
+    0.30.8 20 Mar 2009 Maintenance release, ARP 2600 fixes.
+
+When using Jack as the MIDI interface it was possible that the engine would 
+attempt to link audio to midi channels and vice versa. The requests fail and do
+not break anything but the default connections don't work so its not quite as
+plug-n-play. Added code to check for the port name and also to parse the whole
+list of outputs for the first two that will link up, similarly all the inputs
+later.
+
+Resolved a strange issue with the ARP 2600 with respect to discrepencies 
+between the GUI indeces and the engine indices. The problem did not show up
+on all systems and the root cause was being masked by a programming error in 
+the engine using an incorrect scaling for parameters passed to it. The problem
+was not evident on all systems probably due to differences in type casting -
+the parameter is delivered as a float however the index is taken from that 
+cast into an int with a range considerably wider than '1.0'. The fix also 
+required changes for removing cables.
+
+The ARP 2600 filter and amplifier outputs had a signal level far stronger than
+most of the other components, this came from reworking the general filter
+input/output levels to ensure it was being driven correctly. Added in a bit of
+normalisation code to even the levels up.
+
+The ARP 2600 filter would also suffer denormals if all the inputs were move to
+zero. Almost to be expected due to the DSP involved in the filter. The initial
+fix is to inject about -96dB of noise if all the inputs sum to less than that.
+This has the nice side effect of making the filter self oscillating at high
+resonance, that was not previously the case.
+
+Reorganised the ARP 2600 volume options. There was a single 'Global Volume'
+that just drove the output stage. This was broken in several ways. Firstly it
+was in the memory which was a mistake to start with. Then it did not function
+as per the original where this single control was called 'initial volume' and
+was a kind of drone level for the VCA. To correct this the parameter was
+separated into 3 controls: Global Volume which is not in the memory, Program
+Volume that is in the memory, and Init Volume to allow the VCA to drone. It
+is noted that droning in polyphonic mode is messy however not having it with
+mono mode did affect capabilities.
+
+The BME filter tracking keyboard selector did not function to expectation, the
+tracking was either off, or honoured along with the mod group which was wrong
+as these are exclusive options.
+
+The X11 library will now only handle single configure events at a time. These
+are typically window resizing that come by the boatload due to mouse motion
+and if they are all handled at once we tend to get active sense failure and
+the engine (then the GUI) exiting.
+
+Reduced the B3 drawbar crosstalk values for both gearboxes. The previous
+values worked but the signal to noise (crossbar leakage) was excessive. The
+bright gearbox settings are still quite rich in harmonics giving a reasonably 
+overdriven signal but the normal gearbox is now not so noisy.
+
+Distributed Andrew Coughlan Polysix patch 23 and added his sample to the
+website.
+
+    0.30.7 02 Mar 2009 Baumann BME-700
+
+Build a BME-700 emulator. This is a rather rare synthesizer and is probably 
+the best example of where an emulator makes sense, it would be pretty much 
+impossible to get ones hands on one of these. The emulator is in its first 
+build and the oscillator may well need some improvements. Future work will
+also improve response with higher samples rates by removing the internal
+oversampling code. To test this emulator try the options
+    startBristol -bme700 -mono -hnp -retrig
+This will give a monphonic emulation with high note precedence and envelope
+retriggers for any note change.
+
+Added a velocity flag to the monophonic key logic such that velocity may then
+optionally only be taken from the first note in a legato sequence rather than
+from every note in the sequence. Option is called -lvel.
+
+Monophonic triggers were a little broken, the current fixed code will either
+always send a retrigger when the voice moves to a different note with the
+-retrig flag or will only send a trigger for the first of a legato sequence.
+
+The Korg MonoPoly emulator would crash. The new synchronisation code did not
+check for a null sync buffer and some of the emulators would pass a null
+buffer if sync was not configured. Related to this was reassignment of the
+-mono switch to be 'monophonic', equivalent to '-voices 1' rather than as an
+acronym for -monopoly. The switch was reassigned to make the monophonic note
+logic more sensible.
+
+Prophet bank select was broken, code was adding incorrect offset into the
+selection algorithm.
+
+    0.30.6 22 Feb 2009 Monophonic note precedence key logic.
+
+The note assignement logic now correctly implements/emulates a monophonic 
+keyboard with low note precedence (-lnp), high note precedence (-hnp) and last
+note precedence. Previously there had only been code for last note - it was
+the polyphonic algorithm with just one voice however this gives a completely
+different playing style. The option only works when the voicecount is set as
+a single voice. Additionally there is a -retrig option to trigger in both 
+directions when playing legato style. The code is interesting since it was
+firstly a little awkward to do and also since the final solution was to have
+the monophonic synth start playing its single voice and then just keep the 
+voice rolling forever. It stacks up the CPU constantly but gives some useful
+features with the ARP 2600 and Moog Sonic-6 (and others) for droning or just
+tweaking them without playing and is arguably a closer emulation of a real
+mono synth. The voice, once assigned to a mono synth, should not be preempted
+by other emulations, ie, it becomes dedicated.
+A present release may make hnp and retrig the defaults for mono synths, and
+similarly invoke a single voicecount if precedence is requested. For not you
+will probably want to use -hnp/-lnp and -retrig to get useful results.
+This release might include some monophonic note logic debugging output, it
+will probably stay there until 0.30.7/8 depending on testing or bug reports.
+
+Finalised the frequency/step tables and moved on to implementing glide for the
+non-resampling oscillators. The oscillator already supported this but the
+frequency tables were needed to correctly fill the buffers. Poly-800 parameter
+#67 now controls glide for that emulator, previously not operable.
+
+Reworked all the filter code keeping only the Chamberlain and Huovilainen. Then
+reworked the Huovilainen for 2pole/4pole (non-resampling versions later). Put
+in an Oberheim modification that remixes the different pole outputs back into
+the main signal path. The mix is configurable however the GUI has no control
+that drives it: a default value is taken. The filter is a bit richer for the
+mix. This mod was at least considered by Oberheim for the Matrix-12 but then 
+never implemented as the discrete circuits with quality components was a bit
+cost prohibitive. Here is is relatively simple work and since the filter is
+already computationally expensive this operation does not add much to the CPU
+requirements. Different codes sections use different mixing loops. The main
+one puts the tapped signals into the output stage only, others will mix it 
+back into the filter feedback loop which give yet another quality however it
+also suppresses resonance due to the resulting phase complexities.
+[As a note, the application still implements 3 other filter types, the rather
+weak rooneys and a butterworth. The ARP also has its own lag filter for
+voltage processing.]
+
+The Arpeggiator/Sequencer code would leave voices hanging after the operation
+terminated. This was kind of known, start/stop just set the emulator flags to
+allow the code to be called. The resolution was to actively deschedule all
+voices associated with the arpeg/seq function.
+
+The LFO changes to 0.30.4 to increase the maximum speed did adversely affect a
+number of memories and, rather than back them out, this version introduces
+parameterisation to set the upper and lower limits of the LFO with defaults
+that were as per 0.30.3 and below. The new emulators that want to use LFO up
+to ranges that verge on FM functionality will request wider ranges. The
+default values should go from 0.1Hz to 20Hz in line with the previous releases.
+
+Build options was damaging the LD_LIBRARY_PATH where jack libs were included
+before the newly built library path. The result was that rebuilding the code
+would probably find the installed libraries rather than the new ones.
+
+The Hammond was loading excessive memories on switching the opts panels in and
+out, added some flags to prevent this.
+
+    0.30.5 01 Feb 2009 Maintenance release?
+
+Worked on a slew of new (short) recordings for the website, fattening out a
+few of the exising memories. This lead to some issues with sound quality in
+some emulators. These would have been fixed earlier if I actually used bristol
+however most of the work is in development rather than operation. Most of the
+sounds were configured in a matter of minutes, more work would have improved
+the depth but they give an idea of each of the emulations that were recorded.
+These short recordings highlighted a few anomalies in the code, and along with
+some other issues that have been gathering over a few releases the rest of
+this release is a set of fixes.
+
+There were apparant envelope clicks on the axxe emulation, primarily on note
+off events. This was due to a direct 'gain' level being mixed in with the 
+ADSR. Corrected it with a grooming envelope on the key however the ARP lag
+processor would also have done this trick quite well.
+Applied the same change into the Odyssey as it uses a similar gain section on
+the amplifier. The 2600 is not affected by this since it uses patching to get
+around the amplifier rather than fixed signal gains.
+
+PWM on the Arp DCO was failing, affecting all the Arp emulations. The cause
+turned out to be a mixup with the min and max limits for the pulse width, 
+something that was introduced when the corrected sync code was introduced in
+release 0.30.3.
+
+Fixed a key mapping issue where the '\' character mapped to key id zero rather
+than two semitones above the ']' key where it should really have been mapped.
+The changes are in the text profiles so could have been done locally in the
+event of complaints. Apart from that the mappings only cover a US QWERTY 
+keyboard anyway.
+
+Some of the keyboard graphics were damaged during the redesign for the
+Poly-800 giving incorrect redraws for the 3 octave emulations.
+
+The Poly800 GUI had a typo that stuffed a non-zero termination signal level
+into its DCO-2 envelope causing clicking if Double was selected. A separate
+issue occured with the filter envelope that was not retriggering correctly,
+resolution was to configure this one envelope for re-zero and will have to 
+see if it needs to be done for all of them.
+
+The duplicated raw audio output code does silence suppression however this was
+only intended to be for leading silence. It was implemented as a cheap way to
+get sample for the website but it was doing permanant silence suppression which
+damages the audio in most cases.
+
+Added a -mbi option and structure entry to the GUI for memory supersets that
+came as a side effect of reworking just some minor details of the polysix
+options (the -load worked however the GUI did not reflect the true memory).
+This was rolled into general use however some emulations already use local
+methods to manage this. This will only conflict if the global method is
+requested and it also affects Chord and Sequence memory as that does not
+access this parameter (yet). This is a single digit parameter adding that
+number of K to all memory access. Memory #1 with '-mbi 2' accesses memory 
+#2001 on disk. The option is additionally set from the -load setting, if a
+memory above 999 is requested then mbi is stuffed with the most significant
+part and the memory index is the remainder.
+
+Revised the LFO to have a range from 0.1 to 100Hz for a pending BME emulation.
+The rate control is a power function so it should not affect any existing
+memories excessively.
+
+Broken in this release and until further notice is the -glwf option, it causes
+note vocalisation errors. The -lwf option should be used with each emulator to
+activate the lightweight filters individually rather than globally.
+
+    0.30.4 20 Jan 2009 Korg Poly-800
+
+Built a Korg Poly 800 which was more work than anticipated. The GUI needed to 
+have a 'membrane' support for the parameters which generally takes quite a lot
+of effort, perhaps less since the bit-1 already had much of the code. Another
+envelope was built as it is a 6 stage design however that is reusable for the
+pending Yamaha CS-80 that has been under construction for a while. The Poly800
+emulates all the dual/single oscillator with an envelope each, plus the single
+filter design was integrated into the emulator PostOps() routine as well as
+the Poly code so that there can be a single high key tracking filter as per
+the original design or you can have one per voice as a bristol mod. The full
+set of mods and general construction are described in the README file, the
+only remark here is that the single filter code is a bit jumpy when the notes
+change by large amounts, something that could be improved.
+
+Added modifications to the bitone oscillator such that it integrates a separate
+sync output. This is at the base frequency with a resampled squarewave only,
+allowing this complex oscillator to still drive sync into other oscillators.
+Tested with the Crumar and Jupiter emulators.
+
+The same modifications were rolled into the explorer DCO since it also
+generates some combined waveforms that could distort the sync algorithms.
+
+Reworked the bitone oscillator to generate what I am for now calling waveform
+tendencies. The output signal will tend towards a target value under a kind
+of discharge circuit at a controlled rate. The result is a non-resampling
+oscillator, more or less, the wave is generated based on algorithms rather 
+than wavetable resampling. The results are at least harmonically unique within
+bristol, at the moment only integrated into the Poly-800 emulator. They sound
+reasonable when heavily filtered, a little raspy otherwise. The nice thing
+is that they are still quite efficient (will change as the waveform heuristics
+develop), costing only a few percent for the generation of 8 oscillators each
+with 8 strands of tendencies, all slightly detuned from each other to give a
+quite rich result. The oscillators can generate square, ramp, saw, tri and sine
+with support for PW/PWM of the square, sync in/out on ramp/saw/square/tri.
+The triwave sync is correct softsync, the rest are hardsync with waveform
+inversion as required. The efficiency lends itself to oversampling which in
+turn could make the Huovilainen oversampling filter more efficient and give
+a net improvement in the sound at very little cost however that is FFS and
+will not be done until after the P800 is released.
+
+Integrated a new noise generator which has better performance and also a cleaner
+overall signal. The previous code has some excessive LF components.
+
+The Preacher gearbox was a sixth out of tune, 8 semitones. Pretty strange it
+was not reported and I admit I had not noticed it. The default gearbox seems
+to take the wheel indeces from an incorrect starting point. This also brought
+to light another issue with the same code. Since the user profiles were
+enforced recently then the tonewheel mapping file had to be in ~/.bristol and
+was not shadowed back to /usr/local/share. This would have caused some issues
+with the tones rather than the frequencies.
+
+Built another set of keyboard layouts, this time for the Poly-800 but may get
+rolled into other emulators later.
+
+Check Button devices would still dispatch an event if the mouse is released
+outside the bounds on the device. This should not be the case so checks were 
+added for limits before callbacks are made.
+
+There was a small window when killing the app during initialisation could leave
+the engine waiting for the audio thread forever. It should all exit so added
+some timeouts to the status polling routines in the midi thread.
+
+Key bindings were not being read for library testing. Not an operational issue
+however it needed a fix for testing purposes at least.
+
+The pitchwheel and its associated Registered Parameter were not working in
+unison, had to reorganise their internal variables and the frequency calc
+code when changes are made.
+
+Reworked a few more shade layers and put the new key designs into a couple of
+the other emulators.
+
+Configure will now prompt the user to install libasound2-dev as well as
+libx11-dev if either are misssing.
+
+    0.30.3 19 Dec 2008 Crumar Tilogy, PWM and Sync fixes, Polysix improvements
+
+Added the String section to the Stratus emulator to produce the bigger brother
+of the pair, the Trilogy. As with the Organ section of the original, the string
+section is not a major feature and was nothing to write home about. The code
+adds some extra harmonics to fatten out the sound plus some panning and 
+spacialisation to enhance the section. The features can be disabled to give
+a more authentic emulation of the original.
+
+Changed the graphics on the Stratus synth waveform selector, it was not a true
+mix but a three way switch. The graphic is emulated however the control is
+still continuous here.
+
+The default memory for the stratus had a bit too much key tracking configured
+and it shut off the filter completely for the lower octaves.
+
+Fixed some minor issues with the Stratus options panel.
+
+Took excess debugging out of Trilogy/Stratus code.
+
+Touched up the shadow layer for both these emulations.
+
+The Polysix mg controller side affected the oscillator frequency. The wheelmod
+should just affect the overall depth of the routed LFO, it was doing separate
+mod for vibrato which was undesirable. Also changed the default switch for the 
+polysix from -poly to -polysix and -poly6. For now it will respond to both.
+This was an unfortunate choice originally and will presently be dropped to
+just the newer options.
+Similarly changed the Korg Mono/Poly switch to be -monopoly from -mono, also 
+an unfortunate historical choice.
+
+The polysix waveform selection was actually wrong regarding Square and Pulse
+wave - square is a fixed wave that only uses a PW control to select its width,
+the pulse wave uses the same setting but adds PWM via another LFO, these were
+out of sync. Thanks to Andrew Coughlan for the insight whilst working on a Jens
+Johannsons lead sound, apparantly originally done with a Polysix.
+
+Andrew's patch also showed some issues with parameter memorisation for the 
+operating modes: Poly and Mono mode could be lost on reloading a memory, now
+also fixed.
+
+Added in some diverse changes for the PWM code, historically the width has 
+been an integer value in the range of the size of the wavetables and at least
+for some of the oscillators this was still being managed as an integer. The
+pulse width is now floating point and the resampling is independent of the
+main waveform being generated. The difference is only subtle since the
+original code resolved to better then 0.1% accuracy already however it did
+show up a couple of bugs in the prophet DCO code regarding offsets and brought
+to light the noise on oscillator sync with certain waveforms (notably square)
+that really also need to be addressed but probably in the next release as it
+really needs triangular (soft) sync as well as hard sync.
+
+Fixed a long running issue with oscillator sync, namely that it worked but
+very badly if the synchronised wave as a square. It was always ok with ramp
+for example. The cause related to how sync was being done, it was just
+resetting the resampled wave table index to zero, correctly speaking it needed
+phase inversion as well, now implemented. The synchronising wave is also
+resampled before it goes to the synchronised wave to remove the flutter or
+shimmer associated with synchronising to whole samples, it basically
+synchronises to subsamples. Phonically this is a big change and it may be 
+rolled back into 0.20 since 0.30 is still relatively new.
+
+Alterations for this fix are still needed for bit1osc, it generates complex
+waves by default and they are not very good for sync signals. For now users
+will have to simplify the synchronising wave, a future release will have the
+oscillator generate a sync output signal at its base frequency.
+
+    0.30.2 15 Dec 2008 Crumar Stratus
+
+This release has an implementation of the Crumar Status 'duosynth', it used an
+organ divider circuit to produce some slightly lacking organ sounds with four
+harmonics of pure square waves plus a six voice poly synth. The organ circuit
+has been beefed up considerably - it can produce the same square waves however
+adds in alternatives (square and sine through ramp, smoothly) and some added
+stereo spacialisation. The interesting synth glide circuits are emulated, this
+is not typically polyphonic portamiento since this beast used organ divider 
+circuits for the oscillators so independent glide on each voice was not
+possible. In contrast the circuits could be over and underclocked as a note
+starts then glide back to the target note, here emulated polyphonically.
+All the legato features should work - the LFO in mono mode will only strike
+open the LFO envelope grooming circuit once, the glide features will work in
+a similar legato fashion and the oscillator output can be kind of random with
+legato.
+
+Improved the oscillator sync algorithm however certain waveforms are still
+noisier than they should be. This was only in the Crumar Stratus oscillator
+but the alterations can be moved over to the other synchronising oscillators
+when finished.
+
+Altered the filter keyboard tracking for the Huovilainen to try and get better
+tuning. It can be made playable however that still takes quite a lot of
+tweaking so a few more changes are likely over the coming releases.
+
+Put the reverb back into the Sonic-6, will see what people make of it as it
+only works well with fat sounds (B3) or at low delays.
+
+Reworked some of the button control logic since they were not being set when
+withdrawn. The logic for withdrawn should really be just 'don't draw' and this
+was corrected.
+
+Reworked some more off the graphics for better drop shadow on the keyboards.
+
+    0.30.1 03 Dec 2008 Voyager Electric Blue, Moog Sonic 6.
+
+Voyager Electric Blue released in conjunction with some fixes to the existing
+explorer algorithm as detailed below.
+
+Moog Sonic 6 released, the suitcase synth. There are diverse differences with
+the original, implemented largely because they were denoted at the weakest 
+points of this fair synth:
+
+    Added a mod wheel that can drive GenX/Y.
+    PWM is implemented on oscillator B
+    Installed an ADSR rather than AR, selectable.
+    No alternative scalings - use scala file support
+
+The emulation is not duophonic. Primarily poly with separated glide. It does
+have the same 'diaphonic' capabilities although they were pretty dubious in
+the original. Details are in the README file. There are sadly few memories
+configured in this first release, none in fact.
+
+The Sonic-6 implementation was the first new algorithm in a while and it has
+shown a few issues with gain levels regarding the filter output. This lead
+to a few more alterations to the normalisation of diverse emulators but it
+should fix the issue of filter resonance overdriving the outputs and causing
+clipping. It should now be a gentler easy sine wave, probably still quite
+strong but it should not cause clipping with most emulations.
+
+The Explorer code needed to be reviewed for a changed filter set and filter
+characteristics, the original stacked LPF was wrong. The code needs to have
+either serialised HPF/LPF or parallelised (and then stereo) LPF. This was 
+worked into the code and an interface put together to emulate the 'Blue Ice'
+version of the synth.
+
+Reworked the Release parameter of the Voyager/Explorer. The existing code
+either configured the value or just '10' depending on the release switch. The
+correct coding is to either send the value or a small part of the value based
+on the switch setting, closer to the original.
+
+OSS drivers were broken due to a failure to convert some of the device flags
+correctly. The result was no subfragmentation and no subfragment buffer. Only
+tested with ALSA compatibility mode.
+
+Reworking the drop shadow step by step on the piano keyboard. Gives a better
+effect.
+
+Minor changes to the options for the different Prophet emulators.
+
+The 0.20 stream is now maintenance only.
+
+    0.20.10 27 Nov 2008 Maintenance release.
+
+Altered the permissions on the memory files and pixmap files since some users
+would have had problem accessing them. That would have made memories
+unreadable and given some incorrectly painted images. There were no complaints
+however it probably would not have been totally obvious what the problems
+even were.
+
+OSS drivers were broken due to a failure to convert some of the device flags
+correctly. The result was no subfragmentation and no subfragment buffer. Only
+tested with ALSA compatibility mode.
+
+    0.20.9 14 Nov 2008 Maintenance release.
+
+Changed the lightweight filter option to be emulation local rather than global
+but kept the global option now as -glwf. This allows for mono lead synths to 
+have a thick filter and the rest to have the lower cost Chamberlains.
+
+Added an option to prevent the user interface from requesting window sizes to
+the window manager by default used to ensure that the aspect ratio was some
+kind of reasonable match to the original however this causes problems with 
+some tiled window managers causing endless redraws. The -ar or -aspect option
+will just make the library paint into whatever available space is given to the
+GUI - the results may look gruesome if either the height or width is excessive.
+
+Added code to the XPM reader to look for *.xpm.gz and then to gunzip them
+first to /tmp. This reduces the installation nearly by a factor of 5 and is
+minimal overhead an this is only in the startup routines. If the bitmaps are
+manually decompressed then the overhead is avoided as the xpm is then found
+first. It probably needs to be noted that the benefit of having the gz images
+will only be seen if the previous installation is first removed. If not then
+the .xpm and the .gz will remain.
+
+Alterations to the diverse blueprints, most notably the MS-20 however since
+that is not yet functional it was a bit superfluous.
+
+The following synths still need some filter work:
+
+        -explorer          - moog voyager. Needs more work (*)
+        -cs80              - Yamaha. Needs more work (* and is unfinished)
+
+* needs to be two separate filters, Chamberlain HP into Huovilainen LP.
+
+Added some checks for the number of options being given to both bristol and
+brighton, and if they are too few to then advise using startBristol and exiting.
+The goal was to advise on what should be done if somebody just attempts to use
+the binaries without the wrapping script, and since the script uses a host of
+default switches it doesn't cause these messages to print.
+
+Resolved a long running and annoying problem with closing the GUI windows -
+when the close is requested from the Window Manager [x] button (typically in
+the top right) the application does not exit as fast as it should. Had to set
+some WM attributes and do some more checking for Client Messages. Also had to
+clean up the code to terminate dual manual synths, something that became
+evident once the shutdown did not require a ^C in the controlling terminal.
+
+Improved the state logic between the threads such that if the audio thread
+cannot get hold of the target audio device then all threads will exit. This
+was giving problems since previously the parent thread would not exit even
+though the audio thread had failed. Recovery was then a manual process. We
+do not need to apply similar logic to the midi thread since if that does not
+open we will never proceed to the audio thread anyway.
+
+Known issues:
+Starting two mini on the same engine will seg fault when one is closed. The
+buffer pointers are cleared incorrectly. It will probably be a trivial fix: not
+to free the buffers on exit. The floating buffers are little overhead and will
+get reused if another emulater is started.
+
+    0.20.8 28 Sept 2008 New filters, normalised gains, diverse fixes
+
+Integrated the Huovilainen filters into the full set of emulators. Some still
+have filter options that may use the Chamberlain however that may change by
+converting the Huovilainen to a 12dB/octave option and using the Chamberlain
+for lightweight filters, BP and HP:
+
+Added an option for lightweight filters where the CPU intensive Huovilainen
+are replaced by the colder but a lot less expensive Chamberlain, -lwf.
+
+Band limited oscillators are now the default with up to 31 harmonics. The
+previous geometric waveforms are still available with '-blo 0' however their 
+roughness was highlighted by the reworked filters. A few emulators do not use
+the global wave tables and will not inherit the BLO option but they should all
+use other distorts to reduce the edginess of infinite bandwidth waveforms.
+
+Normalised the signal levels on most emulations. This was lead by the Pro One
+developments since it gave a reasonable signal and was used to baseline the 
+other emulations.
+
+Converted glide into a power function to give better control at low values.
+Converted attack into a power function to give better control at low values.
+
+Pitch wheel depth was half a semitone out of configured value. The default
+of 2 was being misinterpreted.
+
+Rhodes was damaged due to a conflict in operator selection since the code for
+the arpeggiator was finalised. The Chorus controls would select ARPEG code and
+that would eventually cause issues.
+
+Noise was inadvertently mixed in the Mini algorithm, passing through the reused
+filter buffer. Fixed this and other anomalies with mod routing.
+
+Mono emulators appeared to drop new notes when played quickly. The actual cause 
+was a loose coding of the note_off logic where an off event would match any
+voice on the channel even though note_on had reassigned the voice a new key.
+This only happened if the note_on voice was still on the newlist waiting to
+be promoted onto the playlist.
+
+Normalised gains and integrated Huovilainen filters to other emulations.
+
+    0.20.7 29 Aug 2008 Sequential Circuits Pro-One, Scala tonal mapping tables, overhaul of the Prophet-10
+
+Built a Sequential Circuits Pro-1 as a polyphonic emulator. There are some
+differences in operation compared to the original. Details are in the README
+file.
+
+The Prophet-10 needed some work primarily on layer management. The original 
+had a few features for in-memory volume/balance/tuning, a sequencer and the
+memory bank functionality was organised differently. These were all worked 
+into the emulation. The sequencer is a lot simpler than the original but can
+function with a sequence per memory and adds the ability to arpeggiate and to
+chord notes. Also reorganised the 5/10 voice management since it was a little
+incorrect previously and realigned the midi channel utilisation.
+
+Reworked the hammond drawbar device to support fully painted images and used
+that to render a new ModWheel dev with a rolling tooth design for the Pro-1.
+It could be improved with a local highlight rather than using the global
+shadow layer, something for future study.
+
+Reworked the rotary pot to support limited motion from -60 to +60 degrees
+with stepped movement for the Pro-1 octave selector. This could be used in the
+other emulations however the general use was for waveform selectors and the
+problem here is realestate to show the waveforms - without the full rotary
+action the diagrams will not fit the available space. Mono, Poly now also use
+it for octave controls and waveform selections requiring a bit of redesign of
+their blueprints. Also put into the LFO waveform selection of the Jupiter.
+The work also included redrawing code the complete rotary to support irregular
+designs. This was required for the tip of the ProOne pot that sticks out.
+
+Added a parser for Scala .scl files to build a microTonalMap for the synth. It
+is possible to retune the synth based on the thousands of Scala maps. The
+option is '-scl <file>' where the file can be a full path name (leading '/') or
+if the mapping file has been placed in the $BRISTOL/memory/profiles directory
+it can be a "filename.scl" or just "filename". The settings are global at the
+moment and there is no default scala map although that would be possible if
+people were interested, or a default per emulation for example.
+
+Added another two taps to the Hammond chorus organised such that there is a
+unique tap sweep per VC rate. Each sweep is offset against each other and for
+chorus then either 1, 2 or all 3 taps are remixed with the original signal at
+a configurable mix level. Changed the scan betweeen taps to be a more gentle
+sloped fade rather than a linear transition. The scan delay and LC are user
+configurable parameters and the tap scan time also to alter the overall speed
+of rotation. Altered the addition and subtraction of taps to fatten out and
+smoothen the sound. Reduced the spread of the taps since they are only
+interesting at low delays. Filled out the lower scan ranges so that they at
+least always scan between taps. It no longer sounds like it has a broken cap.
+
+Added a build option to configure: --disable-jack-midi. There were complaints of
+interoperability with the older jack MIDI libraries. I do not want to support
+the previous releases and this is the lowest common denominator to allow the
+application to at least build with the 0.103.0 API. The complaint is 
+"too few arguments to function 'jack_midi_get_event_count()'" or similar.
+
+The audiodev name is now used for jack registrations. It is defaulted to the
+program name when jack drivers are requested and then overwritten if given as
+an explicit option. This allows visibility of each invocation of bristol into
+jackd.
+
+MS-20 was packing too many panels. Cleaned it up and added in the new ModWheel
+however it still does not work - should move it along a little bit.
+
+Minor bitmap manipulations for some resizing misfits using the -scale option.
+
+Added some more output text for cases where jackd could not be started however
+a review should be made of the the audio and midi thread status selections to 
+make the operation smoother.
+
+Fixed some issues with detuning (sensitivity) where if not initialised it led
+to unexpected results.
+
+Put in limits testing in bristolMidiSendMsg(), something I did not want to do
+preferring a well behaved GUI however it has lead to issues during development
+that would have been nicer to have avoided and its at very little cost.
+
+The per user private memory cache should now be enforced, this should allow
+people to keep their private memories over reinstalls and upgrades. Prior to
+this the cache was only used if the directory structure was in place however
+that is rather unwieldly for most users for the current number of emulations.
+
+
+    0.20.6 13 Jun 2008 Band limited oscllators. UI Heartbeats, GUI scaling.
+
+Added in band limited master waveform tables for the base waves: square, 
+tri, ramp/saw, and a sine wave just to be complete. These were then pushed into
+the diverse oscillator code for most of the emulations. The results are a lot
+smoother if a sufficient number of harmonics is used, '-blo 21' or more, however
+smaller values also give interesting results. The Mini is generally improved by
+not having the 'infinate bandwidth' geometrically correct waveforms, the sound
+is softer and warmer with relatively few harmonics. The next work on the sound
+generation will need to go into the filter.
+
+GUI now sends active sensing updates to the engine. This means the engine can
+detect UI failure and exit rather than hang around and damage the next attempt
+to connect (with the same MIDI channels, etc). There is one timer to control
+the rate at which the GUI sends updates and another time for when the engine
+will decide to stop the emulation. The GUI can detect failure of the engine
+the same way - the write operation of the active sense will fail if the TCP
+connection terminates at the remote side. The code could be improved, it 
+should actually scan the list of synths however it is pretty trivial to extend
+it later. The reason is that the heartbeats are per emulation rather than at
+the top level however the generation of the heartbeats occurs in the GUI in a
+separate MIDI thread and hence is at the top level.
+
+GUI now has a -scale option to presize the window. Default remains 1.0 and at
+large scaling will automatically enable aliastype 'pre'. This can be overridden
+with -aliastype none. There were too many remarks about the diminutive size
+of the GUI and whilst the author likes the size this option improves usability.
+
+Started work on a Yamaha CS-80.
+
+Backing of Realistic MG-1 was offset since the prealiasing code, needed to be
+corrected (actually had a third layer still packed but not used).
+
+Explorer glide was not working due to changes to the operator indeces in the
+emulation not being mirrored in the GUI.
+
+Change the max device ccont from 128 to 512, already under the limit with some
+of the synths probably leading to a few of the crashes I have been seeing.
+
+Applied build patches from Alexis Bailler's gentoo packaging.
+
+With antialias and mobile devices (sliders) we need to repaint extra pixels
+during move operation or the 'blur' starts to stain the image. Fixed with some
+minor alterations to the Undraw code extending its range by a pixel on the X
+and Y axis.
+
+XImage creation failure now suggests using the '-pixmap' option but its almost
+a case of better never than late. I could consider changing the flag and then
+attempting the load again however this may already be a non-issue (was a broken
+64 bit X Server issue).
+
+Introduced a lever operator that changes its size at it moves up and down its
+scale. This was for a part of the CS80 code.
+
+Added a configurable timer into the GUI host code midi scanning period.
+
+Horizontal scales needed redrawing fixes.
+
+    0.20.5 20 Apr 2008 First release of the Jupiter-8 emulation, GUI prealiasing, Vasiliy Basic's Mini memory suite.
+
+Integrated a 4+4 split/layerable Jupiter algorithm with arpeggiator, sequencer
+and chording function assignable per layer. Full write up in the README file.
+
+Changed the Jupiter design such that the VCO have selector buttons rather than
+single switches for register and waveform. This is not per the original but it
+allows me to make them non-exclusive and that will fatten up the sound. This
+functionality is more like the JP-6 and MKS-80.
+
+This code includes a Jack MIDI client interface. It is started with the normal
+options plus '-midi jack' so that it can be used in parallel to an ALSA link
+and TCP link to the GUI. The result is that the engine uses two midi threads,
+one doing bulk operations for GUI settings which might be quite slow, a higher
+priority thread doing Jack MIDI, and the highest priority thread doing the 
+audio processing. Semaphores are implemented to prevent the threads interfering
+with eachother.
+
+Reorganised qwerty mappings for correct MIDI note selection and transpositions,
+brightonController.c confdev may need to be buried in window structures.
+Worked especially for a couple of keyboards that were not C-C.
+
+Implemented a prealiasing code which uses whole pixel blending. It is only
+applied to the silkscreens and gives far better imaging when the synths are 
+resized towards fullscreen - they are still reasonably readable. Reducing the
+window size and normal size are a bit blurred. Configured with '-aliastype pre'.
+
+Reevaluated the arpeggiator step rates to go from 1Hz to 20Hz.
+
+The implementation of antialiasing allow threw light on some coredumps at 
+very small window sizes caused by anomalies in the drop shadow rendering
+going negative due to the small sizes.
+
+Arpeggiator did not correctly terminate the note list when more keys than
+available voices were pressed. Resulted in hanging arpeggiation and holes in
+the arpeggiation sequence.
+
+Resizing windows failed on some emulations with the output signal going to 
+zero: If some of the GUI settings did not match the engine before the resize
+then the sound will change. We should suppress all updates when resizing since
+no changes should happen to the engine.
+
+Resolved an issue with the -emulate and its interpretation of gain levels,
+they were a bit low.
+
+Touched up the rhodes bass graphics. Minimal, but was bored.
+
+Minor touch ups to the memorymoog, prophet, prophet52, axxe, odyssey, mini,
+explorer and rhodes shading graphics. Adjusted some offsets on the B3 to
+prevent some lines of transparency on resizing.
+
+    0.20.4 26 Mar 2008 Arpeggiating OB-Xa, fixes, synchronised threads.
+
+This is maintenance code however you may prefer to defer using it until 0.20.5
+is released. There are numerous fixed integrated here however the midi note
+event management has changed considerably and there may be some anomalies in the
+implementation of the multiple dual linked listed that govern key assignments.
+The symptoms of such anomalies are potentially quite ugly if you run bristol
+with real time scheduling, the tight loops may lock your system so you may
+want to run it with '-priority 0' for no realtime prioritisation. There may be
+lots of thread and arpeggiator diagnostics that will also disappear in the next
+release but you can also use the -quiet flag to prevent them.
+Also, since the MIDI and audio thread now use exclusion then a very busy audio
+thread may result in what appear to be dropped notes: The note_on gets delayed
+due to system overhead but eventually generates a 'newlist' entry for the
+engine to process. If the note_off arrives before the audio thread has taken
+the newlist entry then it is removed before it even gets started. These actions
+are visible with the current debugging. A master keyboard should not be badly 
+affected by this however the GUI can end up clumping together multiple events
+if the CPU load is high and that causes/exacerbates the situation.
+
+Reworked the OBXa for some stronger sounds with a couple of routing corrections.
+Overall sounds is a lot richer. This lead to changing the glide to be a log
+controller rather than lin, another improvement that will affect existing
+memories though. Will become a general capability. Fixed some flagging issues
+with OBX modpanel and layer assignments. Adjusted the mod mix and corrected
+the mod LFO rate controller. Should build some more OBXa memories as well.
+Rework OBXa dual/split options for single midi channel. Reworked some of the
+OBXa graphics including a shading layer ready for distribution.
+
+Arpeggiating sequencing now records under suitable control - only emulation with
+an interface is in the OBXa, Bit-100 but others may follow. The settings can be
+saved in a memory to be recalled and recoded to the engine. There is serious
+fun to be had now with the OBX-a emulator and sequencing/arpeggiation. Details
+are in the readme file but basically start arpeggiating and then crank down
+the filter envelope decay and play with the filter cutoff and mod level.
+
+Implemented the chording code as a small extension to the 0.20.3 sequencer.
+When enabled it will assign a voice to every note in the note list, transposing
+them as it goes.
+
+Worked the arpeggiator changes back into the Juno-60 code. Made the OBX-a Seq
+be once per voice rather than once per synth.
+
+The LFO rate parameter was converted to a log controller rather than a linear
+one, it improves response and allows for some very slow cycles. It will affect
+some memory settings. Glide also changed to logarithmic control. Arpeggiator
+rate similarly.
+
+The memory library was changed such that it honoured the active parameter 
+when calling memory locations, something that may well have changed the 
+characters of the other synths. Went through the code to clean up the obvious
+ones but should run through them all again.
+
+It is now possible to have the GUI search for an emulation rather than passing
+the emulation exlicitly. This is with the -emulate option. The feature also
+sets default voice counts, detunes, gains, etc, from the emulation such that
+the options such as "-voices 10 -emulate jupiter8" and "-voices 10 -jupiter8"
+are different - the first call would default the voice count to 8 from the
+emulator, the second would have the emulate inherit the explicit option of 10
+voices and since we have not actually requested an emulation then the remaining
+options will not be taken from the application defaults.
+
+Installed some new key bitmaps, not sure about the results as they look a little
+surreal, almost chrome rather than ebony.
+
+Corrected some tv_usec comparison failures that were damaging the double click
+timers and defaulting to 1000ms only.
+
+The bristol ASLA seq interface would misinterpret note on/velocity zero. Caused
+some strange results with certain keyboards, and only with some bristol 
+features (arpeggio) since it is correctly reinterpretted later in the chain.
+Also, the OB-Xa midi tracking would double strike with the GUI linked up to
+the master controller, the GUI was not honouring exclusion and retransmitted
+midi events already seen by the engine.
+
+Reorganise the transposition system for some emulations, they now correctly
+request the transpose to the engine rather than just scale their own keyboard.
+Both methods work and are arguably both correct however unless the engine is
+informed of a tranposition then it will not be audibile from a master keyboard
+driving the engine. This alteration needs to be reviewed as it separates the
+midi key id from the qwerty keyboard id's and that is awkward for anybody who
+wants to build their own mapping files. The mapping is now not qwerty key to
+midi key but qwerty key to GUI button index - for most emulations this is the
+key 0 to 60 on a 61 notes keyboard. Also separated the mapping table per
+window rather than globally - when the GUI goes medusa this will be required.
+
+Resolved another window timing issue with note on events at high load. This
+required using a couple of semaphores and was a big change to the note event
+management. It ironed out a few other unlikely situation such as running two
+monophonic synths simultaneously would give unexpected results - their note
+selections could get intermixed. The use of semaphores for mutual exclusion
+of the midi and audio threads was very worth the effort as it will probably
+be used to distribute load over different cores with multiple audio threads
+presently.
+
+Resolved a lingering seg fault in the DX operator with the bounds checking
+that was added and cleaned up the L1/L2 gain levels to be lin rather than log,
+the log did not work well for these controls.
+
+Fixed a heap corruption in GUI has needed addressing for rather a long time
+instead of providing a long term workaround. Resolved a couple of related
+issues with detection of pure blue from negative offsets that also caused
+segfaults that have been annoying me for a while. The workaround that had
+been in place for several releases was pretty ugly.
+
+Cleaned up some parts of the code that were giving in my opinion spurious
+error messaging during compilation.
+
+    0.20.3 05 Mar 2008 Integrated a new Crumar Bit-100 emulation
+
+Finalised the bit-100, some extra options, ability to save -1 and -99 memories.
+
+Restructured the rate algorithm for the glide, there were historical issues
+with its mathematical correctness. Additionally added a bristol NRP to allow
+the maximum glide time to be configurable. The default value was up to 30s 
+however that often felt excessive and makes configuring short values awkward,
+changed this to be 10s with the ability to request up to 30. The GUI now
+responds to the -glide option per emulation and the Bit emulations have memory
+parameterisation.
+
+Added pink and filtered noise options to the BIT synths, defaults to white. The
+option 'white' could be dropped and turned into Pink with progressive filter.
+
+Added a flag required to enable NRP parameter changes in the engine. Default
+is now not to pass them for interpretation since it is a rather arbitrary 
+interface and has been probably responsible for noisy interaction with some
+master keyboards.
+
+Diverse fixes to the BIT emulations:
+Layer volumes were damaged going into split/layer settings.
+Layer transpose, split and midi channel tracking needed some corrections for
+the different options. Specifically there are flags for supporting different
+settings per layer (per default they remain in sync) and these were not being
+honoured.
+The same fixes were required to ensure that non-aligned settings would be 
+correctly returned after dual loading splits and layers.
+Layer parking was damaged (required writeThru cache enabled to work).
+Memory loading was damages for high ordered parameters.
+More issues with the high order parameters.
+
+Restructured the arpeggiator to cetralise the code ready to put it into the
+Jupiter emulator. Code inserted to allow the arpeggiator to hook into the
+midi note event dispatching to prepare it for reprogramming.
+
+Tested now with jack 0.99, 0.103 and 0.109 successfully.
+
+Updated copyright dates to reflect 2008.
+
+    0.20.2 25 Feb 2008 Integrated a few Crumar Bit emulations.
+
+Edited brightonButton for highlighted buttons, required repainting the control
+and could be rolled back into the brightonButton rather than being separate.
+Build a Crumar Bit-99/Bit-1 and an m2, all variations on the bit-99. Added 
+several bristol features via data entry parameters. The capabilities and the
+differences to the original are documented on the website and in the README
+files with the distribution.
+Patched in a dummy audio driver such that no audio operations are executed. This
+may seem rather daft for a synth however working under virtualized systems often
+gives dodgy and unreliable audio interfacing so having a dummy lets me still
+work on the GUI to engine interfacing rather than limiting the work to the GUI.
+This is accessible with '-audio dummy'.
+Fixed an issue with port redirection and multilayer synths failing.
+NRP were being incorrectly interpreted which meant that emulation gains and
+detunes were not being registered.
+Velocity of note off events was being mapped into voice velocity as well as
+note-off velocity. This is incorrect as it causes jumps in envelope gains, etc.
+The correct behaviour is for device that want to use note off velocity should
+search for it in the correct place. The bristol ADSR does not adjust release
+rates by velocity however it could by using this explicitly.
+The envelope uses a power gain curve that is precalculated for lookups on 
+attack/decay rates. It was a little damaged at the zero point and could cause
+'inf' failures on some of the work being done, highly inefficient. Only seen
+in very rare cases and normally just during development since the code avoided
+using the limits. Corrected.
+Implemented OMNI mode however only the Crumar allow access to it at the moment.
+Transpose has been reimplemented such that the MIDI library is correctly
+handling the transpose. Previously it would lose track of some notes - press
+key 36, transpose 12 notes and it would not be able to match the note off to the
+original note on. The fix was resonable trivial and now the rest of the synths
+should also start using this method, something that will happen later.
+Velocity control has been added into the GUI so that it can be requested at
+start time per emulation. I should try and document all the 500 or so different
+mappings - the only references at the moment are the source code.
+
+    0.20.1 20 Jan 2008 First release of the 0.20 stream
+
+Designed a 7 segment red led digit display for the Jupiter panel. The original
+had an 8 segment display however the floating point was superfluous and has 
+been left out.
+Compilation without jack or ALSA would fail dismally, the make routines would
+not pull out all the ALSA definitions. There may remain some issues since the
+OSS Midi interface does not seem to work, only rawmidi. If you really want OSS
+support with MIDI and all then mail the author. The changes altered the list of
+drivers, removing the Sun D-BRI and ALSA revisions prior to 0.9, both of which
+are now antiquated anyway.
+The remaining audio interfaces are:
+
+    OSS (pretty much any release as the interface is stable)
+    ALSA 0.9 or greater (SND_LIB_MAJOR=1)
+    Jack 0.99 or greater
+
+There does not seem to be any jack version information available from the 
+include files at compile time unfortunately, something that may be an issue
+with the currently new 0.109 release that appears to have altered the library
+interface specification.
+
+This should not be released until jackd with a 64 sample period size has been
+tested (reported to fail) and we should also consider waiting until the jack
+interface has been folded into the bristol audio library even though it does
+not like being there. That may wait, the alterations the audio library to remove
+the diverse unused interfaces and changes to the compilation flags seems to
+improve stability (and may be ported back to 0.10 at some point). After that we
+can start breaking things again.
+
+Cleaned up some of the debuging.
+Removed the bristol files from the brighton directory.
+This release is based on 0.10.13 with the above changes.
+
+    0.10.13 19 Jan 2008 Maintenance release.
+
+Resolved a failure in the Vox M2 percussive harmonics, they were not decaying,
+an issue with the operator selection in the GUI.
+Cosmetic alterations to some of the vox switch images, prophet panels, etc.
+Added some bounds checking to the jack interface to prevent a couple of errors
+that occur when failing to open the interface.
+XImage issues with 64bit sytems - the XCreateImage() fails due to pad and line
+length errata. Workaround is to use -pixmap (avoids the XImage acceleration
+code) and the fix needs testing but does not break 32 bit systems.
+This will be the last development of 0.10 stream, no more features only bug
+fixes. Further developments will go into the pending 0.20 stream.
+
+    0.10.12 03 Dec 2007 Maintenance release.
+
+RT priority is now defaulted to 75, a value of zero for the runtime parameter
+does not reschedule the thread at all, it is left up to the linked libraries.
+Vox Continental would segfault due to pedalboard buffer pointers.
+Implemented a workaround for damaged segment sizes with some jack attachements
+but this is not really a fix, it just avoids the problem by exiting a little
+more gracefully when there is a mismatch. It may become the fix though, the
+problem only happens when I cannot find the period size a priori.
+Reworked parts of the engine code such that it checks for data availability
+with select rather than going into a wait state. This is a lot cleaner as it
+has a timeout for failure situations. Timer defaults to a few seconds only, 
+that could be improved.
+Rhodes voices were broken due to reorganisation of the ADSR default gain to be
+liniar rather than logarithmic, firstly the notes barely decayed but also the
+harmonic content did not vary from the FM algorithm.
+Integrated a chorus into the Rhodes GUI and a wrapper in the engine FM code.
+
+    0.10.11 27 Oct 2007 Arpeggiator written into the MIDI library.
+
+Reworked the Juno image for more edging and new sliders.
+Built some default "temperature sensitivity" into the dual manual synths, it
+should improve the sound, at least when layered.
+Reorganised the voice initialisation code to have better GM2 conformancy.
+Double click timout made into a GUI configurable option.
+Added a 7 segment LED digit block to the library for the Jupiter display.
+Implemented the arpeggiator for the Juno. It was a requirments for the Jupiter
+however it is easier to test with a synth that already works.
+Reworked the threeway switch so that it was sequential, required some changes
+to the emulations using them.
+
+    0.10.10 01 Oct 2007 Bass pedalboard integration for Hammond and VOX.
+
+Fixed the Vox M2 memories. Also reworked the octave frequency of its harmonics
+since the reed should be an octave higher. The bass pedals are now visible but
+the envelope closes early under some situations.
+The frequency table for the VOX was 'too correct', rewrote the vox microtonal
+map to have a table based on integer division from 1MHz to introduce a few
+cents of detune as per original.
+Some of the microtonal maps were incorrect, loss of key 108. Had no effect as
+none of the emulations used the microtonal map however it needed to be fixed.
+Put a bass pedalboard into the Hammond B3 emulation. It requires extra graphics
+space which is not an issue, and for both emulations the pedalboards kind of
+come for free - they use the same MIDI channel as the lower manual but call a
+different oscillator depending on MIDI note. The B3 memory structures had to
+change to support the lower manual drawbars. If you had your own memories
+in ~/.bristol/memory/hammondB3/* then you should really delete them.
+Made the audio thread priority a runtime option.
+Reworked the prophet pot bitmaps for higher contrast and closer alignment.
+Distributing the GM2 MIDI controller mappings as default, not all emulations
+support it though - does not work well for the dual manual synths nor the
+organs.
+
+    0.10.9 16 Sept 2007 Reworked installation procedures, Vox-300
+
+Thanks to Nicolai Lissner for some directions on the autoconf install locations.
+Made some fixes to the control key interpretation however, correctly speaking,
+it is still actually damaged. The 'incorrectness' is minimal so will spare any
+resolution until it really is needed.
+Finished work on a dual manual VOX Super Continental (M-II, 300, etc), most of
+it works, the only unimplemented feature is the bass sustain envelope.
+Recoloured the Memory Moog buttons.
+
+    0.10.8 01 Sept 2007 Realistic Concertmate, recolorations, fixes
+
+Fixed some issues with the OB routing for correcting the mix button settings.
+Transparency shadow would damage on redrawing. Fixed for the hammond however
+for some of the synths (pro10) this shadow is lost on resizing the window. FFS.
+Minor recolouration of some of the hammond bitmaps for offwhite controls.
+Recoloration of the ARP Odyssey sliders.
+ARP Odyssey Ring Mod was broken due to 2600 alterations.
+Was bored, so programmed a Realistic (Moog) Concertmate MG-1 as a giveaway.
+
+    0.10.7 29 Jul 2007 migration of graphics from pixmap to ximage
+
+Net performance improvement just for this one change is 5 to 10 times the
+rendering rate. The brighton and B11 library are now again in the same
+order of magnitude of CPU requirements with brighton about 1/4 of the B11 
+interface. The overall improvement is best reviewed with the ARP 2600, before
+all the optimisations it could take over 10 seconds to load a memory, now it
+is probably closer to 1/10th of a second. There are still some issues with 
+the XImage interface and this is a configurable option (--disable-ximage) 
+however I am also going to turn this into a runtime option rather than just
+compile time.
+
+Now that the interface speed is optimised the antialiasing code has been 
+reintroduced again as a compile and runtime option. It does have a performance
+hit. The antialiasing has two parameters, the depth of bit masking and the 
+type - texture or all. Antialiasing with the 'all' option affects the total
+representation, using the texture option only affects the backgrounds such 
+that the devices maintain clarity.
+
+Added a monochrome '-grayscale' option, aliasaed as '-gs|-greyscale' which
+does late stage color replacement to shades of gray. In itself it is not very
+useful as all displays are color however the algorithms for color conversion
+will be used presently in some menuing features. There are 5 values:
+
+    1 is an average of the three color components.
+    2 is half the average (dimming)
+    3 is quarter the average (dimming)
+    4 is the minimum component
+    5 is the maximum component
+
+Of these the first 3 will be used, in a generalised algorithm, for the grey
+shaded floating menus.
+
+    0.10.6 27 June 2007 bugfixes and GUI efficiency improvements.
+
+Implemented a color cache to optimize the rendering algorithm. It changes the
+'quality' parameter to a BBP value to which colors are rounded (thus affecting
+the quality of the rendered image) and uses the subsequent red color as an 
+index into a cache table. Each row is a doubly linked sorted list, first by 
+green, then blue by green. Search depth is now no longer the average of half 
+the number of colors but closer to half the row length (which in turn depends
+on the color quality). Delivers about 10 to 50 times improvement, especially 
+for the color intensive transparency layers. Cache stats are available from 
+the ^P XPM dump command. The remaining inefficiencies in the brighton X11 lib
+should now also be addressed. Prior to these changes the brigton interface
+itself was the most intensive operation, it is now only about 10% of the CPU
+required to repaint, hence there is space for another 5 to 10 fold improvement.
+
+Corrected inefficiencies in the horizontal scaler repainting. Originally this
+painted the whole width of the scaler and was resolved to just paint the area
+redrawn by the movement, roughly doubling its performance.
+
+Perfectly vertical patchcables were incorrecty rendered. The actual painting
+was correct however the rendering onto the screen was too narrow.
+
+    0.10.5 06 June 2007 added roadrunner electric piano
+
+    0.10.4 24 May 2007 added Solina string machine
+
+Potentials:
+Some of the diverse synth memories are damaged.
+ARP 2600 has damaged vertical patch cables.
+Move the key mappings and controller mappings to .mcm file as they are static.
+Removed clipping in new keyclick generation.
+
+    0.10.3 18 May 2007 added the following
+
+Modifications to configure.ac and Makefile.am to correct autotools errors.
+Corrected use of --exec_prefix for configure process.
+
+Note velocity, Poly and Channel Pressure curve mappings from file. Global.
+Note integer index mapping in same configuration file. Global.
+Note Microtonal tunings. Global settings - affects the whole engine.
+
+Note velocity map - per emulation.
+Note microtonal map - per emulation.
+
+B3 key noise generated per bus with configurable delays and gain per contact.
+Reverse controller motion of hammond drawbars (mappings?).
+
+Controller mapped value curves for lin/log/exp/parabolic with inverse table.
+
+Resolved issues with use of '-jack' flag as opposed to '-audio jack'.
+
+More keyboard velocity curves of which one mapping per emulation.
+
+Pitch bend damaged by microtonal mapping implementation, fixed.
+
+    0.10.2: 10 May 2007
+
+Changes to automake configuration files for installation prefixes.
+
+    0.10.1: 4 May 2007
+
+Probable first distribution of the bristol version using GNU autotools.
+

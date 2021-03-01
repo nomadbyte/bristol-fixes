@@ -1,0 +1,335 @@
+#
+# The midi control mapping file. This is used by the engine to define a static
+# selection of midi mappings for the runtime for each emulation. There is a
+# separate 'global' mapping file for the engine that are applied before these
+# mappings:
+#
+# $BRISTOL/memory/profiles/midicontrollermap
+#
+# You are strongly advised NOT TO EDIT THIS FILE, but to make a private copy
+# in $HOME/.bristol/memory/profiles, or if you have defined your own DB in
+# $BRISTOL_CACHE/memory/profiles since that way any changes can be undone by
+# removing the private file and hence reverting back to the factory default.
+#
+# This file is read once when the emulation is started.
+#
+# microTonalMap: <midi_key> <frequency>
+# velocityMap: <velocity> <gain>
+# velocityTable: 0 <table>
+#
+# There is no default microTonalMap, the engine has an internal evenly tempered
+# scale that is used if the private map is not defined. If you want to have
+# a true microtonal mapping then it will really have to be defined for each
+# key, I don't have any interpolation routines as the scale is undefined.
+#
+# This microtonal map has priority over the engine mapping as it is specific to
+# just one emulation. Also, if a microtonal map is defined then pitch bend will
+# currently not operate. The pitch bend is evenly tempered and as such the 
+# results for any microtonal map is undefined as the scale is not defined.
+#
+#
+#
+# The velocity map is table of points that is interpolated linearly: you
+# may only have to define the inflexion points, however if you want smooth
+# curves you will have to define each of the 128 velocity values that are used
+# in noteon/noteoff events. The emulation only has a single table of gain
+# levels for each key.velocity index, the engine by contrast has two tables,
+# one for each on/off event however that is an integer map, not a gain map.
+#
+# There are several default tables if you do not want to specify your own 
+# interpolated curve. Each table is the gain for the Midi velocity value given
+# in the note event, it has 128 entries. The following are implmented:
+#
+#	100-199 Convex curves for a soft touch keyboard player
+#	200-499 Concave curves for a hard touch, linear up to quadratic function.
+#
+# The next set up to 525 are repeats of the above but with less granularity. In
+# the above range the value of 200 is linear, as is 510 below:
+#
+#	500-509 Convex curves for a soft touch keyboard player
+#	510 linear
+#	511-25 Concave curves for a hard touched player.
+#
+# Then there are a couple of specific curves
+#
+#	550 logarithmic
+#	560 parabolic
+#
+# The values up to 100 consists of two digit numbers. The first digit defines
+# how late the line starts (it is linear) to ramp up, and the second digit is
+# how late it reaches 1.0. The value of 09 is almost the linear mapping above
+# as it starts from 0 and ends almost at the end. A value of 49 would be for
+# a heavy player, it is zero for a large part of the velocity table, and then
+# ramps up to max gain (1.0) close the end of the table. Note that these table
+# could also have been defined with velocityMap definitions as they are linear
+# interpolations. A present release will include curves to smooth things out
+# a little.
+#
+# Option 520 is a squared powercurve and feels quite natural although that is
+# very subjective. Perhaps its natural for a hard player and it could be a
+# better default than the linear curve.
+#
+# The value 1000 will invert the mapping, so:
+#
+#	1510 - linear from 1.0 down to 0.0 as velocity increases
+#	1520 - exponential, from 1.0 down to 0.0 as velocity increases
+#
+# The engine mapping is applied before the emulation mapping given here. There
+# are reasonable arguments to make this table logarithmic - you are welcome to
+# do so. There are no limits to the values here other than negative values are
+# not mapped, so this table can also be used to compensate for volume levels.
+#
+#velocityMap: 0 0.000001
+#velocityMap: 127 1.0
+velocityTable: 0 518
+
+#
+# It is possible to  specify a value curve for each continuous controller. The
+# interface recognises the following controllers with their associated indeces:
+#
+#	BankSelectCoarse (0)
+#	ModulationWheelCoarse (1)
+#	BreathcontrollerCoarse (2)
+#	FootPedalCoarse (4)
+#	PortamentoTimeCoarse (5)
+#	DataEntryCoarse (6)
+#	VolumeCoarse (7)
+#	BalanceCoarse (8)
+#	PanpositionCoarse (10)
+#	ExpressionCoarse (11)
+#	EffectControl1Coarse (12)
+#	EffectControl2Coarse (13)
+#	GeneralPurposeSlider1 (16)
+#	GeneralPurposeSlider2 (17)
+#	GeneralPurposeSlider3 (18)
+#	GeneralPurposeSlider4 (19)
+#	BankSelectFine (32)
+#	ModulationWheelFine (33)
+#	BreathcontrollerFine (34)
+#	FootPedalFine (36)
+#	PortamentoTimeFine (37)
+#	DataEntryFine (38)
+#	VolumeFine (39)
+#	BalanceFine (40)
+#	PanpositionFine (42)
+#	ExpressionFine (43)
+#	EffectControl1Fine (44)
+#	EffectControl2Fine (45)
+#	HoldPedal (64)
+#	Portamento (65)
+#	SustenutoPedal (66)
+#	SoftPedal (67)
+#	LegatoPedal (68)
+#	Hold2Pedal (69)
+#	SoundVariation (70)
+#	SoundTimbre (71)
+#	SoundReleaseTime (72)
+#	SoundAttackTime (73)
+#	SoundBrightness (74)
+#	SoundControl6 (75)
+#	SoundControl7 (76)
+#	SoundControl8 (77)
+#	SoundControl9 (78)
+#	SoundControl10 (79)
+#	GeneralPurposeButton1 (80)
+#	GeneralPurposeButton2 (81)
+#	GeneralPurposeButton3 (82)
+#	GeneralPurposeButton4 (83)
+#	EffectsLevel (91)
+#	TremuloLevel (92)
+#	ChorusLevel (93)
+#	CelesteLevel (94)
+#	PhaserLevel (95)
+#	DataButtonincrement (96)
+#	DataButtondecrement (97)
+#	Non-registeredParameter (98)
+#	Non-registeredParameter (99)
+#	RegisteredParameter (100)
+#	RegisteredParameter (101)
+#	AllSoundOff (120)
+#	AllControllersOff (121)
+#	LocalKeyboard (122)
+#	AllNotesOff (123)
+#	OmniModeOff (124)
+#	OmniModeOn (125)
+#	MonoOperation (126)
+#	PolyOperation (127)
+#
+# The controllers above 95 should not really be remapped, the default linear
+# mapping is the only one that makes sense however they are still parsed. The
+# following definition would define a curve for the foot pedal with a sharp
+# high end since there is an inflexion at value 100 - these are the 'from-to'
+# mappings:
+#
+#	FootPedalCoarse: 0 0.0001
+#	FootPedalCoarse: 100 64
+#	FootPedalCoarse: 127 127
+#
+# The default curve is linear one-to-one. There are several factory curves:
+#
+#	linear
+#	inverseLinear
+#	log
+#	inverseLog
+#	exponential
+#	inverseExponential
+#	parabola
+#	inverseParabola
+#
+# The following defines an exponential curve for the same foot pedal - the
+# exponential is a list of the controllers that will be given its curve, in
+# this case controller number 4 - a value other than zero will apply this 
+# curve to the given controller id:
+#
+#	exponential: 4 1
+#
+# The factory curves are parsed first, then any specific curves, so of both of
+# two above settings were given then the foot pedal would first be given the
+# factory exponential curve, then the specific FootPedal control would be
+# applied.
+#
+# By way of disclaimer, the fact that the GUI and engine recognise these
+# controllers does not mean they interpret them. If you want to have the
+# envelope attach be controlled by SoundAttackTime (73) then you have to 
+# configure that as a controller mapping with the GUI (middle mouse button
+# then move controller. If you want that to be an inverse controller such that
+# attack goes slower as the value goes up then you remap it to inverseLinear
+# here.
+# Work is being done to deliver some default controller mappings that are as
+# near as possible to GM2 - the above controller definitions.
+#
+
+#
+# The default microtonal map, ie, the bristol ET scale for the midi key range,
+# is not actually correct for the Vox. It had a master oscillator at about
+# 2MHz and divided those values down introducing a few cents of error:
+#
+microTonalMap: 0 8.175879
+microTonalMap: 1 8.661983
+microTonalMap: 2 9.177091
+microTonalMap: 3 9.722803
+microTonalMap: 4 10.300889
+microTonalMap: 5 10.913456
+microTonalMap: 6 11.562431
+microTonalMap: 7 12.249948
+microTonalMap: 8 12.978416
+microTonalMap: 9 13.750051
+microTonalMap: 10 14.567703
+microTonalMap: 11 15.434004
+microTonalMap: 12 16.351892
+microTonalMap: 13 17.324118
+microTonalMap: 14 18.354349
+microTonalMap: 15 19.445795
+microTonalMap: 16 20.601990
+microTonalMap: 17 21.826912
+microTonalMap: 18 23.125130
+microTonalMap: 19 24.500196
+microTonalMap: 20 25.957170
+microTonalMap: 21 27.500481
+microTonalMap: 22 29.135832
+microTonalMap: 23 30.868008
+microTonalMap: 24 32.704319
+microTonalMap: 25 34.648834
+microTonalMap: 26 36.709373
+microTonalMap: 27 38.892345
+microTonalMap: 28 41.204830
+microTonalMap: 29 43.654778
+microTonalMap: 30 46.251331
+microTonalMap: 31 49.000393
+microTonalMap: 32 51.915688
+microTonalMap: 33 55.002476
+microTonalMap: 34 58.271664
+microTonalMap: 35 61.736015
+microTonalMap: 36 65.410782
+microTonalMap: 37 69.300072
+microTonalMap: 38 73.421440
+microTonalMap: 39 77.784691
+microTonalMap: 40 82.413055
+microTonalMap: 41 87.313370
+microTonalMap: 42 92.506935
+microTonalMap: 43 98.000786
+microTonalMap: 44 103.831375
+microTonalMap: 45 110.011002
+microTonalMap: 46 116.550117
+microTonalMap: 47 123.472031
+microTonalMap: 48 130.821564
+microTonalMap: 49 138.600143
+microTonalMap: 50 146.842880
+microTonalMap: 51 155.569382
+microTonalMap: 52 164.826111
+microTonalMap: 53 174.641983
+microTonalMap: 54 185.013870
+microTonalMap: 55 196.001572
+microTonalMap: 56 207.684326
+microTonalMap: 57 220.022003
+microTonalMap: 58 233.100235
+microTonalMap: 59 246.974564
+microTonalMap: 60 261.643127
+microTonalMap: 61 277.238708
+microTonalMap: 62 293.685760
+microTonalMap: 63 311.138763
+microTonalMap: 64 329.706573
+microTonalMap: 65 349.283966
+microTonalMap: 66 370.096222
+microTonalMap: 67 392.003143
+microTonalMap: 68 415.454926
+microTonalMap: 69 440.140839
+microTonalMap: 70 466.200470
+microTonalMap: 71 494.071136
+microTonalMap: 72 523.286255
+microTonalMap: 73 554.631165
+microTonalMap: 74 587.544067
+microTonalMap: 75 622.277527
+microTonalMap: 76 659.630615
+microTonalMap: 77 698.812012
+microTonalMap: 78 740.192444
+microTonalMap: 79 784.313721
+microTonalMap: 80 831.255188
+microTonalMap: 81 880.281677
+microTonalMap: 82 932.835815
+microTonalMap: 83 988.142273
+microTonalMap: 84 1047.120361
+microTonalMap: 85 1109.877930
+microTonalMap: 86 1175.088135
+microTonalMap: 87 1245.329956
+microTonalMap: 88 1319.261230
+microTonalMap: 89 1398.601440
+microTonalMap: 90 1481.481445
+microTonalMap: 91 1569.858765
+microTonalMap: 92 1663.893555
+microTonalMap: 93 1760.563354
+microTonalMap: 94 1865.671631
+microTonalMap: 95 1976.284546
+microTonalMap: 96 2096.436035
+microTonalMap: 97 2222.222168
+microTonalMap: 98 2352.941162
+microTonalMap: 99 2493.765625
+microTonalMap: 100 2638.522461
+microTonalMap: 101 2801.120361
+microTonalMap: 102 2967.359131
+microTonalMap: 103 3144.654053
+microTonalMap: 104 3333.333252
+microTonalMap: 105 3521.126709
+microTonalMap: 106 3731.343262
+microTonalMap: 107 3952.569092
+microTonalMap: 108 4201.680664
+microTonalMap: 109 4444.444336
+microTonalMap: 110 4716.980957
+microTonalMap: 111 5000.000000
+microTonalMap: 112 5291.005371
+microTonalMap: 113 5617.977539
+microTonalMap: 114 5952.380859
+microTonalMap: 115 6289.308105
+microTonalMap: 116 6666.666504
+microTonalMap: 117 7042.253418
+microTonalMap: 118 7462.686523
+microTonalMap: 119 7936.507812
+microTonalMap: 120 8403.361328
+microTonalMap: 121 8928.571289
+microTonalMap: 122 9433.961914
+microTonalMap: 123 10000.000000
+microTonalMap: 124 10638.297852
+microTonalMap: 125 11235.955078
+microTonalMap: 126 11904.761719
+microTonalMap: 127 12658.227539
+

@@ -1,0 +1,23 @@
+
+#
+# Note transpositions
+#
+midiNoteMap: 0 0.000001
+midiNoteMap: 127 127
+
+# Velocity transpositions
+midiNoteOn: 0 0.000001
+midiNoteOn: 127 127.0
+midiNoteOff: 0 0.000001
+midiNoteOff: 127 127.0
+
+# Pressure transpositions
+midiPolyPressure: 0 0.000001
+midiPolyPressure: 64 64
+midiPolyPressure: 127 127
+
+# Pressure transpositions
+midiChannelPressure: 0 0.000001
+midiChannelPressure: 64 64
+midiChannelPressure: 127 127
+

@@ -1,0 +1,1012 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH BRISTOL 1 "Oct  29, 2011"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+bristol \- a synthesiser emulation package.
+.SH SYNOPSIS
+.B startBristol
+.RI -mini\ -jack\ -midi\ seq\ [ options ]
+.SH DESCRIPTION
+
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" respectively.
+\fBbristol\fP is a vintage synthesiser software emulator suite. The application
+consists of an engine itself called bristol and a graphical user interface
+called \fBbrighton\fP. The graphical interface is a bitmap manipulation library
+to present the diverse synth devices such as potentiometers, buttons, sliders,
+patch cables and which generates the messages to configure the synth emulator.
+The engine is an infrastructure that hosts the emulator code that couples
+together the different audio operators required to generate the audio. The
+engine and GUI are started together with the \fBstartBristol\fP script which
+sets up the required environment for the two to connect together. It is not
+generally envisaged that bristol and brighton be started outside of the script
+however there are options to the script to only start one or the other. Bristol
+also has a command line interface that can be used rather than the GUI.
+.PP
+Currently following synthesizers are emulated: 
+.TP
+Emulations
+.br
+
+moog mini
+.br
+moog explorer (voyager)
+.br
+moog voyager electric blue
+.br
+moog memory
+.br
+moog sonic 6
+.br
+moog/realistic mg\-1 concertmate
+.br
+hammond module (deprecated, use \-b3)
+.br
+hammond B3 (default)$      
+.br
+sequential circuits prophet\-5
+.br
+sequential circuits prophet\-5/fx
+.br
+sequential circuits prophet\-10
+.br
+sequential circuits pro\-one
+.br
+fender rhodes mark\-I stage 73
+.br
+fender rhodes bass piano
+.br
+crumar roadrunner electric piano
+.br
+crumar bit 01
+.br
+crumar bit 99
+.br
+crumar bit + mods
+.br
+crumar stratus synth/organ combo
+.br
+crumar trilogy synth/organ/string combo
+.br
+oberheim OB\-X
+.br
+oberheim OB\-Xa
+.br
+arp axxe
+.br
+arp odyssey
+.br
+arp 2600
+.br
+arp/solina string ensemble
+.br
+korg polysix
+.br
+korg poly\-800
+.br
+korg mono/poly
+.br
+korg ms20 (unfinished: \-libtest only)
+.br
+vox continental
+.br
+vox continental super/300/II
+.br
+roland juno\-60
+.br
+roland jupiter\-8
+.br
+baumann bme\-700
+.br
+bristol bassmaker sequencer
+.br
+yamaha dx\-7
+.br
+yamaha cs\-80 (unfinished)
+.br
+commodore\-64 SID chip synth
+.br
+commodore\-64 SID polyphonic synth (unfinished)
+.br
+granular synthesiser (unfinished)
+.br
+ems synthi\-a (unfinished)
+.br
+16 track mixer (unfinished: \-libtest only)
+.PP
+The default connection between the engine and GUI is a TCP socket using a SYSEX format
+message taken from MIDI. Optionally the code will use a unix domain socket for
+improved security. The GUI and engine do not need to be resident on the 
+same system if suitable parameters are given, this feature requires the TCP 
+domain sockets be used. The engine can also accept 
+requests from multiple brighton interfaces and run all the emulators at the
+same time, multitimbraly, sharing voices between them and pre-empting where 
+necessary. If an emulator is started in monophonic mode then it is preallocated
+a voice that will never be pre-empted and which runs continuously, ie, by
+default it will
+continue to run even when no piano keys are pressed. The polyphonic code will
+only run the voice algorithms whilst the key gate is open, the gate being
+derived from the voice envelope state. The engine supports minimally 32 voices
+per default, if an emulator requests less then its emulation is configured with
+a soft limit. If more are requested then more voices are created however the
+upper limit is imposed at 128 voices. A voice is
+an engine structure that allows for allocation and executing, the actual code
+run by a voice can be any of the emulator algorithms which is how multitimbral
+operation is supported. The voice allocation process is 'last note precedence'
+and whilst others are available for the monophonic instruments, this is the
+only polyphonic assignment algorithm.
+.PP
+This package should be started with the startBristol script. The script
+will start up the bristol synthesiser binaries, evaluating the correct
+library paths and executable paths. There are emulation, synthesiser and
+operational parameters:
+							
+.SH OPTIONS
+.TP
+.B Emulation:      
+
+\-mini              \- moog mini
+.br
+\-explorer          \- moog voyager
+.br
+\-voyager           \- moog voyager electric blue
+.br
+\-memory            \- moog memory
+.br
+\-sonic6            \- moog sonic 6
+.br
+\-mg1               \- moog/realistic mg\-1 concertmate
+.br
+\-hammond           \- hammond module (deprecated, use \-b3)
+.br
+\-b3                \- hammond B3 (default)
+.br
+\-prophet           \- sequential circuits prophet\-5
+.br
+\-pro52             \- sequential circuits prophet\-5/fx
+.br
+\-pro10             \- sequential circuits prophet\-10
+.br
+\-pro1              \- sequential circuits pro\-one
+.br
+\-rhodes            \- fender rhodes mark\-I stage 73
+.br
+\-rhodesbass        \- fender rhodes bass piano
+.br
+\-roadrunner        \- crumar roadrunner electric piano
+.br
+\-bitone            \- crumar bit 01
+.br
+\-bit99             \- crumar bit 99
+.br
+\-bit100            \- crumar bit + mods
+.br
+\-stratus           \- crumar stratus synth/organ combo
+.br
+\-trilogy           \- crumar trilogy synth/organ/string combo
+.br
+\-obx               \- oberheim OB\-X
+.br
+\-obxa              \- oberheim OB\-Xa
+.br
+\-axxe              \- arp axxe
+.br
+\-odyssey           \- arp odyssey
+.br
+\-arp2600           \- arp 2600
+.br
+\-solina            \- arp/solina string ensemble
+.br
+\-polysix           \- korg polysix
+.br
+\-poly800           \- korg poly\-800
+.br
+\-monopoly          \- korg mono/poly
+.br
+\-ms20              \- korg ms20 (unfinished: \-libtest only)
+.br
+\-vox               \- vox continental
+.br
+\-voxM2             \- vox continental super/300/II
+.br
+\-juno              \- roland juno\-60
+.br
+\-jupiter           \- roland jupiter\-8
+.br
+\-bme700            \- baumann bme\-700
+.br
+\-bm                \- bristol bassmaker sequencer
+.br
+\-dx                \- yamaha dx\-7
+.br
+\-cs80              \- yamaha cs\-80 (unfinished)
+.br
+\-sidney            \- commodore\-64 SID chip synth
+.br
+\-melbourne         \- commodore\-64 SID polysynth (unfinished)
+.br
+\-granular          \- granular synthesiser (unfinished)
+.br
+\-aks               \- ems synthi\-a (unfinished)
+.br
+\-mixer             \- 16 track mixer (unfinished: \-libtest only)
+.br
+.PP
+.B Synthesiser:
+
+.TP
+\-voices <n>
+The selected emulator will start with this number of voices. The engine will
+always create 32 voices but only allocate this subset to the emulator. If the
+selected value is greater than 32 then the greater number of voices is
+allocated.
+.TP
+\-mono
+Run the emulator in monophonic mode. This is not really an alias for '-voices 1'
+as it additionally configures parameters such as '-retrig -lvel -wwf -hnp'.
+These additional options can be overridden if desired.
+.TP
+\-lnp
+Select low note precedence logic. This only applies to monophonic synthesisers
+and all of the note precedence affect the legato playing style.
+.TP
+\-hnp
+Select high note precedence logic. This only applies to monophonic synthesisers.
+.TP
+\-nnp
+Select no note precedence, this is the default and operates as a last note
+precedence selection.
+.TP
+\-retrig
+Request a trigger event for each note that is played AND notes that are 
+released. The trigger will cause the envelopes to cycle. They will not return
+to zero by default however some of the emulations have that as a GUI control.
+Without this flag triggers are only sent for the first pressed note of a 
+sequence.
+.TP
+\-lvel
+Configure velocity inheritance for all legato notes - the first note of a 
+sequence will have a velocity value that is applied to all subsequent notes.
+This option is a toggle: applying twice will disable the feature. This is 
+important with regards to the emulators as many of the mono synths with set
+lvel per default. The following options may not work as expected:
+
+startBristol -mini -lvel
+
+The issue is that -mini enables legato velocity so the -lvel switch will
+toggle it off again. The same applies to -retrig.
+.TP
+\-channel <c>
+Start the emulator to respond on this MIDI channel, default 1.
+.TP
+\-lowkey <n>
+Configure the lowest note for which the emulator should respond. This defaults
+to '0' but can be used to define key splits and ranges for different synths.
+.TP
+\-highkey <n>
+Configure the highest note for which the emulator should respond. This defaults
+to '127' but can be used to define key splits and ranges for different synths.
+.TP
+\-detune <%>
+Request the emulator run with a level of temperature sensitivity. The default
+value is defined by the emulator, typically 100 or 200. The detune is applied
+to a voice at note on only and is a random value within the range defined here.
+.TP
+\-gain <gn>
+Output signal gain level for the emulator. These can be used to normalise the
+signal levels from different synths when played together. The default value is
+defined by the synth itself, this is an override.
+.TP
+\-pwd <s>
+Pitch wheel depth in semitones, default 2.
+.TP
+\-velocity <v>
+Velocity curve for the emulator. Default is 520, an exponential curve for a
+hard playing style. Value '0' is flat (no touch sensitivity). Values up to 100
+are linear scaled maps.
+The velocity map is table of points that is interpolated linearly: you
+may only have to define the inflexion points, however if you want smooth
+curves you will have to define each of the 128 velocity values that are used
+in noteon/noteoff events. The emulation only has a single table of gain
+levels for each key.velocity index, the engine by contrast has two tables,
+one for each on/off event however that is an integer map, not a gain map.
+
+There are several default tables if you do not want to specify your own 
+interpolated curve. Each table is the gain for the Midi velocity value given
+in the note event, it has 128 entries. The following are implmented:
+
+  100-199 Convex curves for a soft touch keyboard player
+  200-499 Concave curves for a hard touch, linear up to quadratic function.
+
+The next set up to 525 are repeats of the above but with less granularity. In
+the above range the value of 200 is linear, as is 510 below:
+
+  500-509 Convex curves for a soft touch keyboard player
+  510 linear
+  511-25 Concave curves for a hard touched player.
+
+Then there are a couple of specific curves
+
+  550 logarithmic
+  560 parabolic
+
+The values up to 100 consists of two digit numbers. The first digit defines
+how late the line starts (it is linear) to ramp up, and the second digit is
+how late it reaches 1.0. The value of 09 is almost the linear mapping above
+as it starts from 0 and ends almost at the end. A value of 49 would be for
+a heavy player, it is zero for a large part of the velocity table, and then
+ramps up to max gain (1.0) close the end of the table. Note that these table
+could also have been defined with velocityMap definitions as they are linear
+interpolations. A present release will include curves to smooth things out
+a little.
+
+Option 520 is a squared powercurve and feels quite natural although that is
+very subjective. Perhaps its natural for a hard player and it could be a
+better default than the linear curve.
+
+The value 1000 will invert the mapping, so:
+
+  1510 - linear from 1.0 down to 0.0 as velocity increases
+  1520 - exponential, from 1.0 down to 0.0 as velocity increases
+
+The engine mapping is applied before the emulation mapping given here. There
+are reasonable arguments to make this table logarithmic - you are welcome to
+do so. There are no limits to the values here other than negative values are
+not mapped, so this table can also be used to compensate for volume levels.
+
+.TP
+\-glide <s>
+Duration of nogte glide in seconds, default 5.
+.TP
+\-emulate <name>
+Search for the named emulator and invoke it, otherwise exit. Invoking an 
+emulation this was is currently the default, it implies extra parameters for
+voicecount, gain, glide, pitchwheel depth, detune, etc. The default is 
+hammondB3. The -emulate option also implies -register to the emulator name.
+.TP
+\-register <name>
+Use a specific name when registering with Jack and ALSA. By default the engine
+will use the name 'bristol' however this can be confusing if multiple engines
+are being used and this can be used to override the default.
+.TP
+\-lwf
+Select lightweight filters for the emulator.
+.TP
+\-nwf
+Select normalweight filters, the default. These are about twice as expensive
+as lightweight filters.
+.TP
+\-wwf
+Select welterweight filters, this are again about double the CPU load as the
+normal filters.
+.TP
+\-hwf
+Select heavyweight filters. These are roughly twice the welterweight filter. 
+Whilst their is a noticable audible difference between -lwf and -nwf, it is 
+debatable whether the difference between -nwf, -wwf and -hwf is other than 
+visible in the CPU load. The default filter for any -mono synth is -wwf which
+can be overridden with something line '-mini -mono -nwf'.
+.TP
+\-blo <h>
+Number of bandwidth limited harmonics to map. The value of zero will select
+infintite bandwidth, default is 31.
+.TP
+\-blofraction <f>
+The engine uses precomputed tables for all frequencies where the maximum
+harmonic does not exceed this fraction of the samplerate. The default, 0.8, is
+already above nyquist as a tradeoff betweeen content and distortion. Values
+tending towards 1.0 are heavily aliased at the higher frequencies naturally.
+.TP
+\-scala <file>
+The engine will read the given scala file and map it into its frequency tables.
+.PP
+.TP
+.B User Interface:
+
+.TP
+\-quality <n>
+The color cache depth will affect the rendering speed. The lower values start
+showing loss of clarity, the higher values start using thousands of colors
+which is where the performance is affected, value is bpp, default is 6.
+.TP
+\-scale <s>
+Each of the emulators has a default window sisze, this size can be scaled up
+or downwards if desired.
+.TP
+\-width <n>
+The pixel width defines the smaller of two sizees that can be configured. It 
+works with the -scale and -autozoom options for flipping between different 
+sizes on mouse Enter/Leave of the window.
+.TP
+\-autozoom
+Minimise window on exit, maximise on enter.
+.TP
+\-raise
+Automatically raise the window on Enter.
+.TP
+\-lower
+Automatically lower the window on Leave. It is noted here that the use of 
+autozoom, raise and lower may have undesirable effects with some window 
+managers.
+.TP
+\-rud
+Constrain the rotary controller tracking to mouse up/down motion, not to
+actually track the mouse position. The value will be a fraction of the current
+window size.
+.TP
+\-antialias <%>
+For some window sizes there will be pixelation of the rendered imagas unless
+some antialias is applied. With large zoom values this is automatically 
+set up. Value is a percentage, default is 30.
+.TP
+\-aliastype <pre/texture/all>
+There are three antialiasing options, \'pre\' will apply it to the text silkscreens,
+\'texture\' will apply it to the surface bitmaps and \'all\' will apply it everywhere
+including devices rendered. The default is pre however this parameter is only 
+applied if -antialias has a value other than zero.
+.TP
+\-opacity <%>
+Brighton uses a transparency layer for some features such as the ARP 2600 patch
+cables. This is the default transparency. It can be adjusted later with the
+^o/^O/^t control codes in the GUI. Default is 50 percent.
+.TP
+\-pixmap
+Use the X11 pixmap interface rather than the default XImage interface to the
+server.
+.TP
+\-dct <ms>
+Double click timeout for button events, etc, 250 ms.
+.TP
+\-tracking
+Prevent the GUI piano keyboard image from tracking MIDI events, small reduction
+in CPU overhead.
+.TP
+\-keytoggle
+The default GUI behaviour for tuning keys on with the mouse is to latch them,
+this allows for playing chords on the polyphonics. This option will disable the
+latch to that keys are played only whilst held with the mousebutton.
+.TP
+\-neutral
+Initial the emulator with a null patch, all parameters will have the value of
+zero to allow for a patch to be built from the bottom up, completely from
+scratch. This is equivalent to '-load -1', negative memory locations will not
+be saved, ie, you cannot save to the null patch.
+.TP
+\-load <m>
+Initial memory number to load at startup. Default is 0 for most emulators.
+.TP
+\-import <pathname>
+Import a memory from a disk file to the active patch at start time. This patch
+can then be saved to another location and allows for interexchange of memories.
+.TP
+\-mbi <m>
+The master bank index allows for access to extra memory ID. This value times
+1000 is added to the memory ID saved/loaded by the GUI so the GUI can access for
+example 8 banks of 8 memories but using -mbi you can actually save multiple
+sets of 64 memories.
+.TP
+\-activesense <ms>
+The rate at which hello messages are sent from GUI to engine to ensure it is
+still active. If the transmission fails then the GUI will exit, if the engine
+does not receive updates it will also exit. Zero will disable active sense.
+.TP
+\-ast <m>
+The engine timeout period on active sense messages.
+.TP
+\-mct <m>
+The MIDI cycle timeout is a busy waiting GUI timer for MIDI events, used when  
+the GUI takes a MIDI interface for direct event tracking.
+.TP
+\-ar|\-aspect
+All of the emulators will attempt to maintain an aspect ratio for their windows
+so that they look 'normal'. This conflicts with some tiling window managers so
+can be disabled. It may also cause some excessive remapping of windows when they
+are resized.
+.TP
+\-iconify
+Open the window in the iconified state.
+.TP
+\-window
+Do not map any window.
+.TP
+\-cli
+Enable the text based command line interface to the engine. This can be used in
+connjuction with -window however if compiled without support for any windowing
+system the -window option is implied.
+.TP
+\-libtest
+Do not start the engine, nor attempt to connect to it, just post the GUI for
+testing.
+
+.PP
+.TP
+.B GUI Shortcuts:
+
+<Ctrl> 's'     \- save settings to current memory
+.br
+<Ctrl> 'l'     \- (re)load current memory
+.br
+<Ctrl> 'x'     \- exchange current with previous memory
+.br
+<Ctrl> '+'     \- load next memory
+.br
+<Ctrl> '\-'     \- load previous memory
+.br
+<Ctrl> '?'     \- show emulator help information
+.br
+<Ctrl> 'h'     \- show emulator help information
+.br
+<Ctrl> 'r'     \- show application readme information
+.br
+<Ctrl> 'k'     \- show keyboard shortcuts
+.br
+<Ctrl> 'p'     \- screendump to /tmp/<synth>.xpm
+.br
+<Ctrl> 't'     \- toggle opacity
+.br
+<Ctrl> 'o'     \- decrease opacity of patch layer
+.br
+<Ctrl> 'O'     \- increase opacity of patch layer
+.br
+<Ctrl> 'w'     \- display warranty
+.br
+<Ctrl> 'g'     \- display GPL (copying conditions)
+.br
+<Shift> '+'    \- increase window size
+.br
+<Shift> '\-'    \- decrease window size
+.br
+<Shift> 'Enter'\- toggle window between full screen size
+.br
+UpArrow        \- controller motion up (shift key accelerator)
+.br
+DownArrow      \- controller motion down (shift key accelerator)
+.br
+RightArrow     \- more control motion up (shift accelerator)
+.br
+LeftArrow      \- more control motion down (shift accelerator)
+
+.TP
+.B Operational options:
+.TP
+General:
+
+.TP
+\-engine
+Do not start a new engine. The GUI will attempt to connect to an existing 
+engine on the host and port configuration (cq). If the connection is built 
+then the engine will operate both emulators and voice allocations will be
+shared amongst them. All of the emulator outputs are folded back onto the 
+same stereo output, excepting where extra Jack control inputs are used.
+.TP
+\-gui
+Do not start the GUI, only the engine. The GUI will attempt to connect to the
+engine on the configured host and port values. If it does not respond then the
+GUI will exit with some rather terse messaging.
+.TP
+\-server
+Start the engine as a permanant server that does not exit with the last 
+emulator.
+.TP
+\-daemon
+Run the engine as a daemon with disconnected controlling terminal. This does
+not imply the -server option, nor does it imply the -log option for logging to
+the file system, nor -syslog which might also be applicable to a daemon.
+.TP
+\-watchdog <s>
+Timeout for the audio thread initialisation. If the thread does not activate
+within this period then the engine will gracefully exit rather than wait around
+for connections indefinitely. Default period is 30 seconds. This is not active
+in -server or -daemon mode. In normal operation the audio thread will be 
+launched within a couple of seconds but if the engine and GUI are started
+separately then this timeout demands that a GUI be started before the timer
+expires.
+.TP
+\-log
+Redirect logging output to a file. The default file is /var/log/bristol.log and
+/var/log/brighton.log and if they are not available then $HOME/.bristol/log 
+directory is used. The selection of /var/log is to prevent logging to root in
+the event that the engine is invoked by this user.
+.TP
+\-syslog
+Redirect logging output to syslog.
+.TP
+\-console
+Maintain the controlling terminal as output for logging messages, remove the
+timestampes for readability purposes. This can also be configured with the
+environment variable BRISTOL_LOG_CONSOLE=true.
+.TP
+\-rc
+Do not load any bristolrc parameter file.
+.TP
+\-exec
+The final process to be requested by the startBristol script will be called as
+an exec such that it maintains amongst other things the PID of the parent. This
+option will override the exec and leave the script waiting for the processes to
+exit. There implications of not using this parameter, some of the cleanup code
+is part of the wrapping shellscript, per default this is not called due to the
+exec request. This flag is default but should only really be required for 
+LADI compatibility.
+.TP
+\-stop
+Stop all the running bristol engines. This will indirectly result in termination
+of any GUI due to active sensing although that can be disabled. The use case is
+to stop any -server -daemon engines running in the background. The back end to
+the option is pkill.
+.TP
+\-exit
+Stop all the running bristol engines and GUI.
+.TP
+\-kill <-emulator>
+Stop all the running bristol engines and GUI that have been associated with the
+given emulator. If bristol was started with '-mini' it can now be killed with
+-mini so that other emulators are not terminated. If there are multiple mini
+running they will naturally die also. If the engine is running multitimbral GUI
+then the other associated GUI will also exit in addition to the mini.
+.TP
+\-cache <pathname>
+The default location for new memories and emulator profiles, the default is
+~/.bristol and it will be searched before the system/factory default directory
+/usr/local/share/bristol when emulators are started and memories are loaded. If
+the pathname does not exist then it is created if possible.
+.TP
+\-memdump <pathname> [-emulate <synth>]
+Create the target directory <pathname>/memory/<synth> and copy first the 
+factory default memories for the synth, then the user private memories. This 
+can be used with session management to make a copy of all synth memories in a
+session. If the target directory already exists then no copy operation takes
+place but the directory does replace the -cache default to make this the new
+location for saved memories for that session. The -emulate option is required,
+if it is not provided then the default hammondB3 is taken.
+.TP
+\-debug <1\-16>
+Debug level, values above 12 can be very verbose and only the value 0 is 
+arguably realtime safe as it avoids printf() in the engine compute thread.
+.TP
+\-readme [\-<e>]
+Display the program readme information. Show the readme for just a single
+emulator if desired.
+.TP
+\-glwf
+Only allow the use of '-lwf' for all emulators, no overrides.
+.TP
+\-host <hostname>
+Connect to the engine on the hostname, default is localhost. This is used in
+conjuction with -engine to distribute the GUI. The hostname accepts syntax such
+as hostname:port to fix both the host and port for a remote connection to the
+engine. If the host portion is the token 'unix' then a local named socket is
+created rather than a TCP connection. In this instance a specific port number
+can be given to create the named socket /tmp/br.<port> and if the port is not
+specified then a random numeric index is chosen.
+.TP
+\-port <p>
+Connect to the given TCP port for GUI/engine messaging, default 5028. If the 
+port is alreeady in use then the startup with fail. For starting multiple
+bristols with GUI then this option should be discarded and the script will look
+for a free port number for each invocation. It is incorrect to mix this option
+with -host parameters that take a value host:port or unix:port as the results
+will be indeterminate depending on the order the parameters are submitted.
+.TP
+\-quiet
+Redirect debug and diagnostic output to /dev/null.
+.TP
+\-gmc
+Open a MIDI interface in the GUI. Per default the engine will own the only
+MIDI interface for bristol and will redistribute events to the GUI. It is 
+possible to disable the forwarding and attach both GUI and engine to midi
+devices if necessary.
+.TP
+\-forward
+Disable MIDI event forwarding globally. Per default the engine opens a MIDI
+interface and is connected to the physical keyboards, control surfaces and/or
+sequencers. It will forward MIDI events to the GUI for tracking. This option
+disables the feature. When disabled the GUI will not reflect the piano keybaord
+state, nor will it track CC motion unless the options '-gmc' is given to open a
+MIDI connection in the GUI and that the user connects the same control surfaces
+to the GUI via this alternative channel. This option is logically identical to
+\'-localforward -remoteforward\'.
+.TP
+\-localforward
+This will prevent the GUI from forwarding MIDI messages to the engine. This is
+not to prevent MIDI message loops as the forwarding only ever occurs from 
+MIDI interfaces to TCP connections between GUI and engine. This option will
+prevent messages from any surfaces that are connected to the GUI from forwarding
+to the engine.
+.TP
+\-remoteforward
+This will prevent the engine from forwarding to the GUI but still allow the GUI
+to forward to the engine. If the GUI is given a MIDI connection with the -gmc
+option, and control surfaces are applied to both processes then the -forward
+option should be used to globally prevent event redistribution. Failure to do
+so will not result in loops, just one-for-one duplication of events. It is 
+possible to connect the control surfaces just to the GUI when the -gmc option
+is used, this gives the possibility to have a local keyboard and GUI but drive
+an engine on a remote systems. Their is admittedly additional latency involved
+with handling the MIDI messages from the GUI to the remote engine over TCP.
+.TP
+\-oss
+Configure OSS defaults for audio and MIDI interfaces
+.TP
+\-alsa
+Configure ALSA defaults for audio and MIDI interfaces. The MIDI interface is
+an ALSA SEQ port.
+.TP
+\-jack
+Configure Jack defaults for audio and MIDI interfaces. At the time of writing
+this option causes some issues as it selects Jack MIDI which currently requires
+a bridging daemon to operate. The options '-jack -midi seq' would be a more
+typical configuration.
+.TP
+\-jackstats
+Do not request audio parameters from the jack server, take the bristol system
+defaults or the configured parameters. The bristol defaults will invariably
+fail however the call to bristoljackstats is sometimes superfluous and this can
+speed up the initial startup times. Using this parameter will typically require
+that the options -rate and -count are also provided.
+TP
+\-jsmuuid <UUID>
+This is for sole use of the Jack Session Manager
+.TP
+\-jsmfile <path>
+This is for sole use of the Jack Session Manager
+.TP
+\-jsmd <ms>
+Jack session manager delay before session events are distributed internally.
+Event execution is delayed in the GUI by a default of 5000ms.
+.TP
+\-session
+Disable all session management including JSM and LADI.
+.TP
+\-sleep <n>
+Stall the initialisation process for 'n' seconds. This is to work around what
+appears to be race a condition when using a session manager to initialise
+multiple bristol clients as they all vie for the same TCP port identifier.
+.TP
+\-jdo
+Jack Dual Open: let the audio and midi threads register as independent clients
+with Jack. Per default the audio thread will open as a jack client and the MIDI
+connection is piggypbacked as another port rather than as another client.
+.TP
+\-o <filename>
+Generate a raw audio output of the final stage samples to a file. The format
+will be 16bit stereo interleaved.
+.TP
+\-nrp
+Enable support for NRP events in both GUI and engine. This is to be used with
+care as NRP in the engine can have unexpected results.
+.TP
+\-enrp
+Enable NRP support in the engine only.
+.TP
+\-gnrp
+Enable NRP events in the GUI. This is required to allow the GUI (and hence the
+engine) to be driven from some MIDI control surfaces.
+.TP
+\-nrpcc <n>
+Maximum number of NRP to map. The default is 128, seen as sufficient for any of
+the current emulators but the mixer will require more if it is every released.
+
+.TP
+.B Audio driver:
+
+.TP 
+\-audio [oss|alsa|jack]
+Audio driver overrides. Depending on the order of the switches it is possible
+to set a group of global defaults (-jack/oss/alsa) then have specific
+re-selection of components.
+.TP
+\-audiodev <dev>
+Audio device name. For Jack, this will be the name registered with the Jack
+daemon.
+.TP
+\-count <samples>
+Number of samples/frames in processing period.
+.TP
+\-outgain <gn>
+Output signal normalisation level, per emulator default 4.
+.TP
+\-ingain <gn>
+Input signal normalisation level, per emulator default 4.
+.TP
+\-preload <periods>
+Number of audio buffers to prewrite to the audio output on start. This is not
+active with the Jack drivers.
+.TP
+\-rate <hz>
+Sampling rate, defaults to 44100.
+.TP
+\-priority <p>
+Realtime priority requested by the engine audio thread, default 75. Zero will
+disable RT processing.
+.TP
+\-autoconn
+Automatically connect the engine input and output to the first Jack IO ports
+found. This can also be achieved with the environment variable
+BRISTOL_AUTOCONN=true
+.TP
+\-multi <c>
+Multiple IO port requests, only works with Jack and currently only the ARP 2600
+gives access to these ports.
+.TP
+\-migc <f>
+Input signal normalisation level for the multi IO ports.
+.TP
+\-mogc <f>
+Output signal normalisation level for the multi IO ports.
+.TP
+
+.B Midi driver:
+
+.TP
+\-midi [oss|[raw]alsa|jack]
+Audio driver overrides. Depending on the order of the switches it is possible
+to set a group of global defaults (-jack/oss/alsa) then have specific
+re-selection of components such as in \'-jack -midi seq\'. The default MIDI
+driver is '-midi seq' but that can be overriden with compile time options such
+as --enable-jack-default-midi to ./configure.
+.TP
+\-mididev <dev>
+MIDI device namee to be opened (OSS/ALSA).
+.TP
+\-mididbg
+Request MIDI level 1 debuging.
+.TP
+\-mididbg2
+Request MIDI level 2 debuging. Both can be selected for level 3.
+.TP
+\-sysid <0xXXXXXXXX>
+Configure an alternative SYSEX identifier for the engine. The default is the
+value 0x534C6162 for historical reasons, this is not a free development ID
+but it is not assigned so should not cause conflict.
+.TP
+
+.br
+.B LADI driver (level 1 compliant):
+
+.TP
+\-ladi brighton
+Execute LADI messages in the GUI only
+.TP
+\-ladi bristol
+Execute LADI messages in the engine only
+.TP
+\-ladi <memory>
+The LADI state memory for save operations. This should be unique for each LADI
+session.
+
+.PP
+.SH EXAMPLES
+
+.TP
+startBristol -mini
+Run a minimoog using ALSA interface for audio and midi (seq). The emulator will 
+default to monophonic, high note precedence with retrigger and legato velocity.
+.TP    
+startBristol \-alsa
+Run a hammondB3 using ALSA interface for audio and midi. This is equivalent to
+all the following options: \-b3 \-audio alsa \-audiodev plughw:0,0 \-midi seq
+\-mididev plughw:0 \-count 256 \-preload 4 \-port 5028 \-voices 32
+\-channel 1 \-rate 44100
+.TP
+startBristol \-explorer \-voices 1
+Run a moog explorer as a monophonic instrument, using ALSA interface for audio
+and midi.
+.TP
+startBristol \-prophet \-alsa \-channel 3
+Run a prophet\-5 using ALSA for audio and midi (on channel 3).
+.TP
+startBristol \-b3 \-count 512 \-preload 2
+Run a hammond b3 with a 512 samples in a period, and preload two such buffers
+before going active. Some Live! cards need this larger buffer size with ALSA
+drivers.
+.TP
+startBristol \-oss \-audiodev /dev/dsp1 \-vox \-voices 8
+Run a vox continental using OSS device 1, and default midi device /dev/midi0.
+Operate with just 8 voices out of the 32 available.
+.TP
+startBristol \-b3 \-audio alsa \-audiodev plughw:0,0 \-seq \-mididev 128.0
+Run a B3 emulation over the ALSA PCM plug interface, using the ALSA sequencer
+over client 128, port 0.
+.TP
+startBristol \-juno &
+.TP    
+startBristol \-prophet \-channel 2 \-engine
+Start two synthesisers, a juno and a prophet. Both synthesisers will will be
+executed on one engine (multitimbral) with 32 voices between them. The juno
+will be on default midi channel (1), and the prophet on channel 2. Output over
+the same default ALSA audio device. The 32 voices will never all get used as
+these emulators will run per default with a lower soft limit. They can be run
+with more voices however that would require suitable values to the -voices
+option.
+.TP
+startBristol \-juno -jack -register juno -voices 32 &
+.TP
+startBristol \-prophet -jack -register prophet -channel 2 -voices 32
+Start two synthesisers, a juno and a prophet5. Each synth is totally independent
+with its own GUI and own engine. Each engine will register separately with the
+jack daemon. They will respectively register the names 'juno' and 'prophet' with
+Jack and ALSA so that they can be differentiated in the respective control
+programmes such as aconnect and qjackctl. The outputs will be visible separately
+in these control programs and can thus be routed independently. Each synth can
+use up to 32 voices and there will only be CPU contention - these are separate 
+engine process with 32 voices each.
+
+.SH FILES
+The \fBbristolrc\fP file can be created in the BRISTOL_CACHE directory (default
+value ${HOME}/.bristol/bristolrc) and the users prefered options placed as the
+content. The file will be read as a single line and incorporated onto the 
+command lines for both bristol and brighton.
+There is an additional variable BRISTOL_RC which can point to another location
+if necessary.
+This can be used to simply the command line for all parameters that a user
+provides with each invocation. The parameters can be all on a single line of 
+the file or one per line. The parameters from this file will preceed the user
+specified ones such that the RC defaults may be overridden on the comand line.
+
+.SH ENVIRONMENT VARIABLES
+.TP
+BRISTOL
+This indicates the location of the bristol installation for the binaries,
+bitmaps and related data reside. The default depends on the prefix used for 
+the system build, /usr/local/share/bristol and /usr/share/bristol are typical.
+.TP
+BRISTOL_CACHE
+The cache is where memories and emulator profiles (keyboard maps and
+MIDI Continuous Controller maps) are saved. The default is ${HOME}/.bristol
+.TP
+BRISTOL_RC
+Location of the bristol runcom file.
+.TP
+BRISTOL_LOG_CONSOLE
+Force debuging output to be sent to console without timestamping, log file or
+syslog.
+.TP
+BRISTOL_AUTOCONN
+Attempt to automatically connect the bristol audio inputs and outputs when using
+Jack.
+.TP
+BRISTOL_AUTO_LEFT
+If BRISTOL_AUTOCON is set to anything other than '0' this will be the default
+Jack port for the bristol left channel output. There is no default, if AUTOCONN
+has been requested this will be the first jack playback channel.
+.TP
+BRISTOL_AUTO_RIGHT
+If BRISTOL_AUTOCON is set to anything other than '0' this will be the default
+Jack port for the bristol right channel output. There is no default, if AUTOCONN
+has been requested this will be the second jack playback channel.
+.TP
+BRISTOL_AUTO_IN
+If BRISTOL_AUTOCON is set to anything other than '0' this will be the default
+Jack port for the bristol (mono) input channel. There is no default, if 
+AUTOCONN is set this will be the first jack capture channel.
+
+.SH AUTHOR
+Written by Nicholas Copeland <nickycopeland@hotmail.com>
+
+.SH REPORTING BUGS
+Bugs and enhancement requests can be submitted to the bristol project page on
+SourceForge:
+.PP
+<http://sourceforge.net/tracker/?group_id=157415>
+
+.SH COPYRIGHT
+Copyright © 1996,2011 Nick Copeland. License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>. This is free software: you are free to change
+and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+

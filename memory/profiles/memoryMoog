@@ -1,0 +1,72 @@
+#
+# This the the MIDI controller profile, it keeps controller remappings for
+# converting one controller ID to another, and then controls which controllers
+# are tracked by with GUI devices. It may be edited manually, in which case
+# changes are maintained, and the GUI can also alter the controller tracking
+# by typing <Control><Middle Mouse Button>, the moving the desired control
+#
+# Remap format is "CM: MidiCC   MidiCC"
+# Control format is "CC: MidiCC   panel/index [value]"
+#
+# The values are integers from 0 to 16384, the fine resolution controller
+# value for the throw of this controller.
+#
+#
+CC: 1	   0/90 3807
+CC: 5	   0/84 16384
+CC: 7	   0/92 16384
+CC: 65	   0/85 16384
+CC: 71	   0/34 14883
+CC: 72	   0/45 16384
+CC: 72	   0/39 16384
+CC: 73	   0/36 16384
+CC: 73	   0/42 16384
+CC: 74	   0/33 16384
+CC: 75	   0/43 15943
+CC: 75	   0/37 16384
+CC: 76	   0/52 1289
+CC: 77	   0/65 4240
+CC: 78	   0/66 2209
+CC: 91	   0/51 16384
+CC: 93	   0/91 16384
+
+KM: a 1 1
+KM: z 2 1
+KM: s 3 1
+KM: x 4 1
+KM: c 5 1
+KM: f 6 1
+KM: v 7 1
+KM: g 8 1
+KM: b 9 1
+KM: h 10 1
+KM: n 11 1
+KM: m 12 1
+KM: k 13 1
+KM: , 14 1
+KM: l 15 1
+KM: . 16 1
+KM: / 17 1
+KM: ' 18 1
+
+KM: q 24 0
+KM: 2 25 0
+KM: w 26 0
+KM: 3 27 0
+KM: e 28 0
+KM: r 29 0
+KM: 5 30 0
+KM: t 31 0
+KM: 6 32 0
+KM: y 33 0
+KM: 7 34 0
+KM: u 35 0
+KM: i 36 0
+KM: 9 37 0
+KM: o 38 0
+KM: 0 39 0
+KM: p 40 0
+KM: [ 41 0
+KM: = 42 0
+KM: ] 43 0
+KM: \ 45 0

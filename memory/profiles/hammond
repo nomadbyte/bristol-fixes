@@ -1,0 +1,61 @@
+#
+# This the the MIDI controller profile, it keeps controller remappings for
+# converting one controller ID to another, and then defines which controllers
+# are tracked by which GUI devices. It may be edited manually, in which case
+# changes are maintained but the GUI can also alter the controller tracking
+# by typing <Control><Middle Mouse Button>, the moving the desired control.
+# This file is saved whenever a GUI memory is saved.
+#
+# The file contains Controller Mapping (one controller to another, for example
+# breath controller maps to footpedal, etc), Key Mappings for QWERTY to MIDI
+# note events, and Continuous Controller mappings that allow a control surface
+# to drive the GUI.
+#
+# Remap format is "CM: MidiCC   MidiCC"
+# Keyboard map format is "KM: ASCII   MIDI_note [MIDI_chan]"
+# Control format is "CC: MidiCC   panel/index [value]"
+#
+# The values are integers from 0 to 16384, the fine resolution controller
+# value for the throw of this controller. If in doubt use the value 16383,
+# it is only relevant for ganging controllers.
+#
+
+KM: ' 66 1
+KM: , 62 1
+KM: . 64 1
+KM: / 65 1
+KM: 0 75 0
+KM: 2 61 0
+KM: 3 63 0
+KM: 5 66 0
+KM: 6 68 0
+KM: 7 70 0
+KM: 9 73 0
+KM: = 78 0
+KM: [ 77 0
+KM: \ 48 1
+KM: ] 79 0
+KM: a 49 1
+KM: b 57 1
+KM: c 53 1
+KM: e 64 0
+KM: f 54 1
+KM: g 56 1
+KM: h 58 1
+KM: i 72 0
+KM: k 61 1
+KM: l 63 1
+KM: m 60 1
+KM: n 59 1
+KM: o 74 0
+KM: p 76 0
+KM: q 60 0
+KM: r 65 0
+KM: s 51 1
+KM: t 67 0
+KM: u 71 0
+KM: v 55 1
+KM: w 62 0
+KM: x 52 1
+KM: y 69 0
+KM: z 50 1

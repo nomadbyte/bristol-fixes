@@ -1,0 +1,614 @@
+#
+# This is the bristol default gearbox, 0.40 - 0.60 (current)
+#
+# This file defines the diverse tonewheel generator parameters for the bristol
+# preacher algorithm. There are definitions per wheel that define its gain and
+# waveform, the gain levels for each of the slider busses, frequency, phase and
+# crosstalk levels betweem all the compartments. The tone gain can be
+# seen to equalise the whole keyboard and the bus gains to equalise ane given
+# note. There are also settings per slide bar bus for linearity.
+#
+# The selection between bright and normal is from the GUI "bright" button.
+#
+# Wheel damping is also known as 'volume stealing', 'volume robbing', etc, it
+# defines how much signal loss occurs if the same tonewheel is tapped twice 
+# for any chord combination. The Hammond did not drive all the possible note
+# combinations linearly, so using the same wheel twice did not necessarily 
+# double the volume, it would tailer off slightly. The GUI controls the overall
+# amount of damping, this controls the mapping of the damping over the keyboard.
+#
+# There are 91 wheels [0..90], 9 slider busses [0..9], the ordering is not
+# relevant and any undefined entries are interpolated between the nearest
+# defined boundaries. Upper and lower extremes are leveled to the nearest
+# defined value when not explicitly specified.
+#
+# There are the following options:
+#
+#	ToneNormal: <wheel> <waveform>  - tonewheel waveform normal
+#	ToneBright: <wheel> <waveform>  - tonewheel waveform bright
+#
+#	EQNormal: <wheel> <gain>  - relative gain for that wheel in normal setting
+#	EQBright: <wheel> <gain>  - relative gain for that wheel in bright setting
+#
+#	DampNormal: <wheel> <gain>	- relative damping of wheel, normal setting
+#	DampBright: <wheel> <gain>	- relative damping of wheel, bright setting
+#
+#	BusNormal: <bus> <gain>	- relative gain of slider busses, normal setting
+#	BusBright: <bus> <gain>	- relative gain of slider busses, bright setting
+#
+# Use whatver values you want however anything <= 0 is ignored.
+#
+# Waveforms are as follows:
+#
+#	1.0 - sinewave.
+#	> 1 - tends towards ramp wave (5.0 has a quite sharp leading edge)
+#	< 1 - tends towards square (0.0 is a rather sharp edged square wave)
+#
+# The defaults amplify the bass and treble frequencies, using a slight square
+# wave for the low frequencies moving up to ramps for the high end.
+#
+# This file is reread when the compress option is selected from the GUI
+# although this button does not actually affect the sound quality of the
+# preacher (it does affect the sound when the preacher is not selected).
+# Reloads are quite an intensive operation since all 91 wheel waveforms are
+# recalculated. Avoid them whilst actively playing, but you can adust the
+# values without having to restart the engine and test the net results, plus
+# changing the 'bright' button setting will have no impact on performance
+# since the differences are precalculated.
+#
+
+# Tonewheel waveforms, lower end are flatter to be a little hollow. This may
+# be incorrect since using a bright, higher frequency response would typically
+# result in the lower frequency waves having a richer content. The ranges 
+# should be fixed such that the waveforms for the tooths are common by number
+# of teeth - there were 12 of each: 2, 4, 8, 16, 32, 64, 128 plus 6 of 192
+# The output waveforms for each of these ranges should be comparable.
+#
+ToneNormal: 0 0.96
+ToneNormal: 11 0.963
+ToneNormal: 12 0.97
+ToneNormal: 23 0.973
+ToneNormal: 24 0.98
+ToneNormal: 35 0.983
+ToneNormal: 36 0.99
+ToneNormal: 47 0.993
+ToneNormal: 48 1.0
+ToneNormal: 59 1.0
+ToneNormal: 60 1.0
+ToneNormal: 71 1.0
+ToneNormal: 72 0.95
+ToneNormal: 83 0.95
+ToneNormal: 84 0.90
+ToneNormal: 96 0.90
+#
+# ToneNormal: 0 0.60
+# ToneNormal: 32 0.80
+# ToneNormal: 40 0.90
+# ToneNormal: 50 1.0
+# ToneNormal: 65 1.0
+# ToneNormal: 70 1.05
+# ToneNormal: 75 1.1
+
+# Equalisation "Normal" - tonewheels and busses. This is a rough estimate of
+# the mV output signals taken from a B3.
+EQNormal: 0 4.0
+EQNormal: 11 2.5
+EQNormal: 12 2.0
+EQNormal: 23 1.5
+EQNormal: 24 1.0
+EQNormal: 35 1.0
+EQNormal: 36 0.8
+EQNormal: 47 0.9
+EQNormal: 48 1.0
+EQNormal: 59 1.3
+EQNormal: 60 1.4
+EQNormal: 71 1.4
+EQNormal: 72 1.5
+EQNormal: 82 3.0
+EQNormal: 90 2.5
+
+# Bus normal EQ
+BusNormal: 0 1.5
+BusNormal: 5 1.0
+BusNormal: 8 1.0
+
+# Wheel damping 'normal' - some loss of signal at lower frequencies
+DampNormal: 0 0.9
+DampNormal: 90 1.0
+
+# Tonewheel bright waveforms: less square at low end, more ramp at high end
+ToneBright: 0 0.60
+ToneBright: 11 0.62
+ToneBright: 12 0.70
+ToneBright: 23 0.72
+ToneBright: 24 0.80
+ToneBright: 35 0.82
+ToneBright: 36 0.90
+ToneBright: 47 0.92
+ToneBright: 48 1.0
+ToneBright: 59 1.0
+ToneBright: 60 1.0
+ToneBright: 71 1.0
+ToneBright: 72 1.05
+ToneBright: 83 1.05
+ToneBright: 84 1.08
+ToneBright: 96 1.08
+
+# "Bright" equalisation
+EQBright: 0 4.0
+EQBright: 11 2.5
+EQBright: 12 2.0
+EQBright: 23 1.5
+EQBright: 24 1.0
+EQBright: 35 1.0
+EQBright: 36 0.8
+EQBright: 47 0.9
+EQBright: 48 1.0
+EQBright: 59 1.3
+EQBright: 60 2.4
+EQBright: 71 2.4
+EQBright: 72 2.5
+EQBright: 82 5.0
+EQBright: 90 3.5
+
+# Bus Bright EQ
+BusBright: 0 0.8
+BusBright: 4 0.6
+BusBright: 8 1.5
+
+# Wheel damping 'bright' - more loss of signal at lower frequencies
+DampBright: 0 0.85
+DampBright: 90 1.0
+
+#
+# These are the gains of each stop on the sliders. These values result in 
+# a linear interpolation but you can change that if you want to have things
+# like exponential gains, uneven gains.
+#
+# These value add a small amount to the 'stopped' bus to emulate the bus
+# leakage (in a rather crude fashion).
+#
+stops: 0 0.00000001
+stops: 8 1.0
+
+#
+# Wheels are defined as
+#
+#	wheel: <nr> <freq> <phase>
+#
+# These can redefine the Hammond 'almost' Even Tempered frequencies and the
+# wheel phases. The default frequencies are the slightly off hammond notes,
+# here we are going to add additional flatness on the 192-toothed wheels.
+#
+# Default phase is to init totally randomly, this is pretty much how the
+# Hammond operated - the teeth were located by spring friction only and could
+# wander with transport as the wheel could 'walk' under vibration. Phase should
+# not affect the sound, but actually it does. If you don't like the random
+# change between invocations then they can be fixed here. Either way, you do
+# not want to go for all the wheels to be totally in phase, that would be very 
+# electronic - if you want to emulate the L or M series this could be useful.
+#
+# Entering a negative value or the hyphen ('-') will leave the default value.
+# Entering zero instead of - should give you a clean leading phase.
+
+#
+# This is the default initial gearbox generated automatically by the engine,
+# you can redefine it here:
+#
+#wheel: 0 41.193748 -
+#wheel: 1 43.636250 -
+#wheel: 2 46.250000 -
+#wheel: 3 49.000000 -
+#wheel: 4 51.892502 -
+#wheel: 5 55.000000 -
+#wheel: 6 58.259998 -
+#wheel: 7 61.715000 -
+#wheel: 8 65.385002 -
+#wheel: 9 69.267502 -
+#wheel: 10 73.425003 -
+#wheel: 11 77.777496 -
+#wheel: 12 82.387497 -
+#wheel: 13 87.272499 -
+#wheel: 14 92.500000 -
+#wheel: 15 98.000000 -
+#wheel: 16 103.785004 -
+#wheel: 17 110.000000 -
+#wheel: 18 116.519997 -
+#wheel: 19 123.430000 -
+#wheel: 20 130.770004 -
+#wheel: 21 138.535004 -
+#wheel: 22 146.850006 -
+#wheel: 23 155.554993 -
+#wheel: 24 164.774994 -
+#wheel: 25 174.544998 -
+#wheel: 26 185.000000 -
+#wheel: 27 196.000000 -
+#wheel: 28 207.570007 -
+#wheel: 29 220.000000 -
+#wheel: 30 233.039993 -
+#wheel: 31 246.860001 -
+#wheel: 32 261.540009 -
+#wheel: 33 277.070007 -
+#wheel: 34 293.700012 -
+#wheel: 35 311.109985 -
+#wheel: 36 329.549988 -
+#wheel: 37 349.089996 -
+#wheel: 38 370.000000 -
+#wheel: 39 392.000000 -
+#wheel: 40 415.140015 -
+#wheel: 41 440.000000 -
+#wheel: 42 466.079987 -
+#wheel: 43 493.720001 -
+#wheel: 44 523.080017 -
+#wheel: 45 554.140015 -
+#wheel: 46 587.400024 -
+#wheel: 47 622.219971 -
+#wheel: 48 659.099976 -
+#wheel: 49 698.179993 -
+#wheel: 50 740.000000 -
+#wheel: 51 784.000000 -
+#wheel: 52 830.280029 -
+#wheel: 53 880.000000 -
+#wheel: 54 932.159973 -
+#wheel: 55 987.440002 -
+#wheel: 56 1046.160034 -
+#wheel: 57 1108.280029 -
+#wheel: 58 1174.800049 -
+#wheel: 59 1244.439941 -
+#wheel: 60 1318.199951 -
+#wheel: 61 1396.359985 -
+#wheel: 62 1480.000000 -
+#wheel: 63 1568.000000 -
+#wheel: 64 1660.560059 -
+#wheel: 65 1760.000000 -
+#wheel: 66 1864.319946 -
+#wheel: 67 1974.880005 -
+#wheel: 68 2092.320068 -
+#wheel: 69 2216.560059 -
+#wheel: 70 2349.600098 -
+#wheel: 71 2488.879883 -
+#wheel: 72 2636.399902 -
+#wheel: 73 2792.719971 -
+#wheel: 74 2960.000000 -
+#wheel: 75 3136.000000 -
+#wheel: 76 3321.120117 -
+#wheel: 77 3520.000000 -
+#wheel: 78 3728.639893 -
+#wheel: 79 3949.760010 -
+#wheel: 80 4184.640137 -
+#wheel: 81 4433.120117 -
+#wheel: 82 4699.200195 -
+#wheel: 83 4977.759766 -
+#wheel: 84 5272.799805 -
+#wheel: 85 5585.439941 -
+#wheel: 86 5920.000000 -
+#wheel: 87 6272.000000 -
+#wheel: 88 6642.240234 -
+#wheel: 89 7040.000000 -
+#wheel: 90 7457.279785 -
+
+#
+# This are for the 192 teethed wheels which are additionally a few cents out:
+#
+wheel:	84 5250.799805 -
+wheel:	85 5555.439941 -
+wheel:	86 5900.000000 -
+wheel:	87 6232.000000 -
+wheel:	88 6600.240234 -
+wheel:	89 7010.000000 - A - flatten by about 0.3 cents. The rest are flat
+wheel:	90 7400.279785 - and are now just a bit flatter. No phase changes.
+
+#
+# Level of crosstalk from the 3 other wheels in the same compartment. The
+# defaults should be according to the normal 60Hz tonewheel box including
+# crosstalk for the 2/4 and 8/32 wheels. 
+#
+# These are not dB values but linear gain from 0 to 1.0 and if anybody wants
+# dB signal loss values then they either need to calculate them or get in
+# touch with me to encode it that way.
+#
+# The first two values govern the crosstalk between the two near wheels, and 
+# the second two from the two far wheels. Crosstalk to the first wheel in a
+# compartment is typically lower due to the effects of the shaping filter
+# applied to low frequency wheels.
+#
+# The 4th entry is for the drawbar bus crosstalk.
+#
+# Entries 5 through 8 are filter and loom crosstalk. These have been given 
+# larger values as the disonance is quite interesting.
+#
+crosstalkNormal: 0 0.003
+crosstalkNormal: 1 0.004
+crosstalkNormal: 2 0.003
+crosstalkNormal: 3 0.004
+crosstalkNormal: 4 0.003
+crosstalkNormal: 5 0.003
+crosstalkNormal: 6 0.004
+crosstalkNormal: 7 0.003
+crosstalkNormal: 8 0.005
+
+crosstalkBright: 0 0.01
+crosstalkBright: 1 0.02
+crosstalkBright: 2 0.015
+crosstalkBright: 3 0.01
+crosstalkBright: 4 0.015
+crosstalkBright: 5 0.02
+crosstalkBright: 6 0.015
+crosstalkBright: 7 0.015
+crosstalkBright: 8 0.02
+
+#
+# And the compartment table. These are the note numbers (Hammond counted from
+# 1, but as we all know that does not work well for computers) in each of
+# the 24 compartments. Each compartment had a pair of tonewheels at each side
+# and there was more crosstalk between these two than the far two at the other
+# side of the compartment due to distance. Note that these are not the same as
+# the MIDI note numbers from KeyOn events, but internal 'tooth' indeces.
+#
+# These chamber definitions should be correct but if you see any discrepencies
+# let me know. Each tonewheel was in a compartment with 3 other octaves of the
+# same note and there were two compartments for any given key covering either
+# seven or eight octaves. Some notes had empty top frequency tonewheels since
+# the then engineering could not put enough teeth on the wheel, these were
+# dealt with using foldback from lower frequencies (and the lowest octave also
+# had foldback from one octave above for slightly different related reasons).
+#
+# Crosstalk '0' is used between the first pair and the last pair - they are the
+# adjacent wheels. The other two crosstalk are for the opposite pair and could
+# really have been consolidated into a single value.
+#
+# Crosstalk level-3 is used for bus crosstalk of the drawbars.
+#
+# For example, from the first line:
+#
+# Wheel 0 has crosstalk from 48 at level0, plus 12 at level1 and 60 at level2.
+# Wheel 48 has crosstalk from 0 at level0, plus 60 at level1 and 12 at level2.
+# Wheel 12 has crosstalk from 60 at level0, plus 0 at level1 and 48 at level2.
+# Wheel 60 has crosstalk from 12 at level0, plus 48 at level1 and 0 at level2.
+#
+# These lines can be extended to include the crosstalk levels if you want to 
+# redefine them per wheel.
+#
+compartment: 0		0	48		12	60
+compartment: 1		24	72		37	-
+compartment: 2		7	55		19	67
+compartment: 3		31	79		43	86
+compartment: 4		2	50		14	62
+compartment: 5		26	74		38	-
+compartment: 6		9	57		21	69
+compartment: 7		33	81		45	88
+compartment: 8		4	52		16	64
+compartment: 9		28	76		40	-
+compartment: 10		11	59		23	71
+compartment: 11		35	83		47	90
+compartment: 12		6	54		18	66
+compartment: 13		30	78		42	85
+compartment: 14		1	49		13	61
+compartment: 15		25	73		37	-
+compartment: 16		8	56		20	68
+compartment: 17		32	80		44	54
+compartment: 18		3	51		15	63
+compartment: 19		27	75		13	-
+compartment: 20		10	58		22	70
+compartment: 21		34	82		46	89
+compartment: 22		5	53		17	65
+#
+# An example with crosstalk level:
+#
+compartment: 23		29	77		41	84 0.02 0.05 0.03 0.04
+
+#
+# Adjacency table. Each wheel, apart from being in a shared compartment which
+# created crosstalk was also on a filter board with different notes in its
+# vicinity and in a wire loom with various adjacent cables. There are another
+# four entries in the crosstalk table for these values, the default given
+# here are for the filter adjacency, but the fact is these can be redefined for
+# arbitrary wheel numbers if you want to create a loom. Again, the crosstalk
+# values are optional and override the defaults.
+#
+# The default adjacency table is actually taken from the above compartment table
+# as the filter circuits were mounted on the outside, hence, wheel 30 in
+# compartment 13 had 4 main neighbors, these being 6, 1 and 49 and 54. The
+# crosstalk between these will follow the default values unless otherwise
+# defined. The adjacency for wheel zero is given as reference as it only has
+# two adjacent filters.
+#
+adjacency: 30	1 6 49 54	0.6 0.5 0.3 0.3
+adjacency: 0	24 72 - -	0.6 0.5
+
+#
+# Drawbar equalisation.
+#
+# The tapering table controls the wheel gains by drawbar. It works after the
+# wheel EQ given above and actually gives a different mix by drawbar by key.
+# Again, this should follow the actual tapering schematics although the values
+# used may need to be different as these translate again into linear gains.
+#
+# If these look wrong let me know, they were taken from the schematics of one
+# Hammond model. You can emulate broken stops by giving that stop value a very
+# large impedence - 1000, 2000, etc.
+#
+# The original circuit was a resistive divider with the output signal over 
+# a 24 Ohms impedence. The values that are entered here are the net signal
+# gain/loss or a resistor index. The index makes it easier to change the 
+# settings globally without needing a degree in 'vi'. The reason both formats
+# are accepted is that one is easier to define, the other is more flexible 
+# and will allow resistor tolerances to be built in to be less mechanical.
+#
+# taper: note <16'> <5 1/3'> <8'> <4'> <2 2/3'> <2'> <1 3/5'> <1 1/3'> <1'>
+#
+# There is one entry per note from 0 to 60 for a C to C keyboard. Values outside
+# this range are undefined.
+#
+# The default taper table is:
+#
+# resistors: 100  50  34  24  15  10
+# resistors: 0.4 0.6 0.8 1.0 1.2 1.4 // resulting gain level.
+#
+# taper: *	0.4 0.8 0.6 0.8 1.4 1.4 1.2 1.0 1.0
+#
+# With the values given above the below three lines are ~equivalent, they use
+# R value with an index into the resistor array (value must be less than array
+# size), the actual resistor values as defined by Hammond, or any other value
+# greater than 6, or a literal value for the gain:
+#
+# taper: 0	 R0   R2  R1  R2  R5  R5  R4  R3  R3
+# taper: 0	 R100 R34 R50 R34 R10 R10 R15 R24 R24
+# taper: 0	 R101 R31 R51 R33 R11 R10 R15 R25 R24 // slightly off
+# taper: 0	 0.4  0.8 0.6 0.8 1.4 1.4 1.2 1.0 1.0
+#
+resistors: 0 0.4
+resistors: 5 1.4
+
+taper: 0	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 1	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 2	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 3	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 4	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 5	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 6	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 7	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 8	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 9	 R0  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 10	 R1  R2  R1  R2  R5  R5  R4  R3  R3
+taper: 11	 R1  R2  R1  R2  R5  R4  R4  R3  R3
+
+taper: 12	 R1  R2  R1  R2  R4  R4  R4  R3  R3
+taper: 13	 R1  R2  R1  R3  R4  R4  R4  R3  R3
+taper: 14	 R1  R3  R1  R3  R4  R4  R4  R3  R3
+taper: 15	 R1  R3  R2  R3  R4  R4  R4  R3  R3
+taper: 16	 R2  R3  R2  R3  R4  R4  R4  R3  R3
+taper: 17	 R2  R3  R2  R3  R4  R4  R4  R3  R3
+taper: 18	 R2  R3  R2  R3  R4  R4  R3  R3  R3
+taper: 19	 R2  R3  R2  R3  R4  R4  R3  R3  R3
+taper: 20	 R2  R3  R2  R3  R3  R3  R3  R3  R3
+taper: 21	 R2  R3  R2  R3  R3  R3  R3  R3  R3
+taper: 22	 R2  R3  R2  R3  R3  R3  R3  R3  R3
+taper: 23	 R2  R3  R3  R3  R3  R3  R3  R3  R3
+
+taper: 24	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 25	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 26	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 27	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 28	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 29	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 30	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 31	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 32	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 33	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 34	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 35	 R3  R3  R3  R3  R3  R3  R3  R3  R3
+
+taper: 36	 R4  R3  R3  R3  R3  R3  R3  R3  R3
+taper: 37	 R4  R3  R4  R3  R3  R3  R3  R3  R3
+taper: 38	 R4  R4  R4  R3  R3  R3  R3  R3  R3
+taper: 39	 R4  R4  R4  R2  R3  R3  R3  R3  R3
+taper: 40	 R4  R4  R4  R2  R2  R3  R3  R3  R3
+taper: 41	 R4  R4  R4  R2  R2  R2  R3  R3  R3
+taper: 42	 R4  R4  R4  R2  R2  R2  R2  R3  R3
+taper: 43	 R4  R4  R4  R2  R2  R2  R2  R2  R1
+taper: 44	 R4  R4  R4  R2  R2  R2  R2  R2  R1
+taper: 45	 R4  R4  R4  R2  R2  R2  R2  R2  R1
+taper: 46	 R4  R4  R4  R2  R2  R2  R2  R2  R1
+taper: 47	 R4  R4  R4  R2  R2  R2  R2  R2  R1
+
+taper: 48	 R5  R4  R4  R2  R2  R2  R2  R1  R1
+taper: 49	 R5  R4  R5  R2  R2  R2  R2  R1  R1
+taper: 50	 R5  R5  R5  R2  R2  R2  R2  R1  R1
+taper: 51	 R5  R5  R5  R2  R2  R2  R1  R1  R1
+taper: 52	 R5  R5  R5  R2  R1  R2  R1  R1  R1
+taper: 53	 R5  R5  R5  R2  R1  R2  R1  R1  R1
+taper: 54	 R5  R5  R5  R2  R1  R2  R1  R1  R1
+taper: 55	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+taper: 56	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+taper: 57	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+taper: 58	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+taper: 59	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+
+taper: 60	 R5  R5  R5  R2  R1  R1  R1  R1  R1
+
+#
+# KeyClick section. The preacher has its own keyclick emulation. Each key has
+# 9 contacts, one for each drawbar bus, and each will make a contact at a 
+# slightly different time due to wear and creep of the contacts. This is 
+# emulated with a millisecond offset timer from the note_on event such that
+# each bus has its own delay before two things happen:
+#
+# 1: contact is made and the tonewheel finally passes to the output.
+# 2: click is generated at a specified level.
+#
+# The gain levels apply to the noise level from that single contact, they may
+# be different but always apply to the same offset timer. The timers are fixed,
+# however there is no link between the offset and the drawbar, they are 
+# mildly randomised, partly by index selection but also by key velocity - these
+# are the maximum offsets, when a key is hit faster then it moves faster and
+# the contact delays compress, as with the original instrument (almost - if
+# you want to know the differences then mail me).
+#
+# Gains can be inverted on selection, and the pulse from each contact can be
+# controlled from a limited selection.
+#
+# There are currently 6 waveforms: 0 to 2 are sines of different frequencies,
+# 3 is a pulse wave edged with noise, 4 and 5 are ramped waves with different
+# attack and decay characteristics.
+#
+# The overall level of keyclick also has a control in the GUI. All these values
+# use the drawbar number as index.
+#
+# There is currently no NoteOff grooming (0.10.2).
+#
+BusDelayNormal: 0 0.001
+BusDelayNormal: 8 80
+
+BusDelayBright: 0 0.001
+BusDelayBright: 1 100.0
+BusDelayBright: 2 77.0
+BusDelayBright: 3 3.0
+BusDelayBright: 4 4.0 - These are the percussive busses and do not carry click
+BusDelayBright: 5 0.2 - also responds better with a short delay.
+BusDelayBright: 6 30
+BusDelayBright: 7 70
+BusDelayBright: 8 100
+
+# Click gain levels by bus.
+ClickNormal: 0 1.0
+ClickNormal: 8 0.5
+
+ClickBright: 0 2.0
+ClickBright: 1 1.0
+ClickBright: 2 0.01
+ClickBright: 3 0.8
+ClickBright: 4 0.001
+ClickBright: 5 0.001
+ClickBright: 6 0.5
+ClickBright: 7 1.0
+ClickBright: 8 1.8
+
+ClickPulseNormal: 0 0.001
+ClickPulseNormal: 0 1.0
+ClickPulseNormal: 0 2.0
+ClickPulseNormal: 8 3
+
+ClickPulseBright: 0 3
+ClickPulseBright: 8 0.001
+
+ClickInvertNormal: 0 0.01
+ClickInvertNormal: 1 1
+ClickInvertNormal: 2 0.01
+ClickInvertNormal: 3 1
+ClickInvertNormal: 4 0.01
+ClickInvertNormal: 5 1
+ClickInvertNormal: 6 0.01
+ClickInvertNormal: 7 1
+ClickInvertNormal: 8 0.01
+
+ClickInvertBright: 0 1
+ClickInvertBright: 1 0.01
+ClickInvertBright: 2 1
+ClickInvertBright: 3 0.01
+ClickInvertBright: 4 1
+ClickInvertBright: 5 0.01
+ClickInvertBright: 6 1
+ClickInvertBright: 7 0.01
+ClickInvertBright: 8 1
+

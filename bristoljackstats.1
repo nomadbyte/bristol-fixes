@@ -1,0 +1,49 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH BRISTOLJACKSTATS 1 "May  11, 2011"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+bristoljackstats \- ancillary program for bristol
+.SH SYNOPSIS
+.B bristoljackstats
+.SH DESCRIPTION
+
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" respectively.
+\fBbristoljackstats\fP is an ancillary program for the bristol emulator suite
+which requests the jack engine start itself and report its target sampling rate
+and period size. These are needed a priori by bristol so have to be evaluated
+in advance. The program is not intended for general use, it is called by the
+startBristol process as the emulator environment is created.
+.SH SEE ALSO
+startBristol(1)
+
+.SH AUTHOR
+Written by Nicholas Copeland <nickycopeland@hotmail.com>
+
+.SH REPORTING BUGS
+Bugs and enhancement requests can be submitted to the bristol project page on
+SourceForge:
+.PP
+<https://sourceforge.net/tracker/?group_id=157415>
+
+.SH COPYRIGHT
+Copyright © 1996,2011 Nick Copeland. License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>. This is free software: you are free to change
+and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+

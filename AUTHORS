@@ -1,0 +1,18 @@
+
+Bristol is written and maintained by Nick Copeland, nickycopeland@hotmail.com, 
+there have been diverse contributions for compatability with different releases
+and compilation options.
+
+Thanks to
+
+Dave Robillard for compilation clean up and 64bit compatability.
+Mike Taht for GUI code clean up and more 64bit compatability.
+Vasiliy Basic for the MiniMoog memory contributions.
+Alexis Bailler for the gentoo packaging.  
+
+Andrew Coughlan for banks of PolySix sounds.
+
+Colin Fletcher for numerous bug reports, fixes and filter code optimisations.
+
+The team at www.bluesynths.com
+

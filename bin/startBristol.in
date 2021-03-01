@@ -1,0 +1,603 @@
+#!/bin/sh
+#
+# Diverse Bristol audio routines.
+# Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2011
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, see <http://www.gnu.org/licenses/>.
+#
+#set -x
+
+args=$*
+
+vers=@VERSION@
+
+cli=0
+engine=1
+gui=1
+quiet=0
+verbose=0
+jack=0
+export JACK_START_SERVER=1
+midi=seq
+HELP=0
+README=0
+
+EMULATE=hammondB3
+FREQ=0
+
+#PORT=5028
+# Randomise the port numbers, can be overridden by -port which would be a
+# requirement for multitimbral
+PORT=`date +%N`
+PORT=`expr $PORT % 65536` >/dev/null 2>&1
+if [ -z $PORT ]; then
+	PORT=`date +%s`
+	PORT=`expr $PORT % 65536` >/dev/null 2>&1
+fi
+if [ $PORT -lt 1024 ]; then
+	PORT=`expr $PORT + 5028`
+fi
+
+valgrind=0
+execme=1
+liblist=0
+
+host=net
+
+engstatus=0
+guistatus=0
+
+JS=1
+RATE=44100
+DRIVER=@DEFAULT_AUDIO_FLAG@
+COUNT=256
+
+LOGO=no
+
+#
+# The following is configured by the autotools process.
+#
+BRISTOL_DIR=@BRISTOL_DIR@
+
+#
+# Whatever directory was called for startBristol we also neede in the PATH
+#
+PATH=${PATH}:`dirname $0`
+
+showhelp()
+{
+	if [ $HELP -eq 3 ]; then
+		brighton -V
+		exit 0
+	fi
+	if [ $HELP -eq 2 ]; then
+		brighton -h | less
+		exit 0
+	fi
+	if [ $verbose = 1 ]; then
+		# let the bristol gui give a verbose help text.
+		engine=0
+	else
+		brighton -V
+		echo
+		echo "startBristol [-explorer|-mini|-memory|-hammond|-b3|-dx|-axxe|-odyssey|-2600|-mono|-poly|-juno|-prophet|-pro10|-pro52|-mixer|-vox|-rhodes|-rhodesbass|-obx|-obxa|-aks|<others>] [-oss|-alsa|-jack] [[-help|-h] [-verbose|-v]]"
+		echo
+		echo "Try 'startBristol -v|-h' for more verbose help output on device configuration."
+		echo
+		echo "Try 'startBristol -readme' for very verbose output"
+		echo "Try 'startBristol -readme -mini' for info on specific emulator"
+		echo
+		echo "Try 'startBristol -b3' or 'startBristol -jack', for example, if you are unsure."
+		echo
+		echo "Q&A to nickycopeland@hotmail.com"
+		echo "bugs, features, enhancements to http://sourceforge.net/projects/bristol"
+		echo
+		exit 0
+	fi
+}
+
+if [ $# = 0 ]; then
+	HELP=1
+fi
+
+# Nokey: Don't override BRISTOL if it's not already set
+if [ -z "$BRISTOL" ]; then
+	if [ -d "${BRISTOL_DIR}/memory" ]; then
+		export BRISTOL=${BRISTOL_DIR}
+	else
+		# We should first take our basename and look for a binary
+		BRISTOL=`dirname $0`
+		BRISTOL=`dirname $BRISTOL`
+
+		if [ ! -f $BRISTOL/bin/bristol ]; then
+			#
+			# Take a default
+			#
+			export BRISTOL=/opt/audio/bristol
+		fi
+	fi
+fi
+export BRISTOL
+
+for index in $*; do
+	if [ $index = "-stop" ]; then
+		pkill bristol
+		if [ $? != 0 ]; then
+			pkill brighton
+		fi
+		exit 0
+	fi
+	if [ $index = "-exit" ]; then
+		pkill bristol
+		pkill brighton
+		exit 0
+	fi
+	if [ $index = "-kill" ]; then
+		pkill -f "\\$2"
+		exit 0
+	fi
+	if [ $index = "-host" ]; then
+		host=`echo $2 | awk -F: '{print $1}'`
+		if [ $host = "unix" ]; then
+			localport=`echo $2 | awk -F: '{print $2}'`
+			if [ -z $localport ]; then
+				localport=$PORT
+			fi
+		fi
+	fi
+	if [ $index = "-freqtweak" ]; then
+		FREQ=$2
+		if [ $FREQ != 0 -a -x /usr/bin/cpufreq-set -a $execme -eq 0 ]; then
+			echo Setting min CPU speed to $FREQ
+			cpufreq-set -d ${FREQ}
+		fi
+	fi
+	if [ $index = "-count" ]; then
+		COUNT=$2
+	fi
+	if [ $index = "-rc" ]; then
+		BRISTOL_RC=/dev/null
+	fi
+	if [ $index = "-sleep" ]; then
+		sleep $2
+	fi
+	if [ $index = "-emulate" ]; then
+		EMULATE=$2
+	fi
+	if [ $index = "-port" ]; then
+		PORT=$2
+	fi
+	if [ $index = "-cache" ]; then
+		export BRISTOL_CACHE=$2
+	fi
+	if [ $index = "-memdump" ]; then
+		export BRISTOL_DUMP=$2
+	fi
+	if [ $index = "--summary" ]; then
+		brighton --summary
+		exit 0
+	fi
+	if [ $index = "-summary" ]; then
+		brighton -summary
+		exit 0
+	fi
+	if [ $index = "-console" ]; then
+		export BRISTOL_LOG_CONSOLE=true
+	fi
+	if [ $index = "-cli" ]; then
+		cli=1
+		execme=0
+	fi
+	if [ $index = "-exec" ]; then
+		execme=0
+	fi
+	if [ $index = "-ladi" ]; then
+		execme=1
+	fi
+	if [ $index = "-valgrind" ]; then
+		valgrind=1
+	fi
+	if [ $index = "-debug" ]; then
+		liblist=1
+	fi
+	if [ $index = "-liblist" ]; then
+		liblist=1
+	fi
+	if [ $index = "-master" ]; then
+		engine=0
+	fi
+	if [ $index = "-engine" ]; then
+		engine=0
+	fi
+	if [ $index = "-gui" ]; then
+		gui=0
+	fi
+	if [ $index = "-readme" ]; then
+		README=1
+	fi
+	if [ $index = "-v" ]; then
+		HELP=2
+	fi
+	if [ $index = "--v" ]; then
+		HELP=2
+	fi
+	if [ $index = "-verbose" ]; then
+		verbose=1
+	fi
+	if [ $index = "--verbose" ]; then
+		verbose=1
+	fi
+	if [ $index = "-version" ]; then
+		HELP=3
+	fi
+	if [ $index = "-V" ]; then
+		HELP=3
+	fi
+	if [ $index = "-logo" ]; then
+		LOGO=yes
+	fi
+	if [ $index = "-h" ]; then
+		HELP=2
+	fi
+	if [ $index = "--h" ]; then
+		HELP=2
+	fi
+	if [ $index = "-help" ]; then
+		HELP=2
+	fi
+	if [ $index = "--help" ]; then
+		HELP=2
+	fi
+	if [ $index = "-libtest" ]; then
+		engine=0
+	fi
+	if [ $index = "-quiet" ]; then
+		quiet=1
+	fi
+	if [ $index = "-q" ]; then
+		quiet=1
+	fi
+	if [ $index = "-jsmuuid" ]; then
+		export BRISTOL_AUTOCONN=false
+	fi
+	if [ $index = "-jackstats" ]; then
+		JS=0
+	fi
+	if [ $index = "-jack" ]; then
+		jack=1
+		COUNT=1024
+		DRIVER=-jack
+	fi
+	if [ $index = "-audio" ]; then
+		DRIVER=-$2
+	fi
+	if [ $index = "-alsa" ]; then
+		jack=0
+		DRIVER=-alsa
+	fi
+	if [ $index = "-jackstart" ]; then
+		unset JACK_START_SERVER
+	fi
+	shift
+done
+
+#
+# As a note for anybody interested in reading this script, brighton also has
+# a BRISTOL_CACHE directory for private memories, sequences and controller maps.
+# Default is in $HOME/.bristol and we create this if it is not already made
+#
+if [ -z "$BRISTOL_CACHE" ]; then
+	export BRISTOL_CACHE=${HOME}/.bristol
+fi
+
+if [ -z "$BRISTOL_DUMP" ]; then
+	mkdir -p ${BRISTOL_CACHE}/memory
+else
+	if [ ! -d $BRISTOL_DUMP/memory/$EMULATE ]; then
+		mkdir -p $BRISTOL_DUMP/memory/$EMULATE
+		cp -f $BRISTOL_DIR/memory/$EMULATE/* $BRISTOL_DUMP/memory/$EMULATE
+		cp -f $BRISTOL_CACHE/memory/$EMULATE/* $BRISTOL_DUMP/memory/$EMULATE
+		echo created memory shadow in $BRISTOL_DUMP
+	fi
+	export BRISTOL_CACHE=$BRISTOL_DUMP
+fi
+
+PREARGS=
+POSTARGS=
+#
+# Changed some of the processing to have tokens in the PREARGS file. We are
+# looking for PREARGS and POSTARGS. If we don't find either of them then take
+# the whole file which was the previous method and is equivalent to PREARGS
+#
+if [ -z "${BRISTOL_RC}" -a -f ${BRISTOL_CACHE}/bristolrc ]; then
+	BRISTOL_RC=${BRISTOL_CACHE}/bristolrc
+fi
+if [ -f "${BRISTOL_RC}" ]; then
+	egrep '(PREARGS|POSTARGS)' ${BRISTOL_RC} >/dev/null
+
+	if [ $? -gt 0 ]; then
+		PREARGS=`cat ${BRISTOL_RC}`
+	else
+		PREARGS=`awk -F= '/PREARGS/ {print $2}'  ${BRISTOL_RC}`
+		POSTARGS=`awk -F= '/POSTARGS/ {print $2}'  ${BRISTOL_RC}`
+	fi
+fi
+
+# Nokey: Does the BRISTOL directory actually exist?
+if [ ! -d $BRISTOL ]; then
+	# Apparently not. Let's try to make a guess as to where it is.
+
+	# Try to find out how we were started. If this script was in
+	#  the PATH of the user, the $0 should have a leading '/'.
+	#  This leading '/' would also be there if this script was
+	#  executed as /full/path/name/startBristol
+	STARTUP=$0
+	# If this script was started as ./"*whatever*" then we need
+	#  to strip off the './' in order to accurately determine
+	#  the BRISTOL directory
+	if [ "$(echo $STARTUP | cut -c 1-2)" = "./" ]; then
+		STARTUP=$(echo $STARTUP | cut -c 3-)
+	fi
+	
+	if [ "$(echo $STARTUP | cut -c 1)" = "/" ]; then
+		BIN_DIR=$(dirname $STARTUP)
+	else
+		BIN_DIR=$(dirname $PWD/$STARTUP)
+	fi
+
+	export BRISTOL=$(dirname $BIN_DIR)
+	unset BIN_DIR STARTUP
+fi
+
+if [ ${README} -ge 1 ]; then
+	brighton $args | less
+	exit 0
+fi
+
+if [ ${HELP} -ge 1 ]; then
+	showhelp
+fi
+
+#
+# Try and get Jack driver information. If the daemon is running, use it. If
+# user has a .jackdrc use that, otherwise use /etc/jackdrc
+#
+if [ ${DRIVER} = "-jack" ]; then 
+	jack=1
+
+	if [ $JS -ne 0 ]; then 
+		JP=`bristoljackstats 2>&1`
+		if [ $? -eq 0 ]; then
+			JACKPARAMS=`echo $JP | awk '/JACKSTATS/'`
+			RATE=`echo ${JACKPARAMS} | awk '{print $2}'`
+			COUNT=`echo ${JACKPARAMS} | awk '{print $3}'`
+
+			echo jackstats found -rate ${RATE} -count ${COUNT}
+		fi
+	else
+		#
+		# We should not really get here. If jack was requested but the daemon
+		# could not be reached (we did not get feedback from bristoljackstats)
+		# then larger issues will occur presently
+		#
+		# Thanks to Sylvain Robitaille for the next code.
+		#
+		# See if the process is running
+		#
+		# We should replace this with pgrep and do it for this user - if the
+		# daemon is running with other rights we may not be able to connect.
+		#
+		JACKD=`ps ax | grep -w jackd | grep -vw grep` 
+
+		#
+		# Otherwise see what would be started
+		#
+		if [ -z "${JACKD}" ]; then 
+			echo "jack driver requested, jackd not running" 
+
+			if [ -f /etc/jackdrc ]; then
+				echo "jack configuration found in /etc/jackdrc"
+				JACKD=`cat /etc/jackdrc`
+			fi
+
+			if [ -f ~/.jackdrc ]; then
+				echo "private jack configuration found in ~/.jackdrc"
+				JACKD=`cat ~/.jackdrc`
+			fi
+		fi
+
+		if [ -z "${JACKD}" ]; then 
+			RATE=48000 
+			COUNT=1024 
+		else
+			RATE=`echo ${JACKD} |grep -o -- '-r[0-9][0-9]*' |sed 's/^-r//'` 
+
+			if [ -z "${RATE}" ]; then 
+				# assume Jackd's default rate: 
+				RATE=48000 
+			fi 
+
+			#COUNT=`echo ${JACKD} |grep -o -- '-p[0-9][0-9]*' |sed 's/^-p//'` 
+			COUNT=`echo ${JACKD} |grep -o -- '-p[0-9][0-9]*' |tail -n1 |sed 's/^-p//'`
+
+			if [ -z "${COUNT}" ]; then 
+				# assume Jackd's default count: 
+				COUNT=1024 
+			fi 
+		fi
+	fi
+fi
+
+#
+# If slabhome already exists, we should take it rather than this definition.
+#
+export SLAB_HOME=$BRISTOL
+export BRIGHTON=$BRISTOL
+
+export LD_LIBRARY_PATH=@BRISTOL_DIR@/lib:/usr/local/lib:/usr/lib:/lib
+
+export PATH=$BRISTOL/bin:/usr/local/bin:${PATH}
+
+if [ ${liblist} != 0 ]; then
+	echo
+	echo '*** bristol libraries ***'
+	echo
+	ldd `which bristol`
+	echo '*** brighton libraries ***'
+	echo
+	ldd `which brighton`
+	echo
+fi
+
+if [ $jack -eq 1 ]; then
+	ldd `which bristol` | grep jack > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo Requested Jack drivers, not compiled into bristol
+		exit -1
+	fi
+fi
+
+if [ ${LOGO} = "yes" ]; then
+	#
+	# Just to make sure
+	#
+	echo
+	echo "Bristol is about to start."
+	echo
+	echo "This program is totally unrelated to ANY of the companies that produced"
+	echo "the original instruments emulated by bristol, and none of the original"
+	echo "manufacturers in ANY way endorse this product."
+	echo
+
+	sleep 1
+fi
+
+#
+# Requesting an engine. This means we need a free TCP port. Our default is 
+# 5028 and if it is not free then search for one from there
+#
+if [ $engine = 1 ]; then
+	if [ $host = "unix" ]; then
+		echo checking availability of host port $localport
+		ls /tmp/br.$localport >/dev/null 2>&1
+		if [ $? -eq 0 ]; then
+			echo "host port looked busy, unlinking"
+			rm -f /tmp/br.$localport
+		fi
+	else
+		echo checking availability of TCP port $PORT
+		netstat -taln | awk '{print $4}' | grep $PORT > /dev/null
+		while [ $? -eq 0 ]; do
+			echo -n "port looked busy, trying "
+			PORT=`expr $PORT + 1`
+			echo $PORT
+			netstat -taln | grep $PORT > /dev/null
+		done
+		if [ ${PORT} -lt 1024 -a ${USER} != "root" ]; then
+				echo you may not have permissions for ports less than 1024
+		else
+			echo using port $PORT
+		fi
+	fi
+fi
+
+#
+# Start up the GUI
+#
+if [ $cli = 1 ]; then
+	if [ $engine = 1 ]; then
+		bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS} &
+	fi
+	export BRISTOL_LOG_CONSOLE=true
+	brighton ${PREARGS} $args -port ${PORT} ${POSTARGS}
+else
+	if [ $gui = 1 ]; then
+		if [ $engine = 1 ]; then
+			if [ $quiet = 0 ]; then
+				brighton ${PREARGS} $args -port ${PORT} ${POSTARGS} &
+			else
+				brighton ${PREARGS} $args -port ${PORT} ${POSTARGS} > /dev/null 2>&1 &
+			fi
+		else
+			if [ $quiet = 0 ]; then
+				if [ $execme = 0 ]; then
+					if [ $valgrind = 0 ]; then
+						brighton ${PREARGS} $args -port ${PORT} ${POSTARGS}
+					else
+						valgrind --leak-check=full -v --show-reachable=yes --track-origins=yes brighton $args -port ${PORT} ${POSTARGS}
+					fi
+				else
+					exec brighton ${PREARGS} $args -port ${PORT} ${POSTARGS}
+				fi
+				guistatus=$?
+			else
+				if [ $execme = 0 ]; then
+					brighton ${PREARGS} $args -port ${PORT} ${POSTARGS} > /dev/null 2>&1
+				else
+					exec brighton ${PREARGS} $args -port ${PORT} ${POSTARGS} > /dev/null 2>&1
+				fi
+				guistatus=$?
+			fi
+		fi
+	fi
+
+	#
+	# the bristol engine has flags for -oss or -alsa drivers, -preload buffers of
+	# -count samples:
+	#	bristol -preload 4 -count 256 [-oss]
+	#
+	if [ $engine = 1 ]; then
+		if [ $quiet = 0 ]; then
+			if [ $valgrind = 0 ]; then
+				if [ $execme = 0 ]; then
+					bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS}
+					engstatus=$?
+				else
+					exec bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS}
+				fi
+			else
+				valgrind --leak-check=full -v --show-reachable=yes --track-origins=yes bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS}
+				engstatus=$?
+			fi
+		else
+			if [ $execme = 0 ]; then
+				bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS} > /dev/null 2>&1
+			else
+				exec bristol -rate ${RATE} -count ${COUNT} ${PREARGS} $args -port $PORT ${POSTARGS} > /dev/null 2>&1
+			fi
+			engstatus=$?
+		fi
+	fi
+fi
+
+# Make sure we have the children returned, prevents ugly delayed output
+if [ $engine = 1 ]; then
+	wait % >/dev/null 2>&1
+fi
+if [ $gui = 1 ]; then
+	wait % >/dev/null 2>&1
+fi
+
+sleep 1
+
+if [ $FREQ != 0 -a -x /usr/bin/cpufreq-set ]; then
+	cpufreq-set -d 250MHz
+fi
+# This could be a lot more intelligent but it will work. We need to remove any
+# dangling sockets. Alternatively just delete the files, the check for their
+# existance is superfluous
+rm -f /tmp/br.* >/dev/null 2>&1
+
+ exit `expr $engstatus + $guistatus`
+ 

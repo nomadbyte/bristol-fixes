@@ -1,0 +1,526 @@
+
+Installing Bristol Summary (x.y.z = 0.60.8, for example):
+
+	a. tar -zxvf bristol-x.y.z.tar.gz
+	b. cd bristol-x.y.z
+	c. ./configure
+	d. make
+	e. sudo make install
+	f. /usr/local/bin/startBristol -mini
+
+Table of Contents:
+
+	1. About Bristol
+	2. Installation
+	3. Command line options
+	4. ALSA Interface Configuration
+	5. Jack Interface Configuration
+	6. Bristol runcom file
+	7. Integration with MIDI Control Surfaces
+	8. Keyboard Accelerators
+	9. Basics of Subtractive Synthesis
+	10. Basics of FM Synthesis
+
+This document is intended to help get bristol running with a minimum of fuss
+or effort. The first steps above, a through f, are the shortest possible path
+but there are a lot more options and capabilities discussed below that may
+change the way bristol operates.
+
+	1. About Bristol.
+
+	1.1 What is it?
+
+Bristol Audio Synthesis is a synth emulation package for a diverse range of
+vintage synthesisers, electric pianos and organs. The application consists of
+a synthesiser backend and a GUI frontend called Brighton.
+
+	1.2 Who is it by?
+
+Bristol is written by Nick Copeland with additional contributions by others.
+
+	2. Installation
+
+	2.1. System requirements
+
+Bristol does not place a high requirement on the underlying system installation,
+the DSP code is all packaged into the engine and the GUI was written for 
+bristol. There are a number of optional extra packages that bristol can use to
+give a more complete set of binaries. Also refer to section 1.3 below.
+
+	libx11-dev       Bristol GUI requires this package
+	libasound2-dev   ALSA support requires this package
+	jackd            Jack support requires this package
+	libjack-dev      Jack support requires this package
+
+The system will also need libm.so to be installed as well as the build utils 
+however this is a part of a normal distribution. The build utility requirements
+is a little outside the scope of this document, it is assumed that make/gcc/as
+are previously installed.
+
+	2.2. Unpack the archive.
+
+To do this, use the command below, replacing x.y.z with the version number of
+the downloaded source code.
+
+tar -zxvf bristol-x.y.z.tar.gz
+
+This will create a subdirectory called bristol-x.y.z
+
+	2.3. cd into the directory and do a 'configure'
+
+cd bristol-x.y.z
+./configure
+
+Do bear in mind that if you have another version of Bristol installed, either
+through your distribution's package manager or locally installed before, the
+configure script will stop and refuse to continue. You can either use the
+package manager to remove the version of Bristol installed or just ignore it
+and add the --disable-version-check option to the end of configure on the
+command-line.
+
+At the end of the configure process there will be a short report on the driver
+interfaces that have been auto-detected. Here is an extract of the output:
+
+| Build with OSS support ......................... : true
+| Build with ALSA support ........................ : true
+| Build with JACK support ........................ : false
+| Bristol needs jackd and libjack-dev to be installed for JACK support.
+| Build with JACK MIDI support ................... : false
+| Build with JACK Session support ................ : false
+| Default audio drivers .......................... : alsa
+| Default MIDI drivers ........................... : alsa
+| X11 include file availability .................. : true
+
+As is visible here it was not possible to find the relevant header files for
+the jack audio interface drivers so support will not be included in the eventual
+compilation. There is an indication provided as to which packages would be 
+required to enable that support. For audio drivers there is a minimum of ALSA
+required (OSS is also possible) however if the X11 header files could not be
+found then there will be no graphical support in the binaries - a command line
+interface only. In this event there will also be a report on which packages
+are required to provide that support.
+
+	2.4. Execute a 'make'.
+
+To build Bristol type:
+
+make
+
+This process will produce all the usual verbose output. It will contain some
+warnings about unused variables and some potential coding changes however it
+should proceed to completion. If you get errors such as the following then you
+will need to contact the author or raise a bug report.
+
+gcc -DHAVE_CONFIG_H -I. -I..   -I/usr/X11R6/include -pthread -Wall -g -I./../include/slab -I./../include/bristol -I. -DBRISTOL_VOICECOUNT=32   -DBRISTOL_JACK_MULTI_CLOSE    -D_BRISTOL_DRAIN    -DBRISTOL_HAS_ALSA=1  -I/usr/include/alsa   -ffast-math -fomit-frame-pointer -O2 -g -O2 -I/usr/X11R6/include -MT bristol.o -MD -MP -MF .deps/bristol.Tpo -c -o bristol.o bristol.c
+bristol.c:62: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘asdf’
+make[2]: *** [bristol.o] Error 1
+make[2]: Leaving directory `/opt/bristol/bristol-0.60.7/bristol'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/opt/bristol/bristol-0.60.7'
+make: *** [all] Error 2
+
+How to contact the author or log a bug are given in the last few lines of the
+output from ./configure above.
+
+It is fortunately unusual that such compilation errors will occur on any Linux
+distribution, the above was forced to fail just for providing an example.
+
+	2.5. install the application typically requires root permissions
+
+If you get no errors from the 'make' process then the application is ready to
+be installed.
+
+sudo make install
+
+This step need to be run as root as, unless you have been very selective with
+the ./configure options then parts of bristol will be written to parts of the
+/usr filesystem which is typically read-only for user accounts. By default this
+should install bristol and associated apps to /usr/local/ with data commponets
+into /usr/local/share. To run the application you should now be able to use the
+startBristol script however that does depend on /usr/local/bin being in your
+path.
+
+	2.6. Run the application
+
+If the binary is placed in a directory in your path then you can typically 
+start it directly:
+
+startBristol -mini
+
+If this is not in your path then try the following, this is the default location
+for the binaries and may differ if you use alternative --prefix for configure.
+
+/usr/local/bin/startBristol -mini
+
+
+
+
+	3. Some Useful options for starting bristol:
+
+-voices
+
+Sets the number of voices the synth starts with. The default for most of the 
+synths is to start with as many voices as their hardware counterparts have. 
+In the case of the mini moog, this would be 1 voice.
+
+-mono
+
+Starts the synth with 1 voice (-hnp -lnp can be used to select high/low note
+priority respectively)
+
+-hnp
+
+Selects High Note Priority, any notes played higher than the currently held
+note will sound and bounce back to the held when released. Notes lower will
+be ignored by the engine. Vice versa with -lnp.
+
+-register
+
+Changes the jack and alsa names to the text after it, so it can make more
+sense when connecting devices etc.
+
+-ar
+
+Ignores the emulator default aspect ratio. In tiling window managers, bristol
+can fight with the tiling for so long that active sensing will close the
+emulator. This option stops that behaviour.
+
+Note: Active Sensing is a 'ping' between the GUI frontend and the synth backend,
+to ensure that the synth engine hasn't crashed.
+
+-debug [1-16]
+
+Produces debug output to the terminal. 1 is very little debug. 16 is very
+verbose debug.
+
+Many more options, along with the full list of synths can be found by doing
+'startBristol --help' or 'man bristol'.
+
+
+
+	4. ALSA Interface Configuration
+
+To see the MIDI connections that can be built you need to look at aconnect
+commmand:
+
+aconnect -io
+
+Here is a sammple of its output:
+
+client 0: 'System' [type=kernel]
+0 'Timer '
+1 'Announce '
+client 14: 'Midi Through' [type=kernel]
+0 'Midi Through Port-0'
+client 20: 'USB Oxygen 61' [type=kernel]
+0 'USB Oxygen 61 MIDI 1'
+client 24: 'USB Keystation 88es' [type=kernel]
+0 'USB Keystation 88es MIDI 1'
+client 129: 'bristol' [type=user]
+0 'bristol input
+
+Here we can see two MIDI controllers and the bristol engine. The following
+command will link them together so that you can play bristol from your MIDI
+master controller:
+
+aconnect 20 129
+aconnect 'USB Oxygen 61' bristol
+
+It is possible to connect two master controllers to bristol and this is not
+unusual for something like the B3. This emulator also has two manuals and can
+accept multiple controllers on different MIDI channels to allow control of
+both them.
+
+If ALSA is the default interface (ie, you have not given any flags that imply
+another interface type) then bristol will use ALSA for both audio and MIDI. The
+default is the 'seq' MIDI interface. It is also possible to use a raw MIDI
+interface with the option '-midi raw', the type really depends on your soundcard
+and driver options.
+
+
+
+	5. Jack Interface Configuration
+
+JACK is a low-latency sound server, similar to ASIO on windows. Any apps that
+are 'jack-aware' are able send audio information to one another seamlessly.
+Bristol is just one such application that supports JACK. More information can
+be found at http://jackaudio.org/
+
+Using the jack audio driver is as simple as appending '-jack' to the
+startBristol command.
+
+As of 0.60.7, the following can disable the 'bristoljackstats' app, which can
+cause startBristol to fail:
+
+startBristol -jack -jackstats -count <jack periodsize> -rate <jack samplerate>
+
+The count and rate have to match the settings given to the jack daemon. In the
+event of mismatch you will get an error condition from bristol with some level
+of diagnostic output to indicate the cause.
+
+Unless specifically told otherwise, bristol will use jack drivers for both
+audio and midi.
+
+	5.1 Using qjackctl
+
+Using qjackctl you can easily connect midi controlloers by clicking on either
+the 'Midi' tab or 'Alsa' tab, depending on which midi driver you've selected to
+use with bristol and then clicking the controller you want on the left pane and
+the 'Bristol' input on the right and clicking 'connect'.
+
+
+
+
+	6. The Bristol runcom file
+
+Bristol itself has a large range of parameters, each tuning the operation to 
+suit specific needs. Having to give so many parameters to get the synth to 
+work in a specific environment gives it flexibility but also makes it sometimes
+difficult to use. To quote one person, "It can be an inspiration killer".
+
+There are a few third party apps such as monoBristol that provide graphical
+front ends to the commandline options to make starting bristol easier. Bristol
+itself supports a runcom file where a user can specify common preferred params
+that are then included with every invocation.
+
+The bristol runcom file can be found, per default, in $HOME/.bristol/bristolrc
+and its function depends on the bristol version.
+
+	6.1 Bristol prior to 0.60.8
+
+The file needs to be created as it does not exist per default. When it exists
+then the complete contents are prepended before the command line options. As
+an example, consider the following contents:
+
+	-jack
+	-jackstats
+	-count 256
+	-rate 48000
+
+or 
+
+	-jack -jackstats -count 256 -rate 48000
+
+Both of these will have the same affect as they are all summed together. If
+bristol is started as 'startBristol -mini' then the actual commmandline will be
+
+	startBristol -jack -jackstats -count 256 -rate 48000 -mini
+
+	6.2 Bristol from 0.60.8
+
+There were some limitations of the initial runcom implementation. A number of
+parameters are implied by each emulator: voices, detune, pitchbend and others.
+If the runcom includes a -pwd (pitch wheel depth) of 7 it might be lost when
+the emulator is selected as the emulator will configure its own desired pitch
+wheel sensitivity as most of the emulators will default this value to '2'. To
+support such features the runcom was changed to support pre and post parameters.
+Consider the following contents:
+
+	PREARGS=-jack -jackstats -count 128 -rate 48000 -as 0 -priority 65 -debug 1
+	POSTARGS=-multi 2 -lnp -pwd 7 -glide 10 -rud -lnp -log -gain 2 -host unix:
+
+If bristol is now started with 'startBristol -mini' the final options taken by
+the program will be
+
+	startBristol $PREARGS -mini $POSTARGS
+
+This is all expanded out to give a complete command line that, if it was typed
+in, would read as follows:
+
+	startBristol -jack -jackstats -count 128 -rate 48000 -as 0 -priority 65 -debug 1 -mini -multi 2 -lnp -pwd 7 -glide -rud -lnp -log -gain 2 -host unix:
+
+Here there are some initial parameter settings, then the emulator is selected.
+The emulator will default the pitch wheel depth to '2'. Then the post arguments
+are added and they reset the pitchwheel depth to the value '7'.
+
+This whole ugly line of parameters is now called with just
+
+	startBristol -mini
+
+The goal of the runcom file is to reduce to a minimum the number of parameters
+that need to be given on the command line whilst still maintaining a completely
+customised local configuration.
+
+Questions regarding parameter ordering should be sent to LAU mailing list, the
+author, or raised on the bristol sourceforge forum.
+
+
+
+
+	7. Controlling the GUI from a MIDI master controller
+
+It is possible to get the GUI to be controlled from faders on a master 
+controller. First connect up the MIDI as described above. Place the mouse
+cursor over the GUI control you want to track and push the Middle Mouse Button.
+Now move the MIDI control, the GUI should now track that control. Devices can
+be unregistered using the same method. The settings will be saved when you
+save a memory.
+
+The settings themselves are in the directory listed below, and they can be
+edited with a text editor.
+
+    /home/username/.bristol/memory/profiles/<synthname> 
+
+Most of the synths come with a standard GM midi mapping for controlling filter
+cutoff/resonance, etc.
+
+
+
+	8. Keyboard accelerators
+
+	8.1 Keyboard Mappings.
+
+Bristol supports GUI shortcuts and playing the synths via a QWERTY keyboard.
+Playing bristol via the QWERTY on the B3 has C2 starting on '\' and going up
+to F3 on '/' on the bottom manual, while the top manual goes from C4 on Q to
+G5 on ']'. On a single keyboard synth, such as the polysix, C1 starts on '\'
+and goes up F2 on '/' and C3 starts on Q and ends at G4 on ']'.
+
+For alternative mappings such as AZERTY it is necessary to manually edit the
+emulator profile files.
+
+	8.2 Keyboard Accelerators
+
+Useful shortcuts are:
+Ctrl +
+Load next memory
+Ctrl - 
+Load previous memory
+Ctrl l
+Load/reload current memory
+Ctrl s
+Save settings to current memory.
+
+Arrow keys can control pot/slider movement with Shift being an accelerator.
+The GUI devices also support VI style j/k up/down with Shift and Control 
+options.
+
+
+
+	9. Basics of Subtractive Synthesis.
+
+Subtractive synths generally have 5 parts to them:
+
+	1. Oscillators
+	2. Filters
+	3. Low Frequency Oscillators (LFOs)
+	4. ADSR Envelopes
+	5. Amplification output
+
+Subtractive synthesis works by taking the waveforms generated by oscillators,
+filtering them (or not) to remove specific frequencies, using a LFO to modulate
+the sound, applying an ADSR Envelope to them and then sending the sound out the
+synth.
+
+	9.1. Oscillators
+
+Oscillators use basic waveforms (saw, square, triangle, sine) to produce sound.
+On some synths, these can be combined to produce harmonically rich sounds (saw
+and square for example).
+
+The more oscillators a synth has, the greater number of waveforms that can be
+layered together to create a quite 'phat' sound.
+
+	9.2. Filters
+
+Filters are used to remove specific frequencies from the oscillators.
+
+Filters generally come in 3 types in the bristol synths:
+
+Low Pass Filter
+High Pass
+Band Reject
+
+Low Pass filters remove high frequencies (i.e they pass low freqencies).
+High Pass filters remove low freqencies
+Band Reject filters remove both low and high filters in a specific range and
+allow a certain 'mid-range' of frequencies through.
+
+On all filters, there are 2 main controls:
+Frequency Cutoff.
+Frequency Resonance.
+
+Frequency Cutoff allows you to control how much of the sound gets filtered.
+Resonance amplifies the narrow band of frequencies that are close to the cutoff point.
+
+	9.3.Low Frequency Oscillators (LFOs)
+
+LFOs are exactly like normal oscillators (they have waveforms, like sine,
+square and triangle), but they sound below what a human can hear.  In this way,
+they can modulate various parameters on the synths, without being heard. The
+parameters that an LFO modulates is called the destination.
+
+LFOs usually have 2 controls:
+Rate
+Delay
+
+Rate determines how quickly the LFO oscillates at, low levels modulates the
+destination slowly, while high levels will modulate quickly. Delay determines
+how quickly the LFO should start modulating the destination.
+
+Common modulation destinations are:
+Audible Oscillator's frequency (Vibrato effect)
+Filter Cutoff frequency (wah-wah effect)
+Amplification output (tremolo effect)
+
+On most of the bristol synths, the LFO 'depth' (how much the LFO affects the
+destination) is controlled by the mod-wheel.
+
+	9.4. ADSR Envelopes.
+
+ADSR envelopes shape the sound of the oscillators and filter (where available).
+ADSR stands for the 4 parameters that can shape the sound:
+
+Attack - How quickly the sound reaches full volume.
+Decay - How quickly the sound falls down to the sustain level
+Sustain - Volume of the sound while the key is held
+Release - How quickly the sound fades to silence
+
+	9.5. Amplification output
+There is usually a control here that controls the overall volume of the synth.
+
+
+
+	10. Basics of FM Synthesis.
+
+FM Synthesis stands for Frequency Modulation synthesis.
+
+This means that one oscillator (called a Modulator) modulates the frequency
+of another oscillator (called a Carrier). In Bristol there are 3 FM emulators,
+2 Rhodes Electric Pianos and a Yamaha DX 6 Operator synth.
+
+FM synthesis works by feeding one signal from one oscillator (a modulator) into
+another signal from another oscillator (a carrier). The interesting part is
+when a modulator is audible, detuning the modulator will produce bell-like
+tones in the output as the carrier's frequency is modulated by an audible
+signal. It should be noted that all of the oscillators are sine waves so
+stacking them together can produce some nice hammond-esque sounds.
+
+The DX emulation has got 24 different "algorithms" for all 6 of it's operators.
+These control which oscillators are modulators and which are carriers
+(modulators can be fed into other modulators as well).
+
+All operators have their own ADSR envelope, so sound shaping is possible in
+a variety of ways. The ADSR is a 7-stage envelope. This means that it has 7
+parts to it:
+
+L1 - First audible stage
+Attack1 - Rate at which the operator goes from silence to L1
+L2 - Second audible stage
+Attack2 - Rate at which the operator goes from L1 to L2
+Decay - Rate at which L2 falls to the Sustain stage
+Sustain - How loud the sound will be through steady state
+Release - Rate at which the sound falls to silence
+
+Input gain - How much the modulator affects the carrier for this specific
+operator.
+Output gain - How loud the operator is (when it's a carrier) and how much modulation is sent out (when it's a modulator).
+
+Each operator has three buttons: LFO, IGC and OGC.
+LFO drops the oscillator by a few octaves and removes pitch tracking.
+IGC controls whether the input gain for that operator is affected by velocity.
+OGC controls whether the output gain for that operator is affected by velocity.
+
+Initial draft by Andrew Coughlan.
+Editing, additional information and suggestions by Nick Copeland.
+
