@@ -39,7 +39,14 @@
 
 #ifdef _BRISTOL_JACK
 #if (BRISTOL_HAS_ALSA == 1)
+/* On Ubuntu, the 'alsa/iatomic.h' is not found, thus the default build fails.
+ * Disable it here with the same conditional as below.
+ *
+ * See-also: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=834180
+ */
+#ifdef DONT_USE_THIS
 #include <alsa/iatomic.h>
+#endif
 #endif
 
 /*
