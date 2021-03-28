@@ -1288,7 +1288,7 @@ bvgImage odysseyMemImage = {
 	0x00000000,
 	4,
 	{
-		{{BVG_STRING, BVG_WHITE, 20, 80, 200, 12, "MARK I/II  DOWN   UP"}},
+		{{BVG_STRING, BVG_WHITE, 48, 80, 172, 12, "MK2     DOWN   UP"}},
 		{{BVG_STRING, BVG_WHITE, 148, 45, 35, 12, "MIDI"}},
 		{{BVG_STRING, BVG_WHITE, 225, 80, 440, 12, "LOAD     1    2    3    4    5    6    7    8"}},
 		{{BVG_STRING, BVG_WHITE, 643, 80, 440, 12, "1    2    3    4    5    6    7    8     SAVE"}},
