@@ -539,7 +539,7 @@ bristolVoice *voice, register float *startbuf)
 	fillFreqTable(baudio, voice, fmbuf, sc, 1);
 
 	/*
-	 * If we are dual then put a different freq into the second osc. We will 
+	 * If we are dual then put a different freq into the second osc. We will
 	 * have to avoid issues of glide for now, find dfreq for this low key and
 	 * then apply that to freqbuf.
 	 */

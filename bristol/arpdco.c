@@ -137,7 +137,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 	unsigned char index, float value)
 {
 #ifdef BRISTOL_DBG
-	printf("arpdcoparam(%i, %f/%f)\n",
+	printf("arpdcoparam(%i, %f/%d)\n",
 		index, value, (int) (value*CONTROLLER_RANGE));
 #endif
 
@@ -217,7 +217,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 		case 6: /* mix PWM square */
 			/*
 			 * These were dropped, we always mix all waveforms. Perhaps there
-			 * will be an odyssey/2600 option where we produce either 
+			 * will be an odyssey/2600 option where we produce either
 			 * ramp/square or ramp/square/sine/triangle, but this can also
 			 * be achieved with null pointers.
 			 */
@@ -309,7 +309,7 @@ register int count)
 	 * do a resample to find out where the crossing happened as sample level
 	 * resolution results in distortion and shimmer
 	 *
-	 * Resampling, or rather interpolation to zero, means we have to look at 
+	 * Resampling, or rather interpolation to zero, means we have to look at
 	 * the respective above and below zero values.
 	 */
 	for (; count > 0; count--, lsv = *sb++)
@@ -322,7 +322,7 @@ register int count)
 
 /*
  * As of the first write, 9/11/01, this takes nearly 20mips to operate a single
- * oscillator. Will work on optimisation of the code, using non-referenced 
+ * oscillator. Will work on optimisation of the code, using non-referenced
  * variables in register workspace.
  *
  *	output buffer pointer.
@@ -421,7 +421,7 @@ static int operate(bristolOP *operator,
 	for (obp = 0; obp < count;obp++)
 	{
 		/*
-		 * Take a sample from the wavetable into the output buffer. This 
+		 * Take a sample from the wavetable into the output buffer. This
 		 * should also be scaled by gain parameter.
 		 *
 		 * We can seperate this into subroutine calls, or we can take our
@@ -500,7 +500,7 @@ static int operate(bristolOP *operator,
 		}
 
 		/*
-		 * Move the wavetable pointer forward by amount indicated in input 
+		 * Move the wavetable pointer forward by amount indicated in input
 		 * buffer for this sample.
 		 */
 		if ((wtp += ib[obp] * transp) >= ARPDCO_WAVE_SZE)
@@ -510,7 +510,7 @@ static int operate(bristolOP *operator,
 		}
 
 		/*
-		 * If we have gone negative, round back up. Allows us to run the 
+		 * If we have gone negative, round back up. Allows us to run the
 		 * oscillator backwards.
 		 */
 		while (wtp < 0)
@@ -751,7 +751,7 @@ fillPDsine(float *mem, int count, int compress)
 }
 
 /*
- * Waves have a range of 24, which is basically two octaves. For larger 
+ * Waves have a range of 24, which is basically two octaves. For larger
  * differences will have to apply apms.
  */
 static void
@@ -777,14 +777,14 @@ fillWave(float *mem, int count, int type)
 		default:
 		{
 			float value = BRISTOL_SQR;
-			/* 
+			/*
 			 * This is a square wave, with decaying plateaus.
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0;i < count; i++)
 					mem[i] = blosquare[i];
-					return;
+				return;
 			}
 			for (i = 0;i < count / 2; i++)
 				mem[i] = (value * S_DEC);
@@ -794,7 +794,7 @@ fillWave(float *mem, int count, int type)
 			return;
 		}
 		case 2:
-			/* 
+			/*
 			 * This is a pulse wave - the arp dco does pwm.
 			 */
 			for (i = 0;i < count / 5; i++)
@@ -803,7 +803,7 @@ fillWave(float *mem, int count, int type)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			return;
 		case 3:
-			/* 
+			/*
 			 * This is a ramp wave. We scale the index from -.5 to .5, and
 			 * multiply by the range. We go from rear to front to table to make
 			 * the ramp wave have a positive leading edge.
@@ -822,7 +822,7 @@ fillWave(float *mem, int count, int type)
 			{
 				for (i = 0;i < count; i++)
 					mem[i] = bloramp[i];
-					return;
+				return;
 			}
 			fillPDsine(mem, count, 5);
 			return;
@@ -835,7 +835,7 @@ fillWave(float *mem, int count, int type)
 			{
 				for (i = 0;i < count; i++)
 					mem[i] = blotriangle[i];
-					return;
+				return;
 			}
 			for (i = 0;i < count / 2; i++)
 				mem[i] = -BRISTOL_VPO

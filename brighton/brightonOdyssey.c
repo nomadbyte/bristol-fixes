@@ -93,7 +93,7 @@ extern guimain global;
 #define L1 242
 
 /*
- * This structure is for device definition. The structure is defined in 
+ * This structure is for device definition. The structure is defined in
  * include/brighton.h, further definitions in brighton/brightonDevtable.h and
  * include/brightoninternals.h
  *
@@ -910,7 +910,7 @@ static void
 odysseyFiltOpt(guiSynth *synth, int fd, int chan, int c, int o, int v)
 {
 	/*
-	 * This filter mod is either SH MIX or Keyboard tracking. One causes a 
+	 * This filter mod is either SH MIX or Keyboard tracking. One causes a
 	 * buffer selection, the other is a filter option.
 	 */
 /*printf("odysseyFiltOpt(%i, %i)\n", o, v); */
