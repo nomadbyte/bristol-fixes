@@ -896,13 +896,13 @@ odysseyTranspose(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	switch (v)
 	{
 		case 0:
-			synth->transpose = 36;
+			synth->transpose = 24;
 			break;
 		case 1:
 			synth->transpose = 48;
 			break;
 		case 2:
-			synth->transpose = 60;
+			synth->transpose = 72;
 			break;
 	}
 }
@@ -1261,7 +1261,7 @@ printf("going operational\n");
 	synth->flags |= OPERATIONAL;
 	synth->keypanel = 1;
 	synth->keypanel2 = -1;
-	synth->transpose = 36;
+	synth->transpose = 48; /* middle position */
 
 	if (synth->location == 1)
 	{
