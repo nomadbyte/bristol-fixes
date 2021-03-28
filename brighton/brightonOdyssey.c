@@ -161,7 +161,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 	{"VCO2-PWM-Sine/Env", 2, C9, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"VCO2-Sync", 2, C8, R4, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Mods - 22 */
 	{"S/H-Mix-1", 1, C10, R0, W2, L1, 0, 1, 0,
@@ -309,7 +309,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 	{"", 2, C9, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"", 2, C8, R4, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Mods - 22 */
 	{"", 1, C10, R0, W1, L1, 0, 1, 0,
