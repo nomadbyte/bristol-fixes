@@ -58,7 +58,7 @@
 static int destroy(bristolOP *operator)
 {
 #ifdef BRISTOL_DBG
-	printf("reset(%x)\n", operator);
+	printf("destroy(%x)\n", operator);
 #endif
 
 	/*
