@@ -81,11 +81,12 @@ extern guimain global;
 #define C22 (C21 + CDIFF)
 #define C23 (C22 + CDIFF)
 
-#define R4 98
-#define R0 (R4 + 428)
-#define R1 (R0 + 205)
-#define R2 (R0 + 75)
-#define R5 (R0 + 332)
+#define R4 87
+#define R6 98
+#define R0 (R4 + 433)
+#define R1 (R0 + 203)
+#define R2 (R0 + 73)
+#define R5 (R0 + 338)
 
 #define W1 12
 #define W2 15
@@ -112,7 +113,7 @@ extern guimain global;
 
 static brightonLocations locations[DEVICE_COUNT] = {
 	/* Glide/Tranpose - 0 */
-	{"Glide", 1, C0 - 4, R0, W2, L1, 0, 1, 0,
+	{"Glide", 1, C0 - 4, R0 + 2, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlack.xpm", 0, 0},
 	{"Transpose", 2, C1, R2 + 20, 15, L1/2 - 40, 0, 2, 0, 0, 0,
 		BRIGHTON_THREEWAY|BRIGHTON_NOSHADOW},
@@ -137,7 +138,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"VCO1-PWM-Sine/Env", 2, C5, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
-	{"VCO1-KBD/LFO", 2, C4, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"VCO1-KBD/LFO", 2, C4, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* VCO2 - 12 */
@@ -160,7 +161,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"VCO2-PWM-Sine/Env", 2, C9, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
-	{"VCO2-Sync", 2, C8, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"VCO2-Sync", 2, C8, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Mods - 22 */
@@ -195,13 +196,13 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/knobs/sliderArpRed.xpm", 0, 0},
 	{"VCA-EnvLvl", 1, C19, R0, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpRed.xpm", 0, 0},
-	{"VCF-Cutoff", 1, C13, R4, W2, L1, 0, 1, 0,
+	{"VCF-Cutoff", 1, C13, R4 + 2, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlack.xpm", 0, 0},
-	{"VCF-Res", 1, C14, R4, W2, L1, 0, 1, 0,
+	{"VCF-Res", 1, C14, R4 + 2, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlack.xpm", 0, 0},
-	{"HPF-Cutoff", 1, C18, R4, W2, L1, 0, 1, 0,
+	{"HPF-Cutoff", 1, C18, R4 + 2, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlack.xpm", 0, 0},
-	{"VCA-Gain", 1, C19, R4, W2, L1, 0, 1, 0,
+	{"VCA-Gain", 1, C19, R4 + 2, W2, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlack.xpm", 0, 0},
 	/* And its routing - 40 */
 	{"MIX-Noise/RM", 2, C13, R5, W1 * 3/2, 60, 0, 1, 0,
@@ -241,7 +242,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* White/Pink noise - 56 */
-	{"Noise-White/Pink", 2, C1, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"Noise-White/Pink", 2, C1, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Pitch Control - 57 */
@@ -253,13 +254,13 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/touchnlw.xpm", 0},
 
 	/* Dual osc frequencies */
-	{"VCO2-Dual", 2, C8, R4 + 160, W1 * 3/2, 60, 0, 1, 0,
+	{"VCO2-Dual", 2, C8, R6 + 160, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 };
 
 static brightonLocations locations2[DEVICE_COUNT] = {
 	/* Glide/Tranpose - 0 */
-	{"", 1, C0, R0, W1, L1, 0, 1, 0,
+	{"", 1, C0, R0 + 2, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderblack3.xpm", 0, 0},
 //	{"", 2, C1, R2, 15, L1/2 - 10, 0, 2, 0, 0, 0,
 	{"Transpose", 2, C1, R2 + 20, 15, L1/2 - 40, 0, 2, 0, 0, 0,
@@ -285,7 +286,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"", 2, C5, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
-	{"", 2, C4, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"", 2, C4, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* VCO2 - 12 */
@@ -308,7 +309,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"", 2, C9, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
-	{"", 2, C8, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"", 2, C8, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Mods - 22 */
@@ -343,13 +344,13 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 		"bitmaps/knobs/sliderArpBlackRed.xpm", 0, 0},
 	{"", 1, C19, R0, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderArpBlackRed.xpm", 0, 0},
-	{"", 1, C13, R4, W1, L1, 0, 1, 0,
+	{"", 1, C13, R4 + 2, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderblack3.xpm", 0, 0},
-	{"", 1, C14, R4, W1, L1, 0, 1, 0,
+	{"", 1, C14, R4 + 2, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderblack3.xpm", 0, 0},
-	{"", 1, C18, R4, W1, L1, 0, 1, 0,
+	{"", 1, C18, R4 + 2, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderblack3.xpm", 0, 0},
-	{"", 1, C19, R4, W1, L1, 0, 1, 0,
+	{"", 1, C19, R4 + 2, W1, L1, 0, 1, 0,
 		"bitmaps/knobs/sliderblack3.xpm", 0, 0},
 	/* And its routing - 40 */
 	{"", 2, C13, R5, W1 * 3/2, 60, 0, 1, 0,
@@ -389,7 +390,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* White/Pink noise - 56 */
-	{"", 2, C1, R4, W1 * 3/2, 60, 0, 1, 0,
+	{"", 2, C1, R6, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Pitch Control - 57 */
@@ -401,7 +402,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 		"bitmaps/buttons/touchnlw.xpm", 0},
 
 	/* Dual osc frequencies */
-	{"VCO2-Dual", 2, C8, R4 + 160, W1 * 3/2, 60, 0, 1, 0,
+	{"VCO2-Dual", 2, C8, R6 + 160, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 };
 
