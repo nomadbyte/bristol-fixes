@@ -596,8 +596,8 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 		case MIDI_PROGRAM:
 			printf("midi program: %x, %i\n", controller, value);
 			synth->location = value;
-			loadMemory(synth, "odyssey", 0, synth->bank + synth->location,
-				synth->mem.active, 0, 0);
+			loadMemory(synth, synth->resources->name, 0,
+				synth->bank + synth->location, synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
 			printf("midi banksel: %x, %i\n", controller, value);
@@ -627,12 +627,13 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 
 	switch(index) {
 		case 17:
-			saveMemory(synth, "odyssey", 0, synth->bank + synth->location, 0);
+			saveMemory(synth, synth->resources->name, 0,
+				synth->bank + synth->location, 0);
 			return(0);
 			break;
 		case 0:
-			loadMemory(synth, "odyssey", 0, synth->bank + synth->location,
-				synth->mem.active, 0, 0);
+			loadMemory(synth, synth->resources->name, 0,
+				synth->bank + synth->location, synth->mem.active, 0, 0);
 			return(0);
 			break;
 		case 1:
@@ -965,7 +966,7 @@ arAutoTrig(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		} else {
 			bristolMidiSendMsg(fd, chan, 126, 55, 0);
 
-			bristolMidiSendMsg(global.controlfd, synth->sid, 7, 2, 16383);
+			bristolMidiSendMsg(global.controlfd, synth->sid, 7, 2, C_RANGE_MIN_1);
 		}
 		return;
 	}
@@ -1200,27 +1201,27 @@ odysseyInit(brightonWindow *win)
 	/*
 	 * Need to specify env gain fixed, filter mod on, osc waveform.
 	 */
-	bristolMidiSendMsg(global.controlfd, synth->sid, 4, 4, 16383);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 3, 2, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 4, 4, C_RANGE_MIN_1);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 3, 2, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 4);
 
 	bristolMidiSendMsg(global.controlfd, synth->sid, 126, 49, 0);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 2, 1, 0);
 
 	/* These will change the ringmod osc */
-	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 3, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 3, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 1, 5);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 8, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 8, C_RANGE_MIN_1);
 
 	/* AR envelope fixed parameters. */
-	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 1, 16383);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 2, 16383);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 4, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 1, C_RANGE_MIN_1);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 2, C_RANGE_MIN_1);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 4, C_RANGE_MIN_1);
 
 	/* Ringmodd parameters. */
-	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 0, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 0, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 1, 128);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 2, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 2, C_RANGE_MIN_1);
 
 	/*
 	 * Grooming env for 'gain' to amp. Short but not choppy attack, slightly
@@ -1228,9 +1229,9 @@ odysseyInit(brightonWindow *win)
 	 */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 0, 20);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 1, 1000);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 2, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 2, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 3, 50);
-	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 4, 16383);
+	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 4, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 5, 0); /* - velocity */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 10, 6, 0); /* - rezero */
 
@@ -1268,7 +1269,8 @@ printf("going operational\n");
 		synth->location = 11;
 	}
 
-	loadMemory(synth, "odyssey", 0, initmem, synth->mem.active, 0, 0);
+	loadMemory(synth, synth->resources->name, 0, initmem,
+		synth->mem.active, 0, 0);
 
 	event.value = 1;
 	brightonParamChange(synth->win, 5, MEM_START + 1, &event);
