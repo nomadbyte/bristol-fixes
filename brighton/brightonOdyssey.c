@@ -1198,6 +1198,9 @@ odysseyInit(brightonWindow *win)
 	dispatch[60].controller = 126;
 	dispatch[60].operator = 60;
 
+	dispatch[RADIOSET_1].other1 = -1;
+	dispatch[RADIOSET_2].other1 = -1;
+
 	/*
 	 * Need to specify env gain fixed, filter mod on, osc waveform.
 	 */
