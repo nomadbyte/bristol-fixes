@@ -1302,8 +1302,8 @@ bvgImage odysseyImage = {
 	{
 		{{BVG_STRING, BVG_WHITE, 150, 22, 360, 8, "FREQUENCY              FREQUENCY       "}},
 		{{BVG_STRING, BVG_WHITE, 94, 35, 420, 8, "NOISE  COARSE FINE KBD        COARSE FINE SYNC"}},
-		{{BVG_STRING, BVG_WHITE, 60, 60, 40, 8, "PINK"}},
-		{{BVG_STRING, BVG_WHITE, 55, 77, 45, 8, "WHITE"}},
+		{{BVG_STRING, BVG_WHITE, 55, 60, 45, 8, "WHITE"}},
+		{{BVG_STRING, BVG_WHITE, 60, 85, 40, 8, "PINK"}},
 		{{BVG_STRING, BVG_WHITE, 94, 103, 420, 8, "                   LF                    OFF  "}},
 		{{BVG_STRING, BVG_WHITE, 420, 196, 40, 8, "DUAL"}},
 		{{BVG_STRING, BVG_WHITE, 96, 230, 420, 8, "         VOLTAGE                VOLTAGE       "}},

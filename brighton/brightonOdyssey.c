@@ -240,9 +240,9 @@ static brightonLocations locations[DEVICE_COUNT] = {
 	{"AR-KBD/REPEAT", 2, C23, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
-	/* Pink/White noise - 56 */
+	/* White/Pink noise - 56 */
 	{"Noise-White/Pink", 2, C1, R4, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Pitch Control - 57 */
 	{"Pitch-Flat", 2, 25, R5, 30, 60, 0, 1, 0, "bitmaps/buttons/touchnlw.xpm",
@@ -388,9 +388,9 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 	{"", 2, C23, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 
-	/* Pink/White noise - 56 */
+	/* White/Pink noise - 56 */
 	{"", 2, C1, R4, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Pitch Control - 57 */
 	{"", 2, 25, R5, 30, 60, 0, 1, 0, "bitmaps/buttons/touchnlw.xpm",
