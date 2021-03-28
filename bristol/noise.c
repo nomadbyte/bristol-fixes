@@ -84,7 +84,7 @@ static int reset(bristolOP *operator, bristolOPParams *param)
 #endif
 	param->param[0].float_val = 0.000001;
 	param->param[1].int_val = 0;
-	param->param[2].int_val = 0.25;
+	param->param[2].float_val = 0.25;
 	param->param[3].int_val = 1.0;
 	return(0);
 }
