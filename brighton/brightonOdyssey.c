@@ -1211,6 +1211,14 @@ odysseyInit(brightonWindow *win)
 	bristolMidiSendMsg(global.controlfd, synth->sid, 126, 49, 0);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 2, 1, 0);
 
+	/* Noise gain */
+	bristolMidiSendMsg(global.controlfd, synth->sid, 6, 0, C_RANGE_MIN_1);
+	/* Pink filter configuration */
+	{
+		int cvalue = (int)(0.25 * CONTROLLER_RANGE);
+		bristolMidiSendMsg(global.controlfd, synth->sid, 6, 2, cvalue);
+	}
+
 	/* These will change the ringmod osc */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 3, C_RANGE_MIN_1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 1, 5);
