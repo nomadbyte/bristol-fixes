@@ -177,8 +177,8 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"S/H-Mix2-NoiseVCO2", 2, C11, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
-	{"S/H-Trig-KBD/LFO", 2, C12 - CDIFF, R5, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+	{"S/H-Trig-LFO/KBD", 2, C12 - CDIFF, R5, W1 * 3/2, 60, 0, 1, 0,
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Filter, etc - 29 */
 	{"Mix-1-Lvl", 1, C13, R0, W2, L1, 0, 1, 0,
@@ -326,7 +326,7 @@ static brightonLocations locations2[DEVICE_COUNT] = {
 	{"", 2, C11, R5, W1 * 3/2, 60, 0, 1, 0,
 		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
 	{"", 2, C12 - CDIFF, R5, W1 * 3/2, 60, 0, 1, 0,
-		"bitmaps/buttons/klunk.xpm", 0, BRIGHTON_VERTICAL},
+		"bitmaps/buttons/klunkl.xpm", 0, BRIGHTON_VERTICAL},
 
 	/* Filter, etc - 29 */
 	{"", 1, C13, R0, W1, L1, 0, 1, 0,
