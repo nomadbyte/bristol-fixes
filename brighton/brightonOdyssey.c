@@ -19,7 +19,7 @@
  *
  */
 
-/* ARP Axxe */
+/* ARP Odyssey */
 
 #include <fcntl.h>
 
