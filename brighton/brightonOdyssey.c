@@ -34,7 +34,7 @@ static int odysseyConfigure();
 static int odysseyCallback(brightonWindow *, int, int, float);
 /*static int keyCallback(void *, int, int, float); */
 static int odysseyMemory(brightonWindow *, int, int, float);
-static void odysseyPanelSwitch(brightonWindow *);
+static void odysseyPanelSwitch(brightonWindow *, int);
 static int odysseyMidi(guiSynth *, int);
 static int midiCallback(brightonWindow *, int, int, float);
 
@@ -51,6 +51,9 @@ extern guimain global;
 #define RADIOSET_2 (RADIOSET_1 + 1)
 
 #define KEY_PANEL 1
+#define SKIN1_PANEL  0
+#define SKIN2_PANEL  4
+#define MEM_PANEL  5
 
 #define CDIFF 34
 #define CDIFF2 15
@@ -519,7 +522,7 @@ brightonApp odysseyApp = {
 			odysseyCallback,
 			15, 0, 970, 680,
 			DEVICE_COUNT,
-			locations
+			locations /* SKIN1_PANEL */
 		},
 		{
 			"Keyboard",
@@ -567,7 +570,7 @@ brightonApp odysseyApp = {
 			odysseyCallback,
 			15, 0, 970, 680,
 			DEVICE_COUNT,
-			locations2
+			locations2 /* SKIN2_PANEL */
 		},
 		{
 			"Odyssey",
@@ -579,7 +582,7 @@ brightonApp odysseyApp = {
 			odysseyMemory,
 			15, 680, 970, 70,
 			21,
-			memories
+			memories /* MEM_PANEL */
 		}
 	}
 };
@@ -623,7 +626,7 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 	guiSynth *synth = findSynth(global.synths, win);
 	brightonEvent event;
 
-/*printf("odysseyMemory(%i, %f)\n", index, value); */
+/*printf("odysseyMemory(%i, %f) [%d]\n", index, value, panel); */
 
 	switch(index) {
 		case 17:
@@ -658,7 +661,7 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 				else
 					event.value = 1;
 
-				brightonParamChange(synth->win, 5,
+				brightonParamChange(synth->win, MEM_PANEL,
 					synth->dispatch[RADIOSET_1].other1 + MEM_START, &event);
 			}
 			synth->dispatch[RADIOSET_1].other1 = index;
@@ -686,7 +689,7 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 				else
 					event.value = 1;
 
-				brightonParamChange(synth->win, 5,
+				brightonParamChange(synth->win, MEM_PANEL,
 					synth->dispatch[RADIOSET_2].other1 + MEM_START, &event);
 			}
 			synth->dispatch[RADIOSET_2].other1 = index;
@@ -709,7 +712,7 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 			/*
 			 * Midi Panel Switch
 			 */
-			odysseyPanelSwitch(win);
+			odysseyPanelSwitch(win, value);
 			break;
 	}
 	return(0);
@@ -756,48 +759,48 @@ odysseyMidi(guiSynth *synth, int c)
 	return(0);
 }
 
-static int oMark = 4;
+static int skinPanel = SKIN1_PANEL;
 static float *bs;
 
 static void
-odysseyPanelSwitch(brightonWindow * win)
+odysseyPanelSwitch(brightonWindow * win, int value)
 {
 	brightonEvent event;
 	guiSynth *synth = findSynth(global.synths, win);
 
-/*printf("odysseyPanelSwitch()\n"); */
+/*printf("odysseyPanelSwitch(%d)\n", value); */
 /*	bcopy(synth->mem.param, bs, DEVICE_COUNT * sizeof(float)); */
 
-	if (oMark == 0)
+	if (value == 0)
 	{
 		event.type = BRIGHTON_EXPOSE;
 		event.intvalue = 0;
-		brightonParamChange(synth->win, 0, -1, &event);
+		brightonParamChange(synth->win, SKIN1_PANEL, -1, &event);
 		event.intvalue = 1;
-		brightonParamChange(synth->win, 4, -1, &event);
-		oMark = 4;
+		brightonParamChange(synth->win, SKIN2_PANEL, -1, &event);
+		skinPanel = SKIN2_PANEL;
 		/* And toggle the filter type - rooney. */
 		/*bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 3); */
 		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 4);
 	} else {
 		event.type = BRIGHTON_EXPOSE;
 		event.intvalue = 0;
-		brightonParamChange(synth->win, 4, -1, &event);
+		brightonParamChange(synth->win, SKIN2_PANEL, -1, &event);
 		event.intvalue = 1;
-		brightonParamChange(synth->win, 0, -1, &event);
-		oMark = 0;
+		brightonParamChange(synth->win, SKIN1_PANEL, -1, &event);
+		skinPanel = SKIN1_PANEL;
 		/* And toggle the filter type - chamberlain. */
 		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 0);
 	}
 
 /*
-printf("odysseyPanelSwitch(%i)\n", oMark);
+printf("odysseyPanelSwitch(%i)\n", skinPanel);
 	event.type = BRIGHTON_FLOAT;
 	for (i = 0; i < ACTIVE_DEVS; i++)
 	{
 		event.value = bs[i];
 		synth->mem.param[i] = bs[i] - 1;
-		brightonParamChange(synth->win, oMark, i, &event);
+		brightonParamChange(synth->win, skinPanel, i, &event);
 	}
 */
 }
@@ -816,12 +819,12 @@ odysseyCallback(brightonWindow * win, int panel, int index, float value)
 	guiSynth *synth = findSynth(global.synths, win);
 	int sendvalue;
 
-/*printf("odysseyCallback(%i, %f): %x\n", index, value, synth); */
+/*printf("odysseyCallback(%i, %f): %x [%d]\n", index, value, synth, panel); */
 
 	if (synth == 0)
 		return(0);
 
-	if (panel != 0)
+	if (panel != SKIN1_PANEL)
 	{
 		brightonEvent event;
 
@@ -831,7 +834,7 @@ odysseyCallback(brightonWindow * win, int panel, int index, float value)
 		 */
 		event.type = BRIGHTON_FLOAT;
 		event.value = value;
-		brightonParamChange(synth->win, 0, index, &event);
+		brightonParamChange(synth->win, SKIN1_PANEL, index, &event);
 
 		return(0);
 	} else {
@@ -847,7 +850,7 @@ odysseyCallback(brightonWindow * win, int panel, int index, float value)
 
 		event.type = BRIGHTON_FLOAT;
 		event.value = value;
-		brightonParamChange(synth->win, 4, index, &event);
+		brightonParamChange(synth->win, SKIN2_PANEL, index, &event);
 
 		calling = 0;
 	}
@@ -855,7 +858,7 @@ odysseyCallback(brightonWindow * win, int panel, int index, float value)
 	if ((index >= DEVICE_COUNT) || ((synth->flags & OPERATIONAL) == 0))
 		return(0);
 
-	if (odysseyApp.resources[0].devlocn[index].to == 1.0)
+	if (odysseyApp.resources[SKIN1_PANEL].devlocn[index].to == 1.0)
 		sendvalue = value * (CONTROLLER_RANGE - 1);
 	else
 		sendvalue = value;
@@ -1284,11 +1287,19 @@ printf("going operational\n");
 		synth->mem.active, 0, 0);
 
 	event.value = 1;
-	brightonParamChange(synth->win, 5, MEM_START + 1, &event);
-	brightonParamChange(synth->win, 5, MEM_START + 9, &event);
+	brightonParamChange(synth->win, MEM_PANEL, MEM_START + 1, &event);
+	brightonParamChange(synth->win, MEM_PANEL, MEM_START + 9, &event);
 
 	brightonPut(win,
 		"bitmaps/blueprints/odysseyshade.xpm", 0, 0, win->width, win->height);
+
+	/*
+	 * Force-switch the panel to the starting skin (skin switch: Off).
+	 * This is mainly to make sure that the defaut(0) panel gets unexposed.
+	 * We could hack it directly, but doing the forced switch seems cleaner.
+	 */
+	event.value = 0;
+	brightonParamChange(synth->win, MEM_PANEL, MEM_START + 20, &event);
 
 	/*
 	 * Hm. This is a hack for a few bits of bad rendering of a keyboard. Only
