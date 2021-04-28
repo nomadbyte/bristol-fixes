@@ -224,6 +224,8 @@ param(bristolOP *operator, bristolOPParams *param,
 	switch (index) {
 		case 0:
 		{
+			param->param[index].int_val = intvalue;
+
 			if (param->param[4].int_val == 3) {
 				param->param[index].float_val =
 					gainTable[(int) (value * (CONTROLLER_RANGE - 1))].gain;
@@ -238,17 +240,17 @@ param(bristolOP *operator, bristolOPParams *param,
 					param->param[index].float_val = value / 3;
 			}
 /*printf("Configuring filter %f\n", param->param[index].float_val); */
-			param->param[index].int_val = intvalue;
 			break;
 		}
 		case 1:
+			param->param[index].int_val = intvalue;
+
 			if (param->param[4].int_val == 1)
 				param->param[index].float_val =
 					gainTable[CONTROLLER_RANGE - 1
 						- (int) (value * (CONTROLLER_RANGE - 1))].gain;
 			else
 				param->param[index].float_val = value;
-			param->param[index].int_val = intvalue;
 			break;
 		case 2:
 		case 5: /* Gain */
@@ -268,8 +270,8 @@ param(bristolOP *operator, bristolOPParams *param,
 			if (intvalue > 1) {
 				param->param[index].int_val = intvalue;
 			} else if (value > 0) {
-				float floatvalue = ((float) param->param[0].int_val) /
-					(CONTROLLER_RANGE - 1);
+				float floatvalue =
+					((float) param->param[0].int_val) / CONTROLLER_RANGE;
 
 				param->param[index].int_val = 1;
 				/*
@@ -281,23 +283,23 @@ param(bristolOP *operator, bristolOPParams *param,
 					< (float) 0.000122)
 					param->param[0].float_val = (float) 0.000122;
 
-				floatvalue = ((float) param->param[1].int_val) /
-					(CONTROLLER_RANGE - 1);
+				floatvalue =
+					((float) param->param[1].int_val) / CONTROLLER_RANGE;
 
 				param->param[1].float_val =
 					gainTable[CONTROLLER_RANGE - 1
 						- (int) (floatvalue * (CONTROLLER_RANGE - 1))].gain;
 			} else {
-				float floatvalue = ((float) param->param[0].int_val) /
-					(CONTROLLER_RANGE - 1);
+				float floatvalue =
+					((float) param->param[0].int_val) / CONTROLLER_RANGE;
 
 				printf("Selected chamberlain filter\n");
 				param->param[index].int_val = 0;
-				param->param[0].float_val = value / 3;
+				param->param[0].float_val = floatvalue / 3;
 
-				floatvalue = ((float) param->param[1].int_val) /
-					(CONTROLLER_RANGE - 1);
-				param->param[1].float_val = value;
+				floatvalue =
+					((float) param->param[1].int_val) / CONTROLLER_RANGE;
+				param->param[1].float_val = floatvalue;
 			}
 			break;
 		case 6: /* LP/BP/HP */
@@ -380,7 +382,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
  */
 
 	/* See if we  are limited to lightweight filters */
-	if (param->param[4].int_val != 3)
+	if (param->param[4].int_val && param->param[4].int_val != 3)
 	{
 		if ((blo.flags & BRISTOL_LWF) || (mode == 1))
 			param->param[4].int_val = 0;
@@ -1001,7 +1003,7 @@ filterinit(bristolOP **operator, int index, int samplerate, int samplecount)
 	specs->spec.param[6].flags = BRISTOL_ROTARY|BRISTOL_SLIDER;
 
 	/*
-	 * Now fill in the dco IO specs.
+	 * Now fill in the filter IO specs.
 	 */
 	specs->spec.io[0].ioname = "input";
 	specs->spec.io[0].description = "Filter Input signal";
