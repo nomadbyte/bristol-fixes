@@ -849,7 +849,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 		qres = 2.0f - param->param[1].float_val * 1.97f;
 		cutoff = param->param[0].float_val;
-		gain = param->param[5].float_val * 0.02513;
+		gain = param->param[5].float_val * 0.02513 / 5.0;
 
 		/*
 		 * The following was for on/off keytracking, needs to be continuous.
