@@ -793,6 +793,16 @@ odysseyPanelSwitch(brightonWindow * win, int value)
 		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 0);
 	}
 
+	/* Re-set the current filter params (overridden during filter-type call) */
+	{
+		int cvalue = (int)(synth->mem.param[36] * C_RANGE_MIN_1);
+		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 0, cvalue);
+	}
+	{
+		int cvalue = (int)(synth->mem.param[37] * C_RANGE_MIN_1);
+		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 1, cvalue);
+	}
+
 /*
 printf("odysseyPanelSwitch(%i)\n", skinPanel);
 	event.type = BRIGHTON_FLOAT;
@@ -819,7 +829,8 @@ odysseyCallback(brightonWindow * win, int panel, int index, float value)
 	guiSynth *synth = findSynth(global.synths, win);
 	int sendvalue;
 
-/*printf("odysseyCallback(%i, %f): %x [%d]\n", index, value, synth, panel); */
+/*printf("odysseyCallback(%i, %f): %x [%d] callig:%d\n",
+	index, value, synth, panel, calling); */
 
 	if (synth == 0)
 		return(0);
@@ -1135,7 +1146,7 @@ odysseyInit(brightonWindow *win)
 	/* VCA Env */
 	dispatch[35].controller = 126;
 	dispatch[35].operator = 26;
-	/* VCF Cutoff/Req */
+	/* VCF Cutoff/Res */
 	dispatch[36].controller = 3;
 	dispatch[36].operator = 0;
 	dispatch[37].controller = 3;
