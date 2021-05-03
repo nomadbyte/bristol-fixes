@@ -99,6 +99,10 @@ AC_CHECK_HEADER(X11/Xutil.h, [], [HAVE_XHEADERS=false])
 AC_CHECK_HEADER(X11/Xos.h, [], [HAVE_XHEADERS=false])
 AC_CHECK_HEADER(X11/Xatom.h, [], [HAVE_XHEADERS=false])
 
+# NOTE(jpc) a marker for global variables, so I can rework this later
+CFLAGS="$CFLAGS -DGLOBAL_STATE="
+CPPFLAGS="$CPPFLAGS -DGLOBAL_STATE="
+
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for X11 library functions.

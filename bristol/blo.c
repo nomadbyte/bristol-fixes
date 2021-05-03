@@ -31,17 +31,17 @@
 
 #include "bristolblo.h"
 
-static int init = 1;
+GLOBAL_STATE static int init = 1;
 
-struct bristolBLO blo;
+GLOBAL_STATE struct bristolBLO blo;
 
-float blosine[BRISTOL_BLO_SIZE];
-float blocosine[BRISTOL_BLO_SIZE];
-float blosquare[BRISTOL_BLO_SIZE];
-float bloramp[BRISTOL_BLO_SIZE];
-float blosaw[BRISTOL_BLO_SIZE];
-float blotriangle[BRISTOL_BLO_SIZE];
-float blopulse[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blosine[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blocosine[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blosquare[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float bloramp[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blosaw[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blotriangle[BRISTOL_BLO_SIZE];
+GLOBAL_STATE float blopulse[BRISTOL_BLO_SIZE];
 
 /*
  * Generate the waveforms to the given harmonic reference size. The code could

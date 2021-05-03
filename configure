@@ -12205,6 +12205,9 @@ else
 fi
 
 
+# NOTE(jpc) a marker for global variables, so I can rework this later
+CFLAGS="$CFLAGS -DGLOBAL_STATE="
+CPPFLAGS="$CPPFLAGS -DGLOBAL_STATE="
 
 # Checks for typedefs, structures, and compiler characteristics.
 
