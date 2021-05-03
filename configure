@@ -12122,9 +12122,9 @@ fi
 if test "x$TRY_VC" = 'xyes'
 then
 	which startBristol > /dev/null 2>&1
-	if test $? == 0; then showErrMsg1; fi
+	if test $? = 0; then showErrMsg1; fi
 	which bristol > /dev/null 2>&1
-	if test $? == 0; then showErrMsg1; fi
+	if test $? = 0; then showErrMsg1; fi
 	if test -f ${prefix}/bin/bristol; then showErrMsg1; fi
 fi
 
@@ -12307,7 +12307,7 @@ else
   USE_EXP_ATTACK=no
 fi
 
-if test "x$USE_EXP_ATTACK" == "xyes"
+if test "x$USE_EXP_ATTACK" = "xyes"
 then
 	BRISTOL_LIN_ATTACK=
 fi
@@ -12322,7 +12322,7 @@ else
   USE_SEMAPHORE=no
 fi
 
-if test "x$USE_SEMAPHORE" == "xyes"
+if test "x$USE_SEMAPHORE" = "xyes"
 then
 	BRISTOL_SEMAPHORE=-DBRISTOL_SEMAPHORE
 
@@ -12350,7 +12350,7 @@ else
   USE_BARRIER=no
 fi
 
-if test "x$USE_BARRIER" == "xyes"
+if test "x$USE_BARRIER" = "xyes"
 then
 	BRISTOL_BARRIER=-DUSE_MLOCK
 fi
@@ -15468,7 +15468,7 @@ echo \| Build with sem_open ............................ : true
 fi
 fi
 
-if test $USE_BARRIER == "yes"; then
+if test $USE_BARRIER = "yes"; then
 echo \| Build with jrb memory barrier .................. : true
 fi
 
@@ -15495,7 +15495,7 @@ echo \| Default voicecount ............................. : BRISTOL_VOICECOUNT=$_
 if test $BRR != 10; then
 echo \| Envelope max ramp time ......................... : $BRR seconds
 fi
-if test x$USE_EXP_ATTACK == "xyes"; then
+if test x$USE_EXP_ATTACK = "xyes"; then
 echo \| Envelope attack type ........................... : exponential
 fi
 echo \| author ......................................... : Nick Copeland
