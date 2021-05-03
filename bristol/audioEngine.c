@@ -29,7 +29,7 @@
 
 #include "dco.h"
 
-extern tableEntry defaultTable[];
+GLOBAL_STATE extern tableEntry defaultTable[];
 extern void freeBristolAudio();
 static void a440();
 
@@ -40,7 +40,7 @@ extern void rbMidiNote(audioMain *, bristolMidiMsg *);
 /*
  * Used by the a440 sine generator.
  */
-int s440holder = 0;
+GLOBAL_STATE int s440holder = 0;
 
 static void
 bristolUnlinkVoice(audioMain *audiomain, bristolVoice *v)

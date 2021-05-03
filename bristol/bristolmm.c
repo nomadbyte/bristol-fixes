@@ -24,13 +24,13 @@
 #include "bristolmm.h"
 #include "bristolmidi.h"
 
-static float *freqbuf = (float *) NULL;
-static float *modbuf = (float *) NULL;
-static float *osc3buf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *scratch = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *modbuf = (float *) NULL;
+GLOBAL_STATE static float *osc3buf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *scratch = (float *) NULL;
 
-extern int s440holder;
+GLOBAL_STATE extern int s440holder;
 
 int
 bristolGlobalController(Baudio *baudio, u_char controller,

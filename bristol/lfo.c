@@ -38,7 +38,7 @@
 #include "bristol.h"
 #include "lfo.h"
 
-float note_diff;
+GLOBAL_STATE static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.
@@ -59,7 +59,7 @@ float note_diff;
 #define LFO_WAVE_COUNT 6
 
 static void fillWave();
-static float *bitbucket = NULL;
+GLOBAL_STATE static float *bitbucket = NULL;
 
 /*
  * Reset any local memory information.

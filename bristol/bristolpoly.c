@@ -38,15 +38,15 @@
 /*
  * Buffer requirements.
  */
-static float *freqbuf = (float *) NULL;
-static float *scratchbuf = (float *) NULL;
-static float *osc0buf = (float *) NULL;
-static float *osc1buf = (float *) NULL;
-static float *osc2buf = (float *) NULL;
-static float *osc3buf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *mg1buf = (float *) NULL;
-static float *mg2buf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *osc0buf = (float *) NULL;
+GLOBAL_STATE static float *osc1buf = (float *) NULL;
+GLOBAL_STATE static float *osc2buf = (float *) NULL;
+GLOBAL_STATE static float *osc3buf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *mg1buf = (float *) NULL;
+GLOBAL_STATE static float *mg2buf = (float *) NULL;
 
 int
 polyController(Baudio *baudio, u_char operator, u_char controller, float value)

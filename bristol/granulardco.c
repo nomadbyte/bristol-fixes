@@ -38,8 +38,8 @@
 #include "bristol.h"
 #include "granulardco.h"
 
-float note_diff;
-float samplerate;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static float samplerate;
 
 #define BRISTOL_SQR 4
 
@@ -322,23 +322,23 @@ printf("threads %i\n", param->param[index].int_val);
  * It could be fixed, the issue is that 'regrain()' needs to change the run
  * time parameters and this was an easy option for now.
  */
-static float gg;
-static float *cwt;
-static float gtp;
-static float cdt;
-static float gts;
-static float wtp;
-static float wtr;
-static float wts;
-static float *gmb;
-static float *wmb;
+GLOBAL_STATE static float gg;
+GLOBAL_STATE static float *cwt;
+GLOBAL_STATE static float gtp;
+GLOBAL_STATE static float cdt;
+GLOBAL_STATE static float gts;
+GLOBAL_STATE static float wtp;
+GLOBAL_STATE static float wtr;
+GLOBAL_STATE static float wts;
+GLOBAL_STATE static float *gmb;
+GLOBAL_STATE static float *wmb;
 
-static float gg2;
-static float cdt2;
-static float gtp2;
-static float gts2;
-static float wtp2;
-static float wtr2;
+GLOBAL_STATE static float gg2;
+GLOBAL_STATE static float cdt2;
+GLOBAL_STATE static float gtp2;
+GLOBAL_STATE static float gts2;
+GLOBAL_STATE static float wtp2;
+GLOBAL_STATE static float wtr2;
 
 /*
  * The fun bit.

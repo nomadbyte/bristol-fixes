@@ -26,7 +26,7 @@
 
 extern int bristolGlobalController(struct BAudio *, u_char, u_char, float);
 
-float *lfobuf, *op0buf, *op1buf, *op2buf, *op3buf, *op4buf, *modbuf;
+GLOBAL_STATE static float *lfobuf, *op0buf, *op1buf, *op2buf, *op3buf, *op4buf, *modbuf;
 
 int
 DXGlobalController(Baudio *baudio, u_char controller,

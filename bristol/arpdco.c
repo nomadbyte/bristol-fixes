@@ -39,7 +39,7 @@
 #include "bristolblo.h"
 #include "arpdco.h"
 
-float note_diff, *zbuf;
+GLOBAL_STATE static float note_diff, *zbuf;
 
 #define BRISTOL_SQR 4
 
@@ -70,7 +70,7 @@ static void fillWave();
  * We should not be doing this however I need a quick resolution to some issues
  * with sync of square waves and this is a scratch buffer for the edge detector
  */
-static float *sbuf = NULL;
+GLOBAL_STATE static float *sbuf = NULL;
 
 /*
  * Reset any local memory information.

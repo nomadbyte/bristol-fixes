@@ -23,13 +23,13 @@
 
 #include "bristol.h"
 
-static float *tmpbuf1 = (float *) NULL;
-static float *vbuf = (float *) NULL;
-static float *outbuf = (float *) NULL;
-static float *percbuf = (float *) NULL;
-static float *percenv = (float *) NULL;
-static float *bassbuf = (float *) NULL;
-static float *bassenv = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf1 = (float *) NULL;
+GLOBAL_STATE static float *vbuf = (float *) NULL;
+GLOBAL_STATE static float *outbuf = (float *) NULL;
+GLOBAL_STATE static float *percbuf = (float *) NULL;
+GLOBAL_STATE static float *percenv = (float *) NULL;
+GLOBAL_STATE static float *bassbuf = (float *) NULL;
+GLOBAL_STATE static float *bassenv = (float *) NULL;
 
 #define VOX_VIBRA		0x01
 #define VOX_VIBRA_DONE	0x02
@@ -88,7 +88,7 @@ baudio->effect[0]->param->param[5].float_val);
 	return(0);
 }
 
-int vibraDone = 0;
+GLOBAL_STATE static int vibraDone = 0;
 
 /*
  * This will only do the envelopes for the Dual manual. It will cover the

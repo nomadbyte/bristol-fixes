@@ -31,20 +31,20 @@
  *
  * (This file was copied from the prophet, hence shares much of the code)
  */
-static float *freq = (float *) NULL;
-static float *freqbuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *oscbbuf = (float *) NULL;
-static float *oscabuf = (float *) NULL;
-static float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *freq = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *oscbbuf = (float *) NULL;
+GLOBAL_STATE static float *oscabuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
 
-static float *lfosqr = (float *) NULL;
-static float *lfo = (float *) NULL;
-static float *lfosine = (float *) NULL;
-static float *modsine = (float *) NULL;
-static float *lfosh = (float *) NULL;
+GLOBAL_STATE static float *lfosqr = (float *) NULL;
+GLOBAL_STATE static float *lfo = (float *) NULL;
+GLOBAL_STATE static float *lfosine = (float *) NULL;
+GLOBAL_STATE static float *modsine = (float *) NULL;
+GLOBAL_STATE static float *lfosh = (float *) NULL;
 
 int
 obxController(Baudio *baudio, u_char operator, u_char controller, float value)

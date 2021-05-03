@@ -61,7 +61,7 @@
 #define FILTER_MOD_IND 1
 #define FILTER_OUT_IND 2
 
-static float srate;
+GLOBAL_STATE static float srate;
 
 /*
  * When this uses cfreq we get very good keyboard tracking as cfreq is a true
@@ -145,7 +145,7 @@ static int destroy(bristolOP *operator)
 }
 
 #define ROOT2 1.4142135623730950488
-double pidsr;
+GLOBAL_STATE static double pidsr;
 
 /*
  * Reset any local memory information.

@@ -24,11 +24,11 @@
 #include "bristol.h"
 #include "solina.h"
 
-static float *freqbuf = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *sawbuf = (float *) NULL;
-static float *sqrbuf = (float *) NULL;
-static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *sawbuf = (float *) NULL;
+GLOBAL_STATE static float *sqrbuf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
 
 extern int bristolGlobalController(struct BAudio *, u_char, u_char, float);
 extern int buildCurrentTable(Baudio *, float);

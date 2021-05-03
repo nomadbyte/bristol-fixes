@@ -36,30 +36,30 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *fmbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *arbuf = (float *) NULL;
-static float *mixbuf = (float *) NULL;
-static float *shmix = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *lfosh = (float *) NULL;
-static float *lfosine = (float *) NULL;
-static float *lfosquare = (float *) NULL;
-static float *osc1ramp = (float *) NULL;
-static float *osc1puls = (float *) NULL;
-static float *osc2ramp = (float *) NULL;
-static float *osc2puls = (float *) NULL;
-static float *ringmod = (float *) NULL;
-static float *scratch = (float *) NULL;
+GLOBAL_STATE static float *fmbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *arbuf = (float *) NULL;
+GLOBAL_STATE static float *mixbuf = (float *) NULL;
+GLOBAL_STATE static float *shmix = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *lfosh = (float *) NULL;
+GLOBAL_STATE static float *lfosine = (float *) NULL;
+GLOBAL_STATE static float *lfosquare = (float *) NULL;
+GLOBAL_STATE static float *osc1ramp = (float *) NULL;
+GLOBAL_STATE static float *osc1puls = (float *) NULL;
+GLOBAL_STATE static float *osc2ramp = (float *) NULL;
+GLOBAL_STATE static float *osc2puls = (float *) NULL;
+GLOBAL_STATE static float *ringmod = (float *) NULL;
+GLOBAL_STATE static float *scratch = (float *) NULL;
 
 /*
  * All buffers are going to be collapsed into a single 'megabuf', this will be
  * used for all local information for every possible one of these voices. As
  * such it might get big, but will allow for arbitrary buffering.
  */
-static struct {
+GLOBAL_STATE static struct {
 	float *buf;
 	float *outputs[128][ARP_OUTCNT]; /* offsets into buffer for data */
 	float *inputs[128][ARP_INCOUNT]; /* pointer offsets for input source */

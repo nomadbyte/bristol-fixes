@@ -41,16 +41,16 @@ extern int buildCurrentTable(Baudio *, float);
  * could be used here (noise, LFO, but polyphonic parameters would have to be
  * buried in the voice local structure.
  */
-static float *freqbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *osc1buf = (float *) NULL;
-static float *osc2buf = (float *) NULL;
-static float *osc3buf = (float *) NULL;
-static float *lfobuf = (float *) NULL;
-static float *modbuf = (float *) NULL;
-static float *scratch = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *osc1buf = (float *) NULL;
+GLOBAL_STATE static float *osc2buf = (float *) NULL;
+GLOBAL_STATE static float *osc3buf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *modbuf = (float *) NULL;
+GLOBAL_STATE static float *scratch = (float *) NULL;
 
 #define PEDAL1 baudio->contcontroller[7] /* GM-2 Volume pedal */
 #define PEDAL2 baudio->contcontroller[11] /* GM-2 Expression pedal */

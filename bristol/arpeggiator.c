@@ -25,7 +25,7 @@
 #include "bristol.h"
 #include "bristolarpeggiation.h"
 
-extern bristolMidiHandler bristolMidiRoutines;
+GLOBAL_STATE extern bristolMidiHandler bristolMidiRoutines;
 
 /* This is required for 2602222, voices left hanging when terminating */
 static void desequence(audioMain *am, Baudio *ba)

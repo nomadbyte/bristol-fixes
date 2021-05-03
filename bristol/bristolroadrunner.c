@@ -24,12 +24,12 @@
 #include "bristol.h"
 #include "roadrunner.h"
 
-static float *freqbuf = (float *) NULL;
-static float *modbuf = (float *) NULL;
-static float *sawbuf = (float *) NULL;
-static float *tribuf = (float *) NULL;
-static float *sqrbuf = (float *) NULL;
-static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *modbuf = (float *) NULL;
+GLOBAL_STATE static float *sawbuf = (float *) NULL;
+GLOBAL_STATE static float *tribuf = (float *) NULL;
+GLOBAL_STATE static float *sqrbuf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
 
 extern int bristolGlobalController(struct BAudio *, u_char, u_char, float);
 extern int buildCurrentTable(Baudio *, float);

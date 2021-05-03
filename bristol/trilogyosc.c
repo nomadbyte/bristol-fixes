@@ -40,12 +40,12 @@
 #include "bristolblo.h"
 #include "trilogyosc.h"
 
-float note_diff;
-int samplecount;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildTrilogySound(bristolOP *, bristolOPParams *);
-static float *zerobuf;
+GLOBAL_STATE static float *zerobuf;
 
 /*
  * Use of these mean that we can only product a single trilogyosc oscillator.
@@ -62,7 +62,7 @@ static float *zerobuf;
  *
  * We have 16, 8, 4, 2.
  */
-static float sweeps[16] = {2, 4, 8, 16, 1, 32, 12, 20, 24, 32, 0,0,0,0,0,0};
+static const float sweeps[16] = {2, 4, 8, 16, 1, 32, 12, 20, 24, 32, 0,0,0,0,0,0};
 
 /*
  * The name of this operator, IO count, and IO names.

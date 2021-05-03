@@ -25,7 +25,7 @@
 #include <math.h>
 #include "bristol.h"
 
-extern bristolMidiHandler bristolMidiRoutines;
+GLOBAL_STATE extern bristolMidiHandler bristolMidiRoutines;
 
 int rbMidiNoteOn(audioMain *, bristolMidiMsg *);
 int rbMidiNoteOff(audioMain *, bristolMidiMsg *);
@@ -466,9 +466,9 @@ msg->offset = 101;
 	return(0);
 }
 
-static int arbitrary = 0x12365302;
-static int nx1 = 0x67452301;
-static int nx2 = 0xefcdab89;
+GLOBAL_STATE static int arbitrary = 0x12365302;
+GLOBAL_STATE static int nx1 = 0x67452301;
+GLOBAL_STATE static int nx2 = 0xefcdab89;
 
 /*
  * Find a free voice, or take one off the current playlist.

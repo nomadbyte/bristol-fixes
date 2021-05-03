@@ -40,43 +40,43 @@
 #define HCHORUS_IN_IND 0
 #define HCHORUS_OUT_IND 1
 
-int scanrate = 172;
+GLOBAL_STATE static int scanrate = 172;
 
 static void fillGainTable(float *, int);
 static void fillDrainTable(float *, int);
-float *upgain = NULL;
-float *downgain = NULL;
+GLOBAL_STATE static float *upgain = NULL;
+GLOBAL_STATE static float *downgain = NULL;
 
 /*
  * Three different taps rates for V1/V2/V3, fast and shallow to slow and deep,
  * then we mix them for chorus. They are also staggered to reduce matches and
  * there is a null (non moving) tap for some of the depths.
-int atap[32]= {0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,3,3,2,2,1,1};
-int btap[32]= {0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,3,3,2,2,1,1,0};
+GLOBAL_STATE static int atap[32]= {0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,3,3,2,2,1,1};
+GLOBAL_STATE static int btap[32]= {0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,3,3,2,2,1,1,0};
  */
-int atap[32]= {0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1};
-int btap[32]= {1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0};
+GLOBAL_STATE static int atap[32]= {0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1};
+GLOBAL_STATE static int btap[32]= {1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0};
 
-int ctap[32]= {3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4};
-int dtap[32]= {3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3};
+GLOBAL_STATE static int ctap[32]= {3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4};
+GLOBAL_STATE static int dtap[32]= {3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3,3,2,2,1,1,0,0,1,1,2,2,3,3,4,4,3};
 
-int etap[32]= {4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5};
-int ftap[32]= {4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4};
+GLOBAL_STATE static int etap[32]= {4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5};
+GLOBAL_STATE static int ftap[32]= {4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4,4,5,5,6,6,7,7,8,8,7,7,6,6,5,5,4};
 
-int ztap[32]= {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7};
+GLOBAL_STATE static int ztap[32]= {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7};
 
-//int *tap1, *tap2, *tap3, *tap4, *tap5, *tap6;
-int *tap1 = NULL, *tap2 = NULL, *tap3 = NULL;
-int *tap4 = NULL, *tap5 = NULL, *tap6 = NULL;
+//GLOBAL_STATE static int *tap1, *tap2, *tap3, *tap4, *tap5, *tap6;
+GLOBAL_STATE static int *tap1 = NULL, *tap2 = NULL, *tap3 = NULL;
+GLOBAL_STATE static int *tap4 = NULL, *tap5 = NULL, *tap6 = NULL;
 
-//float tapgain[TAPS] = {1.5, 2, 2.5, 3.0, 3.5, 4, 4.5, 5, 5.5};
+//GLOBAL_STATE static float tapgain[TAPS] = {1.5, 2, 2.5, 3.0, 3.5, 4, 4.5, 5, 5.5};
 /* As the filtering goes up the signal gain goes down, so a small correction */
-//float tapgain[TAPS] = {1.0, 1.03, 1.06, 1.09, 1.12, 1.15, 1.18, 1.21, 1.24};
-float tapgain[TAPS] = {1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08};
+//GLOBAL_STATE static float tapgain[TAPS] = {1.0, 1.03, 1.06, 1.09, 1.12, 1.15, 1.18, 1.21, 1.24};
+GLOBAL_STATE static float tapgain[TAPS] = {1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08};
 
-/* float tapfilt[TAPS] = {0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55}; */
+/* GLOBAL_STATE static float tapfilt[TAPS] = {0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55}; */
 /* These get reset anyway, the are a cummulative multiplication */
-float tapfilt[TAPS] = {0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91};
+GLOBAL_STATE static float tapfilt[TAPS] = {0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91};
 
 /*
  * Reset any local memory information.
@@ -93,7 +93,7 @@ static int destroy(bristolOP *operator)
 	return(0);
 }
 
-static int reDelay = 0;
+GLOBAL_STATE static int reDelay = 0;
 
 /*
  * This is called by the frontend when a parameter is changed.

@@ -36,7 +36,7 @@
 #include "bristol.h"
 #include "envelope.h"
 
-static float sr;
+GLOBAL_STATE static float sr;
 
 /*
  * The name of this operator, IO count, and IO names.

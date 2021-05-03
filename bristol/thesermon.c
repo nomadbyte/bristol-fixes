@@ -132,12 +132,12 @@ static void filltriwave(float *, int, double, int);
  * bright and normal settings but these are not really concerned with those
  * settings. FFS.
  */
-typedef struct Crosstalk {
+GLOBAL_STATE typedef struct Crosstalk {
 	int wheel;
 	float gain;
 } crosstalk;
 
-typedef struct Tonewheels {
+GLOBAL_STATE typedef struct Tonewheels {
 	float freq; /* Hz */
 	float step; /* wavetable index step required to generate this frequency */
 	float flutter;
@@ -150,13 +150,13 @@ typedef struct Tonewheels {
 	/* There are more, we could bury the wavetables and buffers in here. */
 } tonewheels;
 
-tonewheels gearbox[92];
+GLOBAL_STATE tonewheels gearbox[92];
 
 /* Bright should be burried in the tonewheel structure */
-static int bright, btnote, btdelay = 0, samplerate;
+GLOBAL_STATE static int bright, btnote, btdelay = 0, samplerate;
 
 #ifdef TONEMATRIX
-struct {
+GLOBAL_STATE struct {
 	float gain;
 	int percussive;
 	float numerator;

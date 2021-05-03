@@ -32,22 +32,22 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *pfreqbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *padsrbuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *lfosh = (float *) NULL;
-static float *lforamp = (float *) NULL;
-static float *lfosquare = (float *) NULL;
-static float *osc1buf = (float *) NULL;
-static float *osc2buf = (float *) NULL;
-static float *oscpbuf = (float *) NULL;
-static float *scratch = (float *) NULL;
-static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *pfreqbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *padsrbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *lfosh = (float *) NULL;
+GLOBAL_STATE static float *lforamp = (float *) NULL;
+GLOBAL_STATE static float *lfosquare = (float *) NULL;
+GLOBAL_STATE static float *osc1buf = (float *) NULL;
+GLOBAL_STATE static float *osc2buf = (float *) NULL;
+GLOBAL_STATE static float *oscpbuf = (float *) NULL;
+GLOBAL_STATE static float *scratch = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
 
-static float *modbuf;
+GLOBAL_STATE static float *modbuf;
 
 int
 mg1Controller(Baudio *baudio, u_char operator, u_char controller, float value)

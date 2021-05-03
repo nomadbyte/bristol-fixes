@@ -41,26 +41,26 @@
 #include "bristol.h"
 #include "granular.h"
 
-static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
 
-static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
 
-static float *lfobuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
 
-static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
 
-static float *bus1buf = (float *) NULL;
-static float *bus2buf = (float *) NULL;
-static float *bus3buf = (float *) NULL;
-static float *bus4buf = (float *) NULL;
-static float *bus5buf = (float *) NULL;
-static float *bus6buf = (float *) NULL;
-static float *bus7buf = (float *) NULL;
-static float *bus8buf = (float *) NULL;
-static float *bus9buf = (float *) NULL;
+GLOBAL_STATE static float *bus1buf = (float *) NULL;
+GLOBAL_STATE static float *bus2buf = (float *) NULL;
+GLOBAL_STATE static float *bus3buf = (float *) NULL;
+GLOBAL_STATE static float *bus4buf = (float *) NULL;
+GLOBAL_STATE static float *bus5buf = (float *) NULL;
+GLOBAL_STATE static float *bus6buf = (float *) NULL;
+GLOBAL_STATE static float *bus7buf = (float *) NULL;
+GLOBAL_STATE static float *bus8buf = (float *) NULL;
+GLOBAL_STATE static float *bus9buf = (float *) NULL;
 
-static float *busbuf[9];
+GLOBAL_STATE static float *busbuf[9];
 
 extern int bristolGlobalController(struct BAudio *, u_char, u_char, float);
 extern int buildCurrentTable(Baudio *, float);

@@ -32,14 +32,14 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *pmodbuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *oscabuf = (float *) NULL;
-static float *mgbuf = (float *) NULL;
-static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *pmodbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *oscabuf = (float *) NULL;
+GLOBAL_STATE static float *mgbuf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
 
 int
 poly6Controller(Baudio *baudio, u_char operator, u_char controller, float value)

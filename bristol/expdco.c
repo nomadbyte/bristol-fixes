@@ -40,7 +40,7 @@
 #include "bristolblo.h"
 #include "expdco.h"
 
-float note_diff;
+GLOBAL_STATE static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.
@@ -59,7 +59,7 @@ float note_diff;
 #define DCO_WAVE_COUNT 6
 
 static void fillWave();
-static float *sbuf = NULL;
+GLOBAL_STATE static float *sbuf = NULL;
 
 /*
  * Reset any local memory information.
