@@ -33,6 +33,8 @@
 
 static int init = 1;
 
+struct bristolBLO blo;
+
 float blosine[BRISTOL_BLO_SIZE];
 float blocosine[BRISTOL_BLO_SIZE];
 float blosquare[BRISTOL_BLO_SIZE];

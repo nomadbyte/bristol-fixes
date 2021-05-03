@@ -39,7 +39,7 @@
 #define BLO_COSINE	6
 #define BLO_PULSE	7
 
-struct {
+extern struct bristolBLO {
 	int flags;
 	int harmonics;
 	int cutin;
