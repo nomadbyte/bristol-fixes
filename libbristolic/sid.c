@@ -148,7 +148,7 @@ extern void bristolfree();
  * varied by time since the attack was linear and the decay was somewhat
  * arbitrarily exponential which needs to be studied.
  */
-static float bSidEnvRates[16] = {
+static const float bSidEnvRates[16] = {
 	0.002,
 	0.006,
 	0.016,
@@ -171,7 +171,7 @@ static float bSidEnvRates[16] = {
  * The following table is actually based on a 2MHz divider circuit, it is not
  * actually equally tempered.
  */
-unsigned short freqmap[128] = {
+const unsigned short freqmap[128] = {
 	(unsigned short) (8.175879 / B_SID_FREQ_DIV),
 	(unsigned short) (8.661983 / B_SID_FREQ_DIV),
 	(unsigned short) (9.177091 / B_SID_FREQ_DIV),
@@ -449,7 +449,7 @@ static unsigned char bSidGet(int, unsigned char, unsigned char);
 /*
  * Default dispatch table, this mostly gets overwritten on RESET
  */
-bSidRoutine bSidDispatch[B_SID_REGISTERS] = {
+GLOBAL_STATE static bSidRoutine bSidDispatch[B_SID_REGISTERS] = {
 	bSidGet,
 	bSidGet,
 	bSidGet,
@@ -512,7 +512,7 @@ bSidIORoutine bSidIODispatch[B_SID_IO] = {
 /*
  * Up to B_SID_COUNT chips can be emulated on request
  */
-bSid *SID[B_SID_COUNT];
+GLOBAL_STATE static bSid *SID[B_SID_COUNT];
 
 static unsigned char
 bSidGet(int id, unsigned char comm, unsigned char param)
