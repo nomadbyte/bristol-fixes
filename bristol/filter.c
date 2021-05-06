@@ -269,6 +269,14 @@ param(bristolOP *operator, bristolOPParams *param,
 				intvalue = 0;
 			if (intvalue > 1) {
 				param->param[index].int_val = intvalue;
+				if (intvalue == 3) {
+					float floatvalue =
+						((float) param->param[0].int_val) / CONTROLLER_RANGE;
+
+					param->param[0].float_val =
+						gainTable[(int) (floatvalue
+								* (CONTROLLER_RANGE - 1))].gain;
+				}
 			} else if (value > 0) {
 				float floatvalue =
 					((float) param->param[0].int_val) / CONTROLLER_RANGE;
