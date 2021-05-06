@@ -632,16 +632,16 @@ bristolVoice *voice, register float *startbuf)
 /* */
 
 /* Filter */
-	audiomain->palette[(*baudio->sound[3]).index]->specs->io[0].buf = mixbuf;
-	audiomain->palette[(*baudio->sound[3]).index]->specs->io[1].buf = scratch;
-	audiomain->palette[(*baudio->sound[3]).index]->specs->io[2].buf = filtbuf;;
+	audiomain->palette[B_FILTER]->specs->io[0].buf = mixbuf;
+	audiomain->palette[B_FILTER]->specs->io[1].buf = scratch;
+	audiomain->palette[B_FILTER]->specs->io[2].buf = filtbuf;;
 
 	bufmerge(mods->mod[12].buf, mods->mod[12].gain, scratch, 0.0, sc);
 	bufmerge(mods->mod[13].buf, mods->mod[13].gain, scratch, 1.0, sc);
 	bufmerge(mods->mod[14].buf, mods->mod[14].gain, scratch, 1.0, sc);
 
 	(*baudio->sound[3]).operate(
-		(audiomain->palette)[3],
+		(audiomain->palette)[B_FILTER],
 		voice,
 		(*baudio->sound[3]).param,
 		voice->locals[voice->index][3]);
@@ -763,7 +763,7 @@ printf("initialising one odyssey\n");
 	/* LFO */
 	initSoundAlgo(	16,	2, baudio, audiomain, baudio->sound);
 	/* A filter */
-	initSoundAlgo(	3,	3, baudio, audiomain, baudio->sound);
+	initSoundAlgo(	B_FILTER,	3, baudio, audiomain, baudio->sound);
 	/* One ADSR */
 	initSoundAlgo(	1,	4, baudio, audiomain, baudio->sound);
 	/* An amplifier */
