@@ -72,11 +72,11 @@ int *tap4 = NULL, *tap5 = NULL, *tap6 = NULL;
 //float tapgain[TAPS] = {1.5, 2, 2.5, 3.0, 3.5, 4, 4.5, 5, 5.5};
 /* As the filtering goes up the signal gain goes down, so a small correction */
 //float tapgain[TAPS] = {1.0, 1.03, 1.06, 1.09, 1.12, 1.15, 1.18, 1.21, 1.24};
-float tapgain[TAPS] = {1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08};
+float tapgain[TAPS+1] = {1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09};
 
 /* float tapfilt[TAPS] = {0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55}; */
 /* These get reset anyway, the are a cummulative multiplication */
-float tapfilt[TAPS] = {0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91};
+float tapfilt[TAPS+1] = {0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91, 0.9};
 
 /*
  * Reset any local memory information.
@@ -159,11 +159,11 @@ param->param[index].int_val, param->param[index].float_val);
 			 */
 			param->param[index].float_val = value;
 			tapfilt[0] = value;
-			for (i = 1; i < TAPS; i++)
+			for (i = 1; i <= TAPS; i++)
 				tapfilt[i] = tapfilt[i-1] * value;
 			/*
 			tapgain[0] = 1.0 / value;
-			for (i = 1; i < TAPS; i++)
+			for (i = 1; i <= TAPS; i++)
 				tapgain[i] = tapgain[i-1] / value;
 			*/
 			break;
