@@ -49,6 +49,7 @@ int
 ossAudioInit(audioDev, devID, fragSize)
 duplexDev *audioDev;
 int devID;
+int fragSize;
 {
 #if (BRISTOL_HAS_OSS == 1)
 	int results, data = 0, mode;

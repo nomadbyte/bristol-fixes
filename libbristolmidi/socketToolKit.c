@@ -58,6 +58,7 @@ int
 open_remote_socket(name, port, listens, reqsig)
 char		*name; /* service name, must be known */
 int 		listens; /* Parameter for the number of connections accepted */
+int			port, reqsig;
 {
 	struct	servent		*service, service_tmp;
 	struct  sockaddr_in remote_socket_addr;

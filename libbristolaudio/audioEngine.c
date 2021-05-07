@@ -85,6 +85,7 @@ int
 initAudioDevice2(audioDev, devID, fragSize)
 duplexDev *audioDev;
 int devID;
+int fragSize;
 {
 	/*
 	 * The device is basically just opened for the first call of this routine.
@@ -118,6 +119,7 @@ int devID;
 int
 setAudioStart2(audioDev, devID)
 duplexDev *audioDev;
+int devID;
 {
 	int enable;
 
@@ -162,6 +164,7 @@ duplexDev *audioDev;
 int
 setAudioStop2(audioDev, devID)
 duplexDev *audioDev;
+int devID;
 {
 	int enable;
 

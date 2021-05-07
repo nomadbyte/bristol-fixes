@@ -92,6 +92,7 @@ short left, right;
 static int
 setAudioOSS(fd, audioDev, param, valueL, valueR)
 duplexDev *audioDev;
+int fd, param, valueL, valueR;
 {
 #if (BRISTOL_HAS_OSS == 1)
 	int value, command;
@@ -259,6 +260,7 @@ char *name;
 int
 getOSSCapability(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 	if ((audioDev->stereoCaps | audioDev->monoCaps) & (1 << controller))
 		return controller;
@@ -268,6 +270,7 @@ duplexDev *audioDev;
 int
 getOSSRecordability(audioDev, cont)
 duplexDev *audioDev;
+int cont;
 {
 	if (audioDev->cflags & SLAB_AUDIODBG)
 		printf("getOSSRecordability(%i, %i)\n", audioDev->devID, cont);

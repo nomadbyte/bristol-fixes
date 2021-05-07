@@ -85,6 +85,7 @@ bristolMidiDevSanity(int dev)
 
 void
 bristolMidiPrintHandle(handle)
+int handle;
 {
 	printf("	Handle:	 %i\n", bmidi.handle[handle].handle);
 	printf("	State:   %i\n", bmidi.handle[handle].state);
@@ -103,6 +104,7 @@ bristolMidiPrintHandle(handle)
 
 int
 bristolMidiSanity(handle)
+int handle;
 {
 #ifdef DEBUG
 	printf("bristolMidiSanity(%i)\n", handle);

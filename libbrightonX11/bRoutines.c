@@ -25,6 +25,7 @@
 
 void *
 brightonX11malloc(size)
+size_t size;
 {
 	void *mem;
 
