@@ -155,7 +155,8 @@ checkcallbacks(bristolMidiMsg *msg)
 
 	for (i = 0; i < BRISTOL_MIDI_HANDLES; i++)
 	{
-		if ((bmidi.dev[bmidi.handle[i].dev].flags & BRISTOL_ACCEPT_SOCKET)
+		if (bmidi.handle[i].dev < 0
+			|| (bmidi.dev[bmidi.handle[i].dev].flags & BRISTOL_ACCEPT_SOCKET)
 			|| (bmidi.dev[i].flags & BRISTOL_CONN_JACK)
 			|| (bmidi.handle[i].state < 0))
 			continue;

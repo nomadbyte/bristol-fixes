@@ -401,7 +401,7 @@ bristolMidiDevRead(int dev, bristolMidiMsg *msg)
 int
 bristolGetMidiFD(int handle)
 {
-	return(bmidi.handle[handle].dev);
+	return(handle >= 0 ? bmidi.handle[handle].dev : -1);
 }
 
 static bristolMidiMsg post;
