@@ -1584,23 +1584,25 @@ initGearbox()
 				gearbox[compartments[i][2]].crosstalk[b][XT_FILT_3].wheel
 					= gearbox[compartments[i][2]].crosstalk[b][XT_FILT_4].wheel
 					= -1;
-	
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].wheel
-					= compartments[i - 1][3];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].gain
-					= defct[b][XT_FILT_1];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].wheel
-					= compartments[i + 1][3];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].gain
-					= defct[b][XT_FILT_2];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].wheel
-					= compartments[i - 1][2];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].gain
-					= defct[b][XT_FILT_3];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].wheel
-					= compartments[i + 1][2];
-				gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].gain
-					= defct[b][XT_FILT_4];
+
+				if (compartments[i][3] >= 0) {
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].wheel
+						= compartments[i - 1][3];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].gain
+						= defct[b][XT_FILT_1];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].wheel
+						= compartments[i + 1][3];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].gain
+						= defct[b][XT_FILT_2];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].wheel
+						= compartments[i - 1][2];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_1].gain
+						= defct[b][XT_FILT_3];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].wheel
+						= compartments[i + 1][2];
+					gearbox[compartments[i][3]].crosstalk[b][XT_FILT_2].gain
+						= defct[b][XT_FILT_4];
+				}
 			}
 		}
 	}
