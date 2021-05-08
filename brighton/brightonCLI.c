@@ -136,7 +136,6 @@ static char *b_blank = "                                                        
 //	if (RESOURCES->resources[btty.p].devlocn[btty.i].to == 1.0f)
 //	if (DEVICE(btty.i).to == 1.0f)
 
-brightonEvent event;
 extern void printBrightonHelp(int);
 
 typedef int (*clicom)();

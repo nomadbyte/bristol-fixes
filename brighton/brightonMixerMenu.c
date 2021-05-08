@@ -1179,11 +1179,11 @@ removeInterface(guiSynth *synth)
 	return(NULL);
 }
 
-brightonEvent event;
-
 int
 doAlarm()
 {
+	brightonEvent event;
+
 	event.type = BRIGHTON_FLOAT;
 	event.value = 0.0;
 
