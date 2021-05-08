@@ -25,23 +25,23 @@
 #ifdef BRISTOL_SEM_OPEN
 #include <fcntl.h>
 #include <sys/stat.h>
-static char sem_long_name[32];
-static char sem_short_name[32];
+GLOBAL_STATE static char sem_long_name[32];
+GLOBAL_STATE static char sem_short_name[32];
 #endif
 #endif /* BRISTOL_SEMAPHORE */
 #include <pthread.h>
 #include "bristolmidi.h"
 #include "bristol.h"
 
-extern int midiExitReq;
+GLOBAL_STATE extern int midiExitReq;
 
 extern int midiCheck();
 extern void initMidiRoutines();
 extern void checkcallbacks(bristolMidiMsg *);
 
-extern audioMain audiomain;
+GLOBAL_STATE extern audioMain audiomain;
 
-bristolMidiHandler bristolMidiRoutines;
+GLOBAL_STATE bristolMidiHandler bristolMidiRoutines;
 void printMidiMsg(bristolMidiMsg *);
 
 void
@@ -208,8 +208,8 @@ midiMsgHandler(bristolMidiMsg *msg, audioMain *audiomain)
 	return(0);
 }
 
-extern int exitReq;
-static char *bSMD = "128.1";
+GLOBAL_STATE extern int exitReq;
+static const char *bSMD = "128.1";
 
 void *
 midiThread(audioMain *audiomain)

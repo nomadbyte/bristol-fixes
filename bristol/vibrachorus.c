@@ -99,7 +99,7 @@ static int reset(bristolOP *operator, bristolOPParams *param)
 	return(0);
 }
 
-static float table[TABSIZE];
+GLOBAL_STATE static float table[TABSIZE];
 
 /*
  * Vibrachorus will take a signal and give it vibra. Depending on the gain the

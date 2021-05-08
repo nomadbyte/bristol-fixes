@@ -40,13 +40,13 @@
 
 #include "click.h"
 
-int clickset[128];
+GLOBAL_STATE static int clickset[128];
 
 #include "bristol.h"
 #include "hammond.h"
 
-float note_diff;
-int samplecount;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildHammondSound(bristolOP *, unsigned char);
@@ -60,25 +60,25 @@ static void fillHammondWave(bristolOP *);
  * The same is true of using single global result waves, wave[6] and wave[7].
  * These need to be moved to private address space, ie, we need more 
  * instantiation.
-static int sineform[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-static int wavelevel[16];
-static int waveindex[16] = {264, 23, 268, 491, 523, 708, 354, 112, 661};
-static int percussion[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+GLOBAL_STATE static int sineform[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+GLOBAL_STATE static int wavelevel[16];
+GLOBAL_STATE static int waveindex[16] = {264, 23, 268, 491, 523, 708, 354, 112, 661};
+GLOBAL_STATE static int percussion[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
  */
-static int *sineform;
-static int *wavelevel;
-static int *waveindex;
-static int *percussion;
+GLOBAL_STATE static int *sineform;
+GLOBAL_STATE static int *wavelevel;
+GLOBAL_STATE static int *waveindex;
+GLOBAL_STATE static int *percussion;
 
-float *wave1;
-float *wave2;
+GLOBAL_STATE static float *wave1;
+GLOBAL_STATE static float *wave2;
 
 /*
  * This can be a single list, it is used to generate the different pipes.
 static int sweeps[16] = {1, 2, 3, 4, 6, 8, 10, 12, 16, 0,0,0,0,0,0,0};
 static float sweeps[16] = {1, 1.5, 2, 4, 6, 8, 10, 12, 16, 0,0,0,0,0,0,0};
  */
-static float sweeps[16] = {2, 6, 4, 8, 12, 16, 20, 24, 32, 0,0,0,0,0,0,0};
+static const float sweeps[16] = {2, 6, 4, 8, 12, 16, 20, 24, 32, 0,0,0,0,0,0,0};
 
 /*
  * The name of this operator, IO count, and IO names.

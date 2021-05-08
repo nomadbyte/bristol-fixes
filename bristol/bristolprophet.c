@@ -31,22 +31,22 @@
  *
  * These should really be hidden in the pMods structure for multiple instances.
  */
-float *freqbuf = (float *) NULL;
-float *osc3buf = (float *) NULL;
-float *wmodbuf = (float *) NULL;
-float *pmodbuf = (float *) NULL;
-float *adsrbuf = (float *) NULL;
-float *filtbuf = (float *) NULL;
-float *noisebuf = (float *) NULL;
-float *oscbbuf = (float *) NULL;
-float *oscabuf = (float *) NULL;
-float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *osc3buf = (float *) NULL;
+GLOBAL_STATE static float *wmodbuf = (float *) NULL;
+GLOBAL_STATE static float *pmodbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *oscbbuf = (float *) NULL;
+GLOBAL_STATE static float *oscabuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
 
-float *tribuf = (float *) NULL;
-float *sqrbuf = (float *) NULL;
-float *rampbuf = (float *) NULL;
+GLOBAL_STATE static float *tribuf = (float *) NULL;
+GLOBAL_STATE static float *sqrbuf = (float *) NULL;
+GLOBAL_STATE static float *rampbuf = (float *) NULL;
 
-extern int s440holder;
+GLOBAL_STATE extern int s440holder;
 
 int
 prophetController(Baudio *baudio, u_char operator, u_char controller,
@@ -621,7 +621,7 @@ printf("removing one prophet\n");
 }
 
 int
-bristolProphetInit(audioMain *audiomain, Baudio *baudio)
+bristolProphetInitModel(audioMain *audiomain, Baudio *baudio, int model)
 {
 printf("initialising one prophet\n");
 	baudio->soundCount = 8; /* Number of operators in this voice (MM) */
@@ -651,7 +651,14 @@ printf("initialising one prophet\n");
 	baudio->destroy = bristolProphetDestroy;
 	baudio->operate = operateOneProphet;
 	baudio->preops = operateProphetPreops;
-	baudio->postops = operateProphetPostops;
+	if (model != 52)
+		baudio->postops = operateProphetPostops;
+	else {
+		/*
+		 * Put in a vibrachorus on our effects list.
+		 */
+		initSoundAlgo(12, 0, baudio, audiomain, baudio->effect);
+	}
 
 	if (freqbuf == 0)
 		freqbuf = (float *) bristolmalloc0(audiomain->segmentsize);
@@ -669,11 +676,23 @@ printf("initialising one prophet\n");
 		oscabuf = (float *) bristolmalloc0(audiomain->segmentsize);
 
 	baudio->mixlocals = (float *) bristolmalloc0(sizeof(pmods));
-	((pmods *) baudio->mixlocals)->voicecount = baudio->voicecount;
-	/* Default center pan */
-	((pmods *) baudio->mixlocals)->pan = 0.5;
-	baudio->mixflags |= BRISTOL_STEREO;
+	if (model != 52)
+	{
+		((pmods *) baudio->mixlocals)->voicecount = baudio->voicecount;
+		/* Default center pan */
+		((pmods *) baudio->mixlocals)->pan = 0.5;
+		baudio->mixflags |= BRISTOL_STEREO;
+	} else {
+		((pmods *) baudio->mixlocals)->pan = 0.0;
+//		baudio->mixflags |= BRISTOL_STEREO;
+	}
 	baudio->mixflags |= P_UNISON;
 	return(0);
+}
+
+int
+bristolProphetInit(audioMain *audiomain, Baudio *baudio)
+{
+	return bristolProphetInitModel(audiomain, baudio, 1);
 }
 

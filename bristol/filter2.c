@@ -73,7 +73,7 @@
 #define FILTER_OUT_IND 2
 
 /* This is ugly, we shuold correctly pull it out of the operator template */
-static float srate;
+GLOBAL_STATE static float srate;
 
 #define _f_lim_r (20000 / (sr * 2)) /* Upper limit with resampling */
 #define _f_lim (20000 / sr)
@@ -147,7 +147,7 @@ static int destroy(bristolOP *operator)
 }
 
 #define ROOT2 1.4142135623730950488
-double pidsr;
+GLOBAL_STATE static double pidsr;
 
 /*
  * Reset any local memory information.
@@ -366,9 +366,9 @@ chamberlain(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFILT
 	return(0);
 }
 
-static float scale = 0.0000001; // 0.000000001;
-static int dngx1 = 0x67452301;
-static int dngx2 = 0xefcdab89;
+static const float scale = 0.0000001; // 0.000000001;
+GLOBAL_STATE static int dngx1 = 0x67452301;
+GLOBAL_STATE static int dngx2 = 0xefcdab89;
 
 static int
 huovilainen24(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFILTERlocal *local, bristolVoice *voice, int count)

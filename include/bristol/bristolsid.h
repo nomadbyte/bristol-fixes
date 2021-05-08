@@ -172,7 +172,7 @@
  */
 #define B_S_F_SCALER 0.000488520
 
-extern unsigned short freqmap[128];
+extern const unsigned short freqmap[128];
 
 /*
  * Finally, these are the two single access methods to the chip emulation, one

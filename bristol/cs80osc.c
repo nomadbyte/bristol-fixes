@@ -41,8 +41,8 @@
 #include "cs80osc.h"
 #include "bristolcs80.h"
 
-float note_diff;
-int samplecount;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildCs80Sound(bristolOP *, bristolOPParams *);
@@ -64,7 +64,7 @@ static void buildCs80Sound(bristolOP *, bristolOPParams *);
 {16', 8', 5-1/3', 4, 2-2/3', 2', 0,0,0,0,0,0,0};
 static float sweeps[16] = {1, 2, 3, 4, 6, 8, 8, 8, 8, 8, 4,4,4,4,4,8};
  */
-static float sweeps[16] = {2, 4, 6, 8, 12, 16, 8, 8, 8, 8, 4,4,4,4,4,8};
+static const float sweeps[16] = {2, 4, 6, 8, 12, 16, 8, 8, 8, 8, 4,4,4,4,4,8};
 
 /*
  * The name of this operator, IO count, and IO names.

@@ -31,22 +31,22 @@ extern void mapVelocityCurve(int, float []);
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *adsr1buf = (float *) NULL;
-static float *adsr2buf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *dco1buf = (float *) NULL;
-static float *dco2buf = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *outbuf = (float *) NULL;
-static float *lfo1buf = (float *) NULL;
-static float *lfo2buf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *scratchbuf = (float *) NULL;
-static float *pwmbuf = (float *) NULL;
-static float *vcofmbuf = (float *) NULL;
-static float *modbuf = (float *) NULL;
-static float *syncbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *adsr1buf = (float *) NULL;
+GLOBAL_STATE static float *adsr2buf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *dco1buf = (float *) NULL;
+GLOBAL_STATE static float *dco2buf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *outbuf = (float *) NULL;
+GLOBAL_STATE static float *lfo1buf = (float *) NULL;
+GLOBAL_STATE static float *lfo2buf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *pwmbuf = (float *) NULL;
+GLOBAL_STATE static float *vcofmbuf = (float *) NULL;
+GLOBAL_STATE static float *modbuf = (float *) NULL;
+GLOBAL_STATE static float *syncbuf = (float *) NULL;
 
 /*
  * These need to go into some local structure for multiple instances
@@ -76,7 +76,7 @@ static float *syncbuf = (float *) NULL;
 #define JUPITER_XMOD_ENV	0x00200000
 #define JUPITER_MOD_ENABLE	0x00400000
 
-typedef struct bMods {
+GLOBAL_STATE typedef struct bMods {
 	unsigned int flags;
 	float *lout;
 	float *rout;
@@ -397,7 +397,7 @@ u_char controller, float value)
  * track the most recent velocity at the expense of envelope retriggers. At
  * steady state the envelope should continue to open as expected.
  */
-static int lfo1exclusion = 0;
+GLOBAL_STATE static int lfo1exclusion = 0;
 
 int
 jupiterPreops(audioMain *audiomain, Baudio *baudio,

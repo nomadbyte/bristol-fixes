@@ -29,19 +29,19 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *pmodbuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *oscbbuf = (float *) NULL;
-static float *oscabuf = (float *) NULL;
-static float *sbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *pmodbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *oscbbuf = (float *) NULL;
+GLOBAL_STATE static float *oscabuf = (float *) NULL;
+GLOBAL_STATE static float *sbuf = (float *) NULL;
 
 /*
  * These need to go into some local structure for multiple instances
  * of the juno - malloc()ed into the baudio->mixlocals.
  */
-typedef struct jMods {
+GLOBAL_STATE typedef struct jMods {
 	float lfo_fgain;
 	unsigned int flags;
 	void *lfolocals;
@@ -60,7 +60,7 @@ typedef struct jMods {
 	int chspeed;
 } jmods;
 
-extern int s440holder;
+GLOBAL_STATE extern int s440holder;
 
 int
 junoController(Baudio *baudio, u_char operator,

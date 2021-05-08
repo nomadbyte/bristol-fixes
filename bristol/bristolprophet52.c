@@ -23,78 +23,12 @@
 #include "bristolmm.h"
 #include "bristolprophet.h"
 
-extern int operateOneProphet(audioMain *, Baudio *, bristolVoice *, float *);
-extern int prophetController(Baudio *, u_char, u_char, float);
-extern int operateProphetPreops(audioMain *, Baudio *, bristolVoice *, float *);
-extern int bristolProphetDestroy(audioMain *, Baudio *);
-
-extern float *freqbuf;
-extern float *osc3buf;
-extern float *wmodbuf;
-extern float *pmodbuf;
-extern float *adsrbuf;
-extern float *filtbuf;
-extern float *noisebuf;
-extern float *oscbbuf;
-extern float *oscabuf;
-extern float *scratchbuf;
+extern int
+bristolProphetInitModel(audioMain *audiomain, Baudio *baudio, int model);
 
 int
 bristolProphet52Init(audioMain *audiomain, Baudio *baudio)
 {
-printf("initialising one prophet\n");
-	baudio->soundCount = 8; /* Number of operators in this voice (MM) */
-	/*
-	 * Assign an array of sound pointers.
-	 */
-	baudio->sound = (bristolSound **)
-		bristolmalloc0(sizeof(bristolOP *) * baudio->soundCount);
-	baudio->effect = (bristolSound **)
-		bristolmalloc0(sizeof(bristolOP *) * baudio->soundCount);
-
-	initSoundAlgo(8, 0, baudio, audiomain, baudio->sound);
-	initSoundAlgo(8, 1, baudio, audiomain, baudio->sound);
-	initSoundAlgo(16, 2, baudio, audiomain, baudio->sound);
-	/* An ADSR */
-	initSoundAlgo(1, 3, baudio, audiomain, baudio->sound);
-	/* A filter */
-	initSoundAlgo(3, 4, baudio, audiomain, baudio->sound);
-	/* Another ADSR */
-	initSoundAlgo(1, 5, baudio, audiomain, baudio->sound);
-	/* An amplifier */
-	initSoundAlgo(2, 6, baudio, audiomain, baudio->sound);
-	/* An noise source */
-	initSoundAlgo(4, 7, baudio, audiomain, baudio->sound);
-
-	baudio->param = prophetController;
-	baudio->destroy = bristolProphetDestroy;
-	baudio->operate = operateOneProphet;
-	baudio->preops = operateProphetPreops;
-
-	/*
-	 * Put in a vibrachorus on our effects list.
-	 */
-	initSoundAlgo(12, 0, baudio, audiomain, baudio->effect);
-
-	if (freqbuf == 0)
-		freqbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (scratchbuf == 0)
-		scratchbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (pmodbuf == 0)
-		pmodbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (adsrbuf == 0)
-		adsrbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (filtbuf == 0)
-		filtbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (oscbbuf == 0)
-		oscbbuf = (float *) bristolmalloc0(audiomain->segmentsize);
-	if (oscabuf == 0)
-		oscabuf = (float *) bristolmalloc0(audiomain->segmentsize);
-
-	baudio->mixlocals = (float *) bristolmalloc0(sizeof(pmods));
-	((pmods *) baudio->mixlocals)->pan = 0.0;
-//	baudio->mixflags |= BRISTOL_STEREO;
-	baudio->mixflags |= P_UNISON;
-	return(0);
+	return bristolProphetInitModel(audiomain, baudio, 52);
 }
 

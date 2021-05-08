@@ -51,7 +51,7 @@
 #include "bristol.h"
 #include "env5stage.h"
 
-static float samplerate = 0;
+GLOBAL_STATE static float samplerate = 0;
 
 /*
  * The name of this operator, IO count, and IO names.

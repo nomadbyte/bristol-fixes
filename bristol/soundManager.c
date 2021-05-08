@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include "bristol.h"
 
-extern audioMain audiomain;
+GLOBAL_STATE extern audioMain audiomain;
 extern void midithreadexit();
 
 bristolSound *

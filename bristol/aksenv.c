@@ -46,7 +46,7 @@
 
 #define AKSENV_OUT_IND 0
 
-static float rate;
+GLOBAL_STATE static float rate;
 
 /*
  * Reset any local memory information.

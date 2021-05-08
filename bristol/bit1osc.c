@@ -46,8 +46,8 @@
 #include "bristolblo.h"
 #include "bit1osc.h"
 
-static float note_diff;
-int samplecount;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildBitoneSound(bristolOP *, bristolOPParams *);
@@ -67,7 +67,7 @@ static void buildBitoneSound(bristolOP *, bristolOPParams *);
  *
  * We have 16, 8, 4, 2, 1
  */
-static float sweeps[16] = {2, 4, 8, 16, 1, 32, 12, 20, 24, 32, 0,0,0,0,0,0};
+static const float sweeps[16] = {2, 4, 8, 16, 1, 32, 12, 20, 24, 32, 0,0,0,0,0,0};
 
 /*
  * The name of this operator, IO count, and IO names.

@@ -42,8 +42,8 @@ extern int bristolJackInterface();
 
 /*int atStatus = 0; */
 
-extern int dupfd;
-extern char *outputfile;
+GLOBAL_STATE extern int dupfd;
+GLOBAL_STATE extern char *outputfile;
 extern int buildCurrentTable(Baudio *, float);
 extern void initMicrotonalTable(fTab []);
 

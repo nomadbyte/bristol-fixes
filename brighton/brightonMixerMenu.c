@@ -1179,6 +1179,7 @@ removeInterface(guiSynth *synth)
 	return(NULL);
 }
 
+#if 0
 brightonEvent event;
 
 int
@@ -1190,4 +1191,10 @@ doAlarm()
 /*	brightonSendEvent((void *) theSynth->win, 2, DISPLAY1 - 1, &event); */
 	return(0);
 }
-
+#else
+int
+doAlarm()
+{
+	return(0);
+}
+#endif

@@ -38,7 +38,7 @@
 #include "bristol.h"
 #include "aksdco.h"
 
-static float note_diff, *zbuf;
+GLOBAL_STATE static float note_diff, *zbuf;
 
 #define BRISTOL_SQR 4
 #define SINE_LIM 0.05f

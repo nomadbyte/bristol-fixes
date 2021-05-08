@@ -32,20 +32,20 @@ extern void mapVelocityCurve(int, float []);
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *adsr1buf = (float *) NULL;
-static float *adsr2buf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *dco1buf = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *outbuf = (float *) NULL;
-static float *lfo1buf = (float *) NULL;
-static float *lfo2buf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *scratchbuf = (float *) NULL;
-static float *pwmbuf = (float *) NULL;
-static float *sinebuf = (float *) NULL;
-static float *modbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *adsr1buf = (float *) NULL;
+GLOBAL_STATE static float *adsr2buf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *dco1buf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *outbuf = (float *) NULL;
+GLOBAL_STATE static float *lfo1buf = (float *) NULL;
+GLOBAL_STATE static float *lfo2buf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *pwmbuf = (float *) NULL;
+GLOBAL_STATE static float *sinebuf = (float *) NULL;
+GLOBAL_STATE static float *modbuf = (float *) NULL;
 
 /*
  * These need to go into some local structure for multiple instances

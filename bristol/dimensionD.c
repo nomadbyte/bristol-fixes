@@ -96,7 +96,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 	return(0);
 }
 
-static float sinewave[1024];
+GLOBAL_STATE static float sinewave[1024];
 
 /*
  * Reset any local memory information.

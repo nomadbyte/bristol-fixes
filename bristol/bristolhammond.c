@@ -24,10 +24,10 @@
 #include "bristol.h"
 #include "rotary.h"
 
-static float *tmpbuf1 = (float *) NULL;
-static float *tmpbuf2 = (float *) NULL;
-static float *tmpbuf3 = (float *) NULL;
-static float *tmpbuf4 = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf1 = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf2 = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf3 = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf4 = (float *) NULL;
 
 #define HAMMOND_VIBRA 0x01
 #define HAMMOND_SERMON 0x02
@@ -35,7 +35,7 @@ static float *tmpbuf4 = (float *) NULL;
 extern int bristolGlobalController(struct BAudio *, u_char, u_char, float);
 extern int initthesermon(int, int, int);
 
-static int sineform = 0, samplecount, samplerate;
+GLOBAL_STATE static int sineform = 0, samplecount, samplerate;
 static int operateHammondPostops();
 
 int
@@ -208,7 +208,7 @@ extern void therequiem(float *, float *, int);
  * call will find this zeroed. Apart from that, at 500mips per go, thesermon()
  * is rather heavyweight.
  */
-int dosermon = 1;
+GLOBAL_STATE static int dosermon = 1;
 
 int
 operateHammondPreops(audioMain *audiomain, Baudio *baudio,
@@ -253,8 +253,8 @@ bristolVoice *voice, register float *startbuf)
 }
 
 /* Should bury this somewhere..... */
-float pbHLast;
-float pbLLast;
+GLOBAL_STATE static float pbHLast;
+GLOBAL_STATE static float pbLLast;
 
 static int
 operateHammondPostops(audioMain *audiomain, Baudio *baudio,

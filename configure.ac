@@ -62,9 +62,9 @@ AC_ARG_ENABLE(version_check, [  --disable-version-check	ignore preinstalled vers
 if test "x$TRY_VC" = 'xyes'
 then
 	which startBristol > /dev/null 2>&1
-	if test $? == 0; then showErrMsg1; fi
+	if test $? = 0; then showErrMsg1; fi
 	which bristol > /dev/null 2>&1
-	if test $? == 0; then showErrMsg1; fi
+	if test $? = 0; then showErrMsg1; fi
 	if test -f ${prefix}/bin/bristol; then showErrMsg1; fi
 fi
 
@@ -98,6 +98,10 @@ AC_CHECK_HEADER(X11/Xlib.h, [], [HAVE_XHEADERS=false])
 AC_CHECK_HEADER(X11/Xutil.h, [], [HAVE_XHEADERS=false])
 AC_CHECK_HEADER(X11/Xos.h, [], [HAVE_XHEADERS=false])
 AC_CHECK_HEADER(X11/Xatom.h, [], [HAVE_XHEADERS=false])
+
+# NOTE(jpc) a marker for global variables, so I can rework this later
+CFLAGS="$CFLAGS -DGLOBAL_STATE="
+CPPFLAGS="$CPPFLAGS -DGLOBAL_STATE="
 
 # Checks for typedefs, structures, and compiler characteristics.
 
@@ -166,7 +170,7 @@ AC_SUBST(_BRISTOL_VOICES)
 
 BRISTOL_LIN_ATTACK=-DBRISTOL_LIN_ATTACK
 AC_ARG_ENABLE(exp-attack, [  --enable-exp-attack		enable exponential attack], USE_EXP_ATTACK=yes , USE_EXP_ATTACK=no )
-if test "x$USE_EXP_ATTACK" == "xyes"
+if test "x$USE_EXP_ATTACK" = "xyes"
 then
 	BRISTOL_LIN_ATTACK=
 fi
@@ -176,7 +180,7 @@ BRISTOL_SEM_OPEN=
 BRISTOL_SEMAPHORE=
 AC_ARG_ENABLE(semaphore, [  --enable-semaphore		enable engine semaphores ],
 			USE_SEMAPHORE=yes , USE_SEMAPHORE=no )
-if test "x$USE_SEMAPHORE" == "xyes"
+if test "x$USE_SEMAPHORE" = "xyes"
 then
 	BRISTOL_SEMAPHORE=-DBRISTOL_SEMAPHORE
 
@@ -194,7 +198,7 @@ AC_SUBST(BRISTOL_SEMAPHORE)
 BRISTOL_BARRIER=
 AC_ARG_ENABLE(memory-barrier, [  --enable-memory-barrier	enable ringbuffer barrier],
 			USE_BARRIER=yes , USE_BARRIER=no )
-if test "x$USE_BARRIER" == "xyes"
+if test "x$USE_BARRIER" = "xyes"
 then
 	BRISTOL_BARRIER=-DUSE_MLOCK
 fi
@@ -427,7 +431,7 @@ echo \| Build with sem_open ............................ : true
 fi
 fi
 
-if test $USE_BARRIER == "yes"; then
+if test $USE_BARRIER = "yes"; then
 echo \| Build with jrb memory barrier .................. : true
 fi
 
@@ -454,7 +458,7 @@ echo \| Default voicecount ............................. : BRISTOL_VOICECOUNT=$_
 if test $BRR != 10; then
 echo \| Envelope max ramp time ......................... : $BRR seconds
 fi
-if test x$USE_EXP_ATTACK == "xyes"; then
+if test x$USE_EXP_ATTACK = "xyes"; then
 echo \| Envelope attack type ........................... : exponential
 fi
 echo \| author ......................................... : Nick Copeland

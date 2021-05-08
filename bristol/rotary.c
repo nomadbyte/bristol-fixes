@@ -83,8 +83,8 @@ some other parameter that I need to alter?
 
 static void newValvify(float *, int, float);
 #define ROOT2 1.4142135623730950488
-static float pidsr;
-static int stopped = 0;
+GLOBAL_STATE static float pidsr;
+GLOBAL_STATE static int stopped = 0;
 
 /*
  * Reset any local memory information.
@@ -566,7 +566,7 @@ iSnewValvify(register float *busData, register int count, register float valve)
 	}
 }
 
-static float lpf = 0; // need to bury in a local structure
+GLOBAL_STATE static float lpf = 0; // need to bury in a local structure
 
 static void
 newValvify(register float *busData, register int count, register float valve)

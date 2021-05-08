@@ -95,10 +95,10 @@
 
 #define EMULATION 15
 
-static float note_diff;
+GLOBAL_STATE static float note_diff;
 
 /* Detuning for the different tendencies, controlled by DETUNE */
-static float dt[TENDENCY_COUNT] = {
+static const float dt[TENDENCY_COUNT] = {
  0.043,
  0.073,
  0.029,

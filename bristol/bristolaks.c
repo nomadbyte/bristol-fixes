@@ -43,18 +43,18 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *tmpbuf = (float *) NULL;
-static float *patchbuf1 = (float *) NULL;
-static float *patchbuf2 = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *tmpbuf = (float *) NULL;
+GLOBAL_STATE static float *patchbuf1 = (float *) NULL;
+GLOBAL_STATE static float *patchbuf2 = (float *) NULL;
 
 /*
  * All buffers are going to be collapsed into a single 'megabuf', this will be
  * used for all local information for every possible one of these voices. As
  * such it might get big, but will allow for arbitrary buffering.
  */
-static struct {
+GLOBAL_STATE static struct {
 	float *buf;
 	float *outputs[128][AKS_OUTCOUNT]; /* offsets into buffer for data */
 /*	float *inputs[128][AKS_INCOUNT]; pointer offsets for input source */

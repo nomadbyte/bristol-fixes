@@ -32,16 +32,16 @@
  * audio threads, unless we ensure a single thread deals with any given algo
  * type, since then they are only used sequentially.
  */
-static float *freqbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *lfosh = (float *) NULL;
-static float *lfosine = (float *) NULL;
-static float *lfosquare = (float *) NULL;
-static float *osc1buf = (float *) NULL;
-static float *osc2buf = (float *) NULL;
-static float *scratch = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *lfosh = (float *) NULL;
+GLOBAL_STATE static float *lfosine = (float *) NULL;
+GLOBAL_STATE static float *lfosquare = (float *) NULL;
+GLOBAL_STATE static float *osc1buf = (float *) NULL;
+GLOBAL_STATE static float *osc2buf = (float *) NULL;
+GLOBAL_STATE static float *scratch = (float *) NULL;
 
 int
 axxeController(Baudio *baudio, u_char operator, u_char controller, float value)

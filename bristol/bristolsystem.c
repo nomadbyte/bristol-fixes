@@ -36,7 +36,7 @@ extern int bristolJackInterface();
 #endif
 extern void allNotesOff();
 
-static int initCount = 0;
+GLOBAL_STATE static int initCount = 0;
 
 int
 bristolgetsid(Baudio *baudio, int sid)

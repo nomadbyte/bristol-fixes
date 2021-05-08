@@ -40,8 +40,8 @@
 #include "bristolblo.h"
 #include "vox.h"
 
-float note_diff;
-int samplecount;
+GLOBAL_STATE static float note_diff;
+GLOBAL_STATE static int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildVoxSound(bristolOP *, bristolOPParams *, unsigned char);
@@ -57,10 +57,10 @@ static void fillVoxM2Wave(bristolOP *, bristolOPParams *);
  * These need to be moved to private address space, ie, we need more 
  * instantiation.
  */
-static int *wavelevel;
+GLOBAL_STATE static int *wavelevel;
 
-float *wave1;
-float *wave2;
+GLOBAL_STATE static float *wave1;
+GLOBAL_STATE static float *wave2;
 
 /*
  * This can be a single list, it is used to generate the different pipes.
@@ -69,7 +69,7 @@ float *wave2;
 {16', 8', 4', 5-1/3', 2-2/3', 2', 1-1/3', 1-1/5', 1', 0,0,0,0,0,0,0};
 { 2,  4,  8,      6,     12, 16,     20,     24, 32, 0,0,0,0,0,0,0};
  */
-static float sweeps[16] = {2, 4, 8, 6, 12, 16, 20, 24, 32, 0,0,0,0,0,0,0};
+static const float sweeps[16] = {2, 4, 8, 6, 12, 16, 20, 24, 32, 0,0,0,0,0,0,0};
 
 /*
  * The name of this operator, IO count, and IO names.

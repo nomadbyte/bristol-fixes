@@ -23,25 +23,25 @@
 #include "bristol.h"
 #include "bristolexplorer.h"
 
-static float *freqbuf = (float *) NULL;
-static float *osc3buf = (float *) NULL;
-static float *osc1buf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *filtbuf2 = (float *) NULL;
-static float *lfotri = (float *) NULL;
-static float *lforamp = (float *) NULL;
-static float *lfosh = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *mbuf1 = (float *) NULL;
-static float *mbuf2 = (float *) NULL;
-static float *onbuf = (float *) NULL;
-static float *zerobuf = (float *) NULL;
-static float *syncbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *osc3buf = (float *) NULL;
+GLOBAL_STATE static float *osc1buf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf2 = (float *) NULL;
+GLOBAL_STATE static float *lfotri = (float *) NULL;
+GLOBAL_STATE static float *lforamp = (float *) NULL;
+GLOBAL_STATE static float *lfosh = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *mbuf1 = (float *) NULL;
+GLOBAL_STATE static float *mbuf2 = (float *) NULL;
+GLOBAL_STATE static float *onbuf = (float *) NULL;
+GLOBAL_STATE static float *zerobuf = (float *) NULL;
+GLOBAL_STATE static float *syncbuf = (float *) NULL;
 
 extern int buildCurrentTable(Baudio *, float);
 
-extern int s440holder;
+GLOBAL_STATE extern int s440holder;
 
 static int
 expGlobalController(Baudio *baudio, u_char controller,

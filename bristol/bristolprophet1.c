@@ -31,23 +31,23 @@
  *
  * These should really be hidden in the pMods structure for multiple instances.
  */
-static float *freqbuf = (float *) NULL;
-static float *tfreqbuf = (float *) NULL;
-static float *lfobuf = (float *) NULL;
-static float *wmodbuf = (float *) NULL;
-static float *dmodbuf = (float *) NULL;
-static float *adsrbuf = (float *) NULL;
-static float *filtbuf = (float *) NULL;
-static float *noisebuf = (float *) NULL;
-static float *oscbbuf = (float *) NULL;
-static float *oscabuf = (float *) NULL;
-static float *scratchbuf = (float *) NULL;
+GLOBAL_STATE static float *freqbuf = (float *) NULL;
+GLOBAL_STATE static float *tfreqbuf = (float *) NULL;
+GLOBAL_STATE static float *lfobuf = (float *) NULL;
+GLOBAL_STATE static float *wmodbuf = (float *) NULL;
+GLOBAL_STATE static float *dmodbuf = (float *) NULL;
+GLOBAL_STATE static float *adsrbuf = (float *) NULL;
+GLOBAL_STATE static float *filtbuf = (float *) NULL;
+GLOBAL_STATE static float *noisebuf = (float *) NULL;
+GLOBAL_STATE static float *oscbbuf = (float *) NULL;
+GLOBAL_STATE static float *oscabuf = (float *) NULL;
+GLOBAL_STATE static float *scratchbuf = (float *) NULL;
 
-static float *tribuf = (float *) NULL;
-static float *sqrbuf = (float *) NULL;
-static float *rampbuf = (float *) NULL;
+GLOBAL_STATE static float *tribuf = (float *) NULL;
+GLOBAL_STATE static float *sqrbuf = (float *) NULL;
+GLOBAL_STATE static float *rampbuf = (float *) NULL;
 
-extern int s440holder;
+GLOBAL_STATE extern int s440holder;
 
 int
 pro1Controller(Baudio *baudio, u_char operator, u_char controller,
