@@ -692,7 +692,8 @@ bristolArpegReVoice(Baudio *baudio, bristolVoice *voice, float sr)
 			 * We are going to use just the first voice in our list and cycle
 			 * it through the frequencies of the keys held.
 			 */
-			if ((key = baudio->arpeggio.a.notes[baudio->arpeggio.a.current].k)
+			if (baudio->arpeggio.a.current < 0
+				|| (key = baudio->arpeggio.a.notes[baudio->arpeggio.a.current].k)
 				< 0)
 				return(-1);
 			key += baudio->arpeggio.a.octave * 12;
