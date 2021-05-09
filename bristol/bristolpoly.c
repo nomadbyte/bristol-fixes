@@ -830,8 +830,8 @@ polyNoteOff(audioMain *audiomain, Baudio *baudio, bristolVoice *voice)
 			= mods->keydata[a].cFreqmult;
 		mods->keydata[0].key = mods->keydata[1].key
 			= mods->keydata[a].key;
-		mods->keydata[0].lastkey = mods->keydata[0].lastkey
-			= mods->keydata[1].lastkey;
+		mods->keydata[0].lastkey = mods->keydata[1].lastkey
+			= mods->keydata[a].lastkey;
 
 		mods->keydata[2].cFreq = mods->keydata[3].cFreq
 			= mods->keydata[b].cFreq;
