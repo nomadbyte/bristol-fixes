@@ -141,7 +141,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		gain = 0.0833 * param->param[0].float_val * param->param[1].float_val
 			* param->param[2].float_val;
 
-		for (; count > 0;count-=8)
+		for (; count > 0; count-=8)
 		{
 			*ob++ = *ib1++ * *ib2++ * gain;
 			*ob++ = *ib1++ * *ib2++ * gain;
@@ -155,7 +155,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	} else {
 		gain = param->param[0].float_val;
 
-		for (; count > 0;count-=8)
+		for (; count > 0; count-=8)
 		{
 			if (*ib2++ >= 0)
 				*ob++ = *ib1++ * gain;

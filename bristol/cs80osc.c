@@ -243,7 +243,7 @@ register int count, register int width)
 	while (wtp < 0)
 		wtp += CS80_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		gdelta = wtp - ((float) ((int) wtp));
 		/*
@@ -313,7 +313,7 @@ register int count)
 	while (wtp < 0)
 		wtp += CS80_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		if (((int) wtp) == CS80_WAVE_SZE_M) {
 			ob[obp] += (wt1[0] * (wtp - ((float) ((int) wtp)))
@@ -623,7 +623,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * CS80_WAVE_GAIN;
 
@@ -681,7 +681,7 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosine[i];
 				return;
 			}
@@ -695,7 +695,7 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = bloramp[i];
 				return;
 			}
@@ -711,14 +711,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosquare[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -728,15 +728,15 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
+					for (i = 0; i < count; i++)
 						mem[i] = blotriangle[i];
 					return;
 				}
 
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -CS80_WAVE_GAIN
 						+ ((float) i / (count / 2)) * CS80_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = CS80_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* CS80_WAVE_GAIN;

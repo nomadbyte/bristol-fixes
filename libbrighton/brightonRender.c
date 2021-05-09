@@ -1032,7 +1032,7 @@ src->width, src->height, primary);
 			 * Set pixel. Since we are using brightonBitmaps we do not have to
 			 * go around using X library calls to set the pixel states.
 			 *
-			 * We may want to put in here isblue then destpixel;continue;
+			 * We may want to put in here isblue then destpixel; continue;
 			 */
 			if (isblue(ix + iy * src->width, palette, pixels))
 				c = scratch[(int) (i + j * dest->width)];

@@ -126,7 +126,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	cbuf = specs->spec.io[ESWITCHMOD_CLOCK].buf;
 	ob = specs->spec.io[ESWITCHMOD_OUT].buf;
 	
-	for (; count > 0;count-=8)
+	for (; count > 0; count-=8)
 	{
 		/*
 		 * If the clock signal is greater than zero take the next sample from

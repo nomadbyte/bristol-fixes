@@ -222,7 +222,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 11 notes.
 				 */
-				for (i = 0; i < 11;i++)
+				for (i = 0; i < 11; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -378,14 +378,22 @@ addpwm(register float *dst, register float *src, register float value, register 
 {
 	for (; c > 0; c-=8)
 	{
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
-		if ((*dst = *src++ + value) > 0.9) *dst = 0.9; dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
+		if ((*dst = *src++ + value) > 0.9) *dst = 0.9;
+		dst++;
 	}
 }
 

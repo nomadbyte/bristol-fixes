@@ -540,7 +540,8 @@ main(int argc, char **argv)
 			if ((audiomain.iocount = atoi(argv[argCount + 1]))
 				> BRISTOL_JACK_MULTI)
 				audiomain.iocount = BRISTOL_JACK_MULTI;
-				argCount++;
+
+			argCount++;
 		}
 
 		if (strcmp(argv[argCount], "-autoconn") == 0)

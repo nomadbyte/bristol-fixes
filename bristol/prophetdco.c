@@ -196,7 +196,7 @@ static int pdcoparam(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -296,7 +296,7 @@ static int pdcoparam(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 12 semitones.
 				 */
-				for (i = 0; i < 12;i++)
+				for (i = 0; i < 12; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -499,7 +499,7 @@ blo.harmonics, voice->key.key * transp < 95?
 	 * Go jumping through the wavetable, with each jump defined by the value
 	 * given on our input line, making sure we fill one output buffer.
 	 */
-	for (obp = 0; obp < count;obp++, pwmb++)
+	for (obp = 0; obp < count; obp++, pwmb++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer. This 
@@ -810,7 +810,7 @@ fillPDsine(float *mem, int count, int compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) compress));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * compress));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * BRISTOL_VPO;
 
@@ -843,7 +843,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 		case 1:
@@ -855,14 +855,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosquare[i];
-					return;
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -BRISTOL_SQR;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -870,9 +870,9 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a pulse wave - the prophet dco does pwm.
 			 */
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			return;
 		case 3:
@@ -885,7 +885,7 @@ fillWave(float *mem, int count, int type)
 			for (; i < count; i++)
 				mem[i] = ((float) i / count) * BRISTOL_VPO * 2.0 -
 					BRISTOL_VPO * 2;
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_VPO * 2.0;
 			mem[0] = 0;
 			mem[count - 1] = mem[1]
@@ -893,9 +893,9 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = bloramp[i];
-					return;
+				return;
 			}
 			fillPDsine(mem, count, 5);
 			return;
@@ -906,14 +906,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blotriangle[i];
-					return;
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (-BRISTOL_VPO
 					+ ((float) i * 2 / (count / 2)) * BRISTOL_VPO) * 2;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (BRISTOL_VPO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_VPO)
 						* 2;
@@ -947,7 +947,7 @@ fillWave(float *mem, int count, int type)
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 			{
 				if ((mem[i] =
 					tan(M_PI * ((double) i) / count) * BRISTOL_VPO / 16)
@@ -961,7 +961,7 @@ fillWave(float *mem, int count, int type)
 			/*
 			 * Sine wave - added as a part of the OBX extensions.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 	}

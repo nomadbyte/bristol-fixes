@@ -35,7 +35,7 @@ bufmerge(register float *src, register float gain1, register float *dst,
 {
 	float *buf3 = dst;
 
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*dst++ = *buf3++ * gain2 + *src++ * gain1;
 		*dst++ = *buf3++ * gain2 + *src++ * gain1;
@@ -64,7 +64,7 @@ bufmerge(register float *src, register float gain1, register float *dst,
 void
 bufadd(register float *buf1, register float add, register int size)
 {
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*buf1++ += add;
 		*buf1++ += add;
@@ -88,7 +88,7 @@ bufadd(register float *buf1, register float add, register int size)
 void
 bufset(register float *buf1, register float set, register int size)
 {
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*buf1++ = set;
 		*buf1++ = set;

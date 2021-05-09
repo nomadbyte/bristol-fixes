@@ -574,7 +574,7 @@ bristolVoice *voice, register float *startbuf)
 	/*
 	 * Gain into the rightbuf, adjust the leftbuf;
 	 */
-	for (;samplecount > 0; samplecount-=8)
+	for (; samplecount > 0; samplecount-=8)
 	{
 		*rbuf++ = *lbuf++ * g;
 		*rbuf++ = *lbuf++ * g;
@@ -590,7 +590,7 @@ bristolVoice *voice, register float *startbuf)
 	g = (1.0f -  ((pmods *) baudio->mixlocals)->pan)
 		* ((pmods *) baudio->mixlocals)->gain;
 	lbuf = baudio->leftbuf;
-	for (;samplecount > 0; samplecount-=8)
+	for (; samplecount > 0; samplecount-=8)
 	{
 		*lbuf++ *= g;
 		*lbuf++ *= g;

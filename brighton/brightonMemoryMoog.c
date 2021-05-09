@@ -752,7 +752,7 @@ memMoogCallback(brightonWindow * win, int panel, int index, float value)
 	else
 		sendvalue = value;
 
-		synth->mem.param[index] = value;
+	synth->mem.param[index] = value;
 
 	if ((!global.libtest) || (index >= ACTIVE_DEVS))
 		synth->dispatch[index].routine(synth,

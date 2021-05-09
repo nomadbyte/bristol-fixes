@@ -162,7 +162,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -448,7 +448,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 		case 1:
@@ -458,13 +458,13 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosquare[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			mem[0] = mem[count / 2] = 0;
 			mem[count - 1] = mem[1]
@@ -479,13 +479,13 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blopulse[i];
 				return;
 			}
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			mem[0] = mem[count / 2] = 0;
 			mem[count - 1] = mem[1]
@@ -500,11 +500,11 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = bloramp[i];
 				return;
 			}
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_VPO * 2.0;
 			mem[0] = 0;
 			mem[count - 1] = mem[1]
@@ -517,14 +517,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blotriangle[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = -BRISTOL_VPO
 					+ ((float) i * 2 / (count / 2)) * BRISTOL_VPO; 
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = BRISTOL_VPO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_VPO;
 			return;
@@ -567,7 +567,7 @@ fillWave(float *mem, int count, int type)
 			 *
 			 * This should be dropped.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 			{
 				if ((mem[i] =
 					tan(M_PI * ((double) i) / count) * BRISTOL_VPO / 16)

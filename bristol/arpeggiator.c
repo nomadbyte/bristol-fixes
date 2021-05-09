@@ -361,7 +361,7 @@ arpeggiatorRePoly2(arpSeq *seq, int voicecount)
 	 */
 	for (i = 0; i < max; i++) {
 		vc -= (seq->notes[i].v = vc / (max - i));
-		for (;j < (voicecount - vc); j++)
+		for (; j < (voicecount - vc); j++)
 			seq->notes[j + BRISTOL_ARPEG_MAX].k = seq->notes[i].k;
 	}
 }

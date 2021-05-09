@@ -162,7 +162,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down wide note range
 				 */
-				for (i = 0; i < 80;i++)
+				for (i = 0; i < 80; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -270,7 +270,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 12 notes.
 				 */
-				for (i = 0; i < 12;i++)
+				for (i = 0; i < 12; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -352,7 +352,7 @@ static int operate(bristolOP *operator,
 	 * Go jumping through the wavetable, with each jump defined by the value
 	 * given on our input line, making sure we fill one output buffer.
 	 */
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer. This 
@@ -561,7 +561,7 @@ fillPulseWave(float *mem, float count, float distort, float gain)
 	 * works we can change it to use some more interesting phase distorted
 	 * waveforms.
 	 */
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = j * gain;
 
@@ -623,7 +623,7 @@ fillSineWave(float *mem, float count, float distort, float gain)
 	inc1 = ((float) M_PI) / (distort * count);
 	inc2 = ((float) M_PI) / (count - distort * count);
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * gain;
 
@@ -653,7 +653,7 @@ fillPDsine(float *mem, int count, int compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) compress));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * compress));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j);
 
@@ -686,7 +686,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count);
 			return;
 		case 1:
@@ -696,10 +696,10 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a square wave, with decaying plateaus.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -BRISTOL_SQR;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -707,9 +707,9 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a pulse wave - the aks dco does pwm.
 			 */
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = 1.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -1.0;
 			return;
 		case 3:
@@ -721,7 +721,7 @@ fillWave(float *mem, int count, int type)
 				mem[i] = ((float) i / count) * 2.0;
 			for (; i < count; i++)
 				mem[i] = ((float) i / count) * 2.0 - 2;
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * 2.0;
 			mem[0] = 0;
 			mem[count - 1] = mem[1]
@@ -734,9 +734,9 @@ fillWave(float *mem, int count, int type)
 			 * Triangular wave. From MIN point, ramp up at twice the rate of
 			 * the ramp wave, then ramp down at same rate.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (-1.0 + ((float) i * 2 / (count / 2))) * 2;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (1.0 - (((float) (i - count / 2) * 2) / (count / 2)))
 						* 2;
 			return;
@@ -769,7 +769,7 @@ fillWave(float *mem, int count, int type)
 			/*
 			 * Sine wave - added as a part of the OBX extensions.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count);
 			return;
 	}

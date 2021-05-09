@@ -128,7 +128,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 printf("%x, %x, %x\n", ib, mb, ob);
 	 * Go through each sample and amplify it, correcting gain back to zero.
 	 */
-	for (;count > 0; count-=16)
+	for (; count > 0; count-=16)
 	{
 		*ob++ += *ib++ * *mb++;
 		*ob++ += *ib++ * *mb++;

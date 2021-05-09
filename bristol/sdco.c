@@ -183,7 +183,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -255,7 +255,7 @@ register int layer)
 	/*
 	 * Incorporate layer
 	 */
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * This is for the sampler and needs to be resample.

@@ -511,7 +511,8 @@ bristolMidiRawToMsg(unsigned char *buff, int count, int index, int dev,
 					if (bmidi.dev[dev].sysex.count < 12)
 						((char *) &msg->params.bristol)
 							[bmidi.dev[dev].sysex.count] = buff[index];
-						bmidi.dev[dev].sysex.count++;
+
+					bmidi.dev[dev].sysex.count++;
 
 					if (bmidi.dev[dev].sysex.count == 4)
 					{

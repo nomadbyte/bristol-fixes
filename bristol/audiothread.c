@@ -339,7 +339,7 @@ audioThread(audioMain *audiomain)
 void
 llgain(register float *buf, register int count, register float gain)
 {
-	for (;count > 0; count -= 8)
+	for (; count > 0; count -= 8)
 	{
 		*buf++ *= gain;
 		*buf++ *= gain;

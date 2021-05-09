@@ -2749,8 +2749,9 @@ bitoneExtendedEntry(guiSynth *synth, int fd, int chan, int c, int o, int v) {
 		if (b1debug(synth, 1))
 			printf("ExtendedEntry(%i, %i = %1.0f)\n", index, v, decimal);
 
-	if (b1debug(synth, 5))
-		printf("Extended 3 index/decimal %i: %f (%i)\n", index, decimal, mode);
+		if (b1debug(synth, 5))
+			printf("Extended 3 index/decimal %i: %f (%i)\n", index, decimal, mode);
+
 		if (mode == MODE_SINGLE)
 		{
 			if ((synth->mem.param[EXTENDED_BUTTON] = v) != 0.0)
@@ -3876,7 +3877,7 @@ bitoneHarmonics(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			value =  1.0;
 
 			/* Remove all but the first harmonic */
-			for (i = 0;i < 4; i++)
+			for (i = 0; i < 4; i++)
 			{
 				if (layer->mem.param[oscIndex + i] != 0)
 				{
@@ -3938,7 +3939,7 @@ bitoneHarmonics(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 		value = 0.0;
 
-		for (i = 0;i < 4; i++)
+		for (i = 0; i < 4; i++)
 		{
 			if ((oscIndex + i) == c)
 				continue;

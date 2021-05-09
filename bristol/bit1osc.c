@@ -436,7 +436,7 @@ static int operate(bristolOP *operator,
 		sweeps[4] * transp + 0.019 * voice->detune,
 		local->wtppw5, lsv, count, pw);
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer, this is
@@ -689,7 +689,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * BITONE_WAVE_GAIN;
 
@@ -753,7 +753,7 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = bloramp[i];
 				return;
 			}
@@ -769,14 +769,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosquare[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -786,14 +786,14 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
+					for (i = 0; i < count; i++)
 						mem[i] = blotriangle[i];
 					return;
 				}
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -BITONE_WAVE_GAIN
 						+ ((float) i / (count / 2)) * BITONE_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = BITONE_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* BITONE_WAVE_GAIN;

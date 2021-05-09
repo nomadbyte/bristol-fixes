@@ -883,7 +883,7 @@ parseTaper(int comp, char *line)
 	 * We now have 9 values. If they start with 'R' it is a resitor index,
 	 * otherwise a literal value.
 	 */
-	for (;drawbar < BUS_COUNT; drawbar++)
+	for (; drawbar < BUS_COUNT; drawbar++)
 	{
 		if ((offset = strnext(offset)) == NULL)
 			return;
@@ -1884,15 +1884,15 @@ register double reach, int compress)
 	newcount = reach * count;
 	reach = 2.0 / (float) newcount;
 
-	for (i = 0;i < newcount; i++)
+	for (i = 0; i < newcount; i++)
 		mem[i] = cosf(M_PI * (increment += reach)) * HAMMOND_WAVE_GAIN;
 
-	for (;i < count; i++)
+	for (; i < count; i++)
 		mem[i] = HAMMOND_WAVE_GAIN;
 
 	if (compress)
 	{
-		for (i = 0;i < count; i++)
+		for (i = 0; i < count; i++)
 		{
 			//mem[i] = (-mem[i] + 8.0f) * (-mem[i] + 8.0f) * (-mem[i] + 8.0f)
 			//	/ 256.0f - 8.0f;
@@ -1921,7 +1921,7 @@ register double reach, int compress)
 	float j = 0, inc = reach;
 	float l;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		if ((j > (count * 3 / 4)) && recalc2)
 		{
@@ -1944,7 +1944,7 @@ register double reach, int compress)
 
 	if (compress)
 	{
-		for (i = 0;i < count; i++)
+		for (i = 0; i < count; i++)
 		{
 			//mem[i] = (mem[i] + 8.0f) * (mem[i] + 8.0f) * (mem[i] + 8.0f)
 			//	/ 256.0f - 8.0f;

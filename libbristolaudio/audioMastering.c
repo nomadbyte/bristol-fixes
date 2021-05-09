@@ -304,7 +304,7 @@ register char *buffer;
 	 *
 	 * Swap each byte pair.
 	 */
-	for (;count > 0; count--)
+	for (; count > 0; count--)
 	{
 		tmp = *(buffer + 1);
 		*(buffer + 1) = *buffer;

@@ -53,7 +53,7 @@ poly800Controller(Baudio *baudio, u_char operator, u_char controller, float valu
 		switch (controller) {
 			case 0:
 				baudio->effect[0]->param->param[controller].float_val = value;
-					(0.1 + (value * value) * 20) * 1024 / baudio->samplerate;
+					/* ?? (0.1 + (value * value) * 20) * 1024 / baudio->samplerate; */
 				break;
 			case 1:
 			case 2:
@@ -162,10 +162,14 @@ fillLFOgainTable(float *buf, float current, float slope, float target, int i)
 {
 	for (; i > 0; i-=4)
 	{
-		if ((current += slope) > target) current = target; *buf++ = current;
-		if ((current += slope) > target) current = target; *buf++ = current;
-		if ((current += slope) > target) current = target; *buf++ = current;
-		if ((current += slope) > target) current = target; *buf++ = current;
+		if ((current += slope) > target) current = target;
+		*buf++ = current;
+		if ((current += slope) > target) current = target;
+		*buf++ = current;
+		if ((current += slope) > target) current = target;
+		*buf++ = current;
+		if ((current += slope) > target) current = target;
+		*buf++ = current;
 	}
 	return(current);
 }

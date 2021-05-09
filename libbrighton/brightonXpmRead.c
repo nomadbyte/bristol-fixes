@@ -231,7 +231,7 @@ xpmread(brightonWindow *bwin, char *filename)
 	 */
 	bitmap->name = brightonmalloc(CTAB_SIZE * sizeof(char));
 
-	for (i = 0; i < colors;i++)
+	for (i = 0; i < colors; i++)
 	{
 		short r, g, b;
 
@@ -288,7 +288,7 @@ xpmread(brightonWindow *bwin, char *filename)
 		}
 	}
 
-	for (i = 0; i < height;i++)
+	for (i = 0; i < height; i++)
 	{
 		if (brightonfgets(line, BUFSIZE, fd) == 0)
 		{

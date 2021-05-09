@@ -167,7 +167,7 @@ fillWave(float *mem, int count, int type)
 	 * 		(2PI * i / count) * 2048.
 	 * We fill count + 1 samples to simplify the resampling.
 	 */
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 		mem[i] = cosf(2 * M_PI * ((float) i) / count);
 }
 
@@ -224,7 +224,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	 * a frequency from 0 to 16kHz. It can be modified so must be calculated
 	 * on the fly from the mod buffer.
 	 */
-	for (; count > 0;count--)
+	for (; count > 0; count--)
 	{
 		if ((freq = cutoff + *mb * 0.1) < 0)
 			freq = 0.00001f;

@@ -394,7 +394,7 @@ register double reach)
 
 	if (bloflags & BRISTOL_BLO)
 	{
-		for (i = 0;i < count; i++)
+		for (i = 0; i < count; i++)
 			mem[i] = blotriangle[i];
 		return;
 	}
@@ -411,7 +411,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * VOX_WAVE_GAIN;
 

@@ -1203,7 +1203,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 			if (currentLayer == LOWER_BANK)
 				off = 163;
 
-			for (i = 0; i < 4;i++)
+			for (i = 0; i < 4; i++)
 			{
 				if (synth->mem.param[i + off] != 0)
 				{
@@ -1217,7 +1217,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 			else
 				off = 151;
 
-			for (i = 0; i < 10;i++)
+			for (i = 0; i < 10; i++)
 			{
 				if (synth->mem.param[i + off] != 0)
 				{
@@ -1242,7 +1242,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 				if (currentLayer == LOWER_BANK)
 					off = 163;
 
-				for (i = 0; i < 4;i++)
+				for (i = 0; i < 4; i++)
 				{
 					if (synth->mem.param[i + off] != 0)
 					{
@@ -1256,7 +1256,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 				else
 					off = 151;
 
-				for (i = 0; i < 10;i++)
+				for (i = 0; i < 10; i++)
 				{
 					if (synth->mem.param[i + off] != 0)
 					{

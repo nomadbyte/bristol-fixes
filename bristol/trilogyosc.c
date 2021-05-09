@@ -252,7 +252,7 @@ register int count, register float inv)
 	while (wtp < 0)
 		wtp += TRILOGY_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer, this is
@@ -615,7 +615,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * TRILOGY_WAVE_GAIN;
 
@@ -679,9 +679,9 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = bloramp[i];
-					return;
+				return;
 			}
 			fillPDwave(mem, count, 20.0);
 			return;
@@ -695,14 +695,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 					mem[i] = blosquare[i];
-					return;
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -712,14 +712,14 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
+					for (i = 0; i < count; i++)
 						mem[i] = blotriangle[i];
-						return;
+					return;
 				}
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -TRILOGY_WAVE_GAIN
 						+ ((float) i / (count / 2)) * TRILOGY_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = TRILOGY_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* TRILOGY_WAVE_GAIN;
@@ -751,10 +751,10 @@ register float reach)
 	newcount = reach * count;
 	reach = 2.0 / (float) newcount;
 
-	for (i = 0;i < newcount; i++)
+	for (i = 0; i < newcount; i++)
 		mem[i] = cosf(M_PI * (increment += reach)) * TRILOGY_WAVE_GAIN;
 
-	for (;i < count; i++)
+	for (; i < count; i++)
 		mem[i] = TRILOGY_WAVE_GAIN;
 }
 
@@ -781,7 +781,7 @@ fillPDcos(float *mem, int count, float compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) comp));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * comp));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = cosf(j) * TRILOGY_WAVE_GAIN;
 
@@ -813,7 +813,7 @@ fillPDsine(float *mem, int count, float compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) comp));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * comp));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * TRILOGY_WAVE_GAIN;
 

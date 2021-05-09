@@ -461,7 +461,7 @@ msg->offset = 101;
 	sem_post(audiomain->sem_long);
 #endif
 
-//printf("sl: ");printPlayList(audiomain);
+//printf("sl: "); printPlayList(audiomain);
 
 	return(0);
 }
@@ -736,7 +736,7 @@ doMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg, Baudio *baudio, int key)
 		audiomain->newlist = voice;
 		voice->last = NULL;
 
-//printf("ss: ");printPlayList(audiomain);
+//printf("ss: "); printPlayList(audiomain);
 
 #ifdef BRISTOL_SEMAPHORE
 		sem_post(audiomain->sem_short);
@@ -874,7 +874,7 @@ doMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg, Baudio *baudio, int key)
 	sem_post(audiomain->sem_long);
 #endif
 
-//printf("sl: ");printPlayList(audiomain);
+//printf("sl: "); printPlayList(audiomain);
 
 	return(0);
 }
@@ -975,7 +975,7 @@ rbMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg)
 			 * We could avoid this, since we have the correct baudio 
 			 * pointer.
 			 */
-			for (;voices > 0; voices--)
+			for (; voices > 0; voices--)
 			{
 				if (baudio->mixflags & BRISTOL_CHORD)
 				{

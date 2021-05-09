@@ -1387,14 +1387,18 @@ execBristol(guimain *global, int c, char **argv)
 		{
 			int sid;
 
-			if ((o = atoi(argv[2])) < 0) return(3); if (o > 127) return(3);
-			if ((p = atoi(argv[3])) < 0) return(3); if (p > 127) return(3);
-			if ((v = atof(argv[4])) < 0.0f) return(3); if (v > 1.0f) return(3); 
+			if ((o = atoi(argv[2])) < 0) return(3);
+			if (o > 127) return(3);
+			if ((p = atoi(argv[3])) < 0) return(3);
+			if (p > 127) return(3);
+			if ((v = atof(argv[4])) < 0.0f) return(3);
+			if (v > 1.0f) return(3); 
 
 			if (btty.ichan == 0)
 				sid = SYNTHS->sid;
 			else
 				sid = SYNTHS->sid2;
+
 			bristolMidiSendMsg(global->controlfd, btty.ichan,
 				o, p, (int) (v * C_RANGE_MIN_1));
 			return(0);
@@ -1488,8 +1492,10 @@ execMidi(guimain *global, int c, char **v)
 		{
 			int k, p;
 
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3); 
-			if ((p = atoi(v[3])) < 0) return(3); if (p > 127) return(3); 
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3); 
+			if ((p = atoi(v[3])) < 0) return(3);
+			if (p > 127) return(3); 
 
 			bristolPolyPressureEvent(global->controlfd, 0, SYNTHS->midichannel,
 				k, p);
@@ -1569,7 +1575,8 @@ execMidi(guimain *global, int c, char **v)
 			if (global->libtest == 0)
 				bristolMidiSendMsg(global->controlfd, SYNTHS->sid,
 		            127, 0, BRISTOL_MIDICHANNEL|SYNTHS->midichannel);
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3);
 
 			SYNTHS->highkey = btty.highkey = k;
 
@@ -1577,7 +1584,8 @@ execMidi(guimain *global, int c, char **v)
 				BRISTOL_HIGHKEY|SYNTHS->highkey);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "lowkey", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3);
 
 			SYNTHS->lowkey = btty.lowkey = k;
 
@@ -1595,27 +1603,32 @@ execMidi(guimain *global, int c, char **v)
 				BRISTOL_NRP_LWF, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "detune", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_DETUNE, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "velocity", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_VELOCITY, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "glide", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_GLIDE, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "pwd", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				MIDI_RP_PW, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "gain", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_GAIN, k);
 			return(B_ERR_OK);
@@ -3995,7 +4008,8 @@ brightonCLIcheck(guimain *global)
 						SYNTHS->location);
 				else
 					snprintf(pbuf, btty.len, "mem: %i\r\n", SYNTHS->location);
-					v = write(btty.fd[1], pbuf, strlen(pbuf));
+
+				v = write(btty.fd[1], pbuf, strlen(pbuf));
 				break;
 			case B_TTY_A_M_UP:
 				/* Mem up */
@@ -4008,7 +4022,8 @@ brightonCLIcheck(guimain *global)
 						SYNTHS->location);
 				else
 					snprintf(pbuf, btty.len, "mem: %i\r\n", SYNTHS->location);
-					v = write(btty.fd[1], pbuf, strlen(pbuf));
+
+				v = write(btty.fd[1], pbuf, strlen(pbuf));
 				break;
 			case B_TTY_A_LEFT:
 				if (--btty.i < 0)
