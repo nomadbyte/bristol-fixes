@@ -147,7 +147,7 @@ int channel, char *param)
 
 	if ((param = index(param, ' ')) == NULL)
 	{
-		if ((param = index(param, 9)) == NULL)
+		if (param == NULL || (param = index(param, 9)) == NULL)
 		{
 /*			printf("failed to get target\n"); */
 			return;
