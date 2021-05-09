@@ -1001,7 +1001,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 			 * already sufficient transpose in the oscillators.
 			 */
 			if (value == 0) {
-				if (synth->mem.param[MOD_START + 11] == 0)
+				if (synth->mem.param[MOD_START + 11] == 0) {
 					/*
 					 * Default transpose
 					synth->transpose = 36;
@@ -1010,6 +1010,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 						BRISTOL_TRANSPOSE);
 					bristolMidiSendMsg(global.controlfd, synth->sid2, 127, 0,
 						BRISTOL_TRANSPOSE);
+				}
 			} else {
 				if (synth->mem.param[MOD_START + 11] != 0)
 				{
@@ -1027,12 +1028,13 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 			break;
 		case 11: /* Transpose up - Radio buttons */
 			if (value == 0) {
-				if (synth->mem.param[MOD_START + 10] == 0)
+				if (synth->mem.param[MOD_START + 10] == 0) {
 					/* Default transpose */
 					bristolMidiSendMsg(global.controlfd, synth->sid, 127, 0,
 						BRISTOL_TRANSPOSE);
 					bristolMidiSendMsg(global.controlfd, synth->sid2, 127, 0,
 						BRISTOL_TRANSPOSE);
+				}
 			} else {
 				if (synth->mem.param[MOD_START + 10] != 0)
 				{
