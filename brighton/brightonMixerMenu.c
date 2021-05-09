@@ -38,9 +38,11 @@
 #include "brightonMixer.h"
 #include "brightonMixerMemory.h"
 
-static char text[128];
-/*static char scratch[MAX_CHAN_COUNT][16]; */
-static char memscratch[16];
+#define MIXER_TEXT_SIZE 128
+#define MIXER_NAME_SIZE 32
+static char text[MIXER_TEXT_SIZE];
+/*static char scratch[MAX_CHAN_COUNT][MIXER_NAME_SIZE]; */
+static char memscratch[MIXER_NAME_SIZE];
 
 static char *removeInterface(guiSynth *);
 static char *printInterface(guiSynth *);
@@ -82,7 +84,7 @@ extern int setMixerMemory(mixerMem *, int, int, float *, char *);
  */
 #define MIXER_MEM_COUNT 1024
 int memCount = -1, memIndex = 0;
-char memList[MIXER_MEM_COUNT][32];
+char memList[MIXER_MEM_COUNT][MIXER_NAME_SIZE];
 
 guiSynth *theSynth;
 
@@ -103,7 +105,7 @@ u_long vuInterval = 100000;
 typedef char *(*MenuFunc)(guiSynth *);
 
 typedef struct mLine {
-	char title[32];
+	char title[MIXER_NAME_SIZE];
 	int last, next;
 	MenuFunc lmenuFunc;
 	MenuFunc rmenuFunc;
@@ -433,7 +435,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 			if (++memIndex > memCount)
 				memIndex = 0;
 
-			sprintf(memscratch, "%s", memList[memIndex]);
+			snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 			loadMixerMemory(synth, memList[memIndex], 0);
 			currentMenu = 14;
 			printMemMenu(synth);
@@ -448,7 +450,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 			if (--memIndex < 0)
 				memIndex = memCount;
 
-			sprintf(memscratch, "%s", memList[memIndex]);
+			snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 			loadMixerMemory(synth, memList[memIndex], 0);
 			currentMenu = 14;
 			printMemMenu(synth);
@@ -470,7 +472,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 		if (currentMenu == 3)
 		{
 			int i;
-			char scratch[32];
+			char scratch[MIXER_NAME_SIZE];
 
 			/*
 			 * Track menu, this will be track naming text. Value will be an
@@ -479,7 +481,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 			 *
 			 * Then print it on line2. 
 			 */
-			sprintf(scratch, "%s",
+			snprintf(scratch, MIXER_NAME_SIZE, "%s",
 				getMixerMemory((mixerMem *) synth->mem.param,
 					currentTrack + 4, 79));
 			i = strlen(scratch);
@@ -502,7 +504,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 			}
 			setMixerMemory((mixerMem *) synth->mem.param,
 				currentTrack + 4, 79, 0, scratch);
-			sprintf(text, "Text: %s               ", scratch);
+			snprintf(text, MIXER_TEXT_SIZE, "Text: %s               ", scratch);
 			displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY3);
 			setTrackText(synth);
 
@@ -533,7 +535,7 @@ functionOp(guiSynth *synth, int panel, int index, int operator, float value)
 				memscratch[i] = value;
 				memscratch[i + 1] = '\0';
 			}
-			sprintf(text, "Name: %s                 ", memscratch);
+			snprintf(text, MIXER_TEXT_SIZE, "Name: %s                 ", memscratch);
 			displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY2);
 
 			return(0);
@@ -833,9 +835,9 @@ midiDown(guiSynth *synth)
 static char *
 setTrackText(guiSynth *synth)
 {
-	char scratch[32];
+	char scratch[MIXER_NAME_SIZE];
 
-	sprintf(scratch, "%s", getMixerMemory((mixerMem *) synth->mem.param, currentTrack + 4, 79));
+	snprintf(scratch, MIXER_NAME_SIZE, "%s", getMixerMemory((mixerMem *) synth->mem.param, currentTrack + 4, 79));
 
 	displayPanel(synth, scratch, 0, currentTrack + 4, PARAM_COUNT - 1);
 	/*
@@ -849,23 +851,24 @@ setTrackText(guiSynth *synth)
 static char *
 printTrackMenu(guiSynth *synth)
 {
-	char scratch[32];
+	char scratch[MIXER_NAME_SIZE];
 
 	if ((currentTrack + 4) < 0)
 		return(NULL);
 
-	sprintf(scratch, "%s", getMixerMemory((mixerMem *) synth->mem.param, currentTrack + 4, 79));
+	snprintf(scratch, MIXER_NAME_SIZE, "%s",
+		getMixerMemory((mixerMem *) synth->mem.param, currentTrack + 4, 79));
 
 	/*
 	 * Create text for track display
 	 */
-	sprintf(text, "       Track %i Menu           ", currentTrack + 1);
+	snprintf(text, MIXER_TEXT_SIZE, "       Track %i Menu           ", currentTrack + 1);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY1);
 
 	displayPanel(synth,
 		functionMenu[3].line[0].title, 0, FUNCTION_PANEL, DISPLAY2);
 
-	sprintf(text, "Text: %s                         ", scratch);
+	snprintf(text, MIXER_TEXT_SIZE, "Text: %s                         ", scratch);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY3);
 
 	displayPanel(synth,
@@ -934,7 +937,7 @@ memorySel1(guiSynth *synth)
 {
 	currentMenu = 14;
 
-	sprintf(memscratch, "%s", memList[memIndex]);
+	snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 
 	printMemMenu(synth);
 	return(NULL);
@@ -946,7 +949,7 @@ memorySel2(guiSynth *synth)
 
 	memIndex += 1;
 	if (memIndex > memCount) memIndex -= memCount + 1;
-	sprintf(memscratch, "%s", memList[memIndex]);
+	snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 
 	printMemMenu(synth);
 	return(NULL);
@@ -958,7 +961,7 @@ memorySel3(guiSynth *synth)
 
 	memIndex += 2;
 	if (memIndex > memCount) memIndex -= memCount + 1;
-	sprintf(memscratch, "%s", memList[memIndex]);
+	snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 
 	printMemMenu(synth);
 	return(NULL);
@@ -970,7 +973,7 @@ memorySel4(guiSynth *synth)
 
 	memIndex += 3;
 	if (memIndex > memCount) memIndex -= memCount + 1;
-	sprintf(memscratch, "%s", memList[memIndex]);
+	snprintf(memscratch, MIXER_NAME_SIZE, "%s", memList[memIndex]);
 
 	printMemMenu(synth);
 	return(NULL);
@@ -984,10 +987,10 @@ songBuildList(guiSynth *synth)
 	memCount = -1;
 
 	while ((entry = getMixerMemory((mixerMem *) synth->mem.param, MM_GETLIST, 1)) != 0)
-		sprintf(memList[++memCount], "%s", entry);
+		snprintf(memList[++memCount], MIXER_NAME_SIZE, "%s", entry);
 	/*while ((entry = ((char *) mixerMemory(synth, MM_GET, MM_GETLIST, 1, 0)))
 		!= 0)
-		sprintf(memList[++memCount], "%s", entry); */
+		snprintf(memList[++memCount], MIXER_NAME_SIZE, "%s", entry); */
 	return(NULL);
 }
 
@@ -999,7 +1002,7 @@ memoryBuildList(guiSynth *synth)
 	memCount = -1;
 
 	while ((entry = (getMixerMemory((mixerMem *) synth->mem.param, MM_GETLIST, 0))) != 0)
-		sprintf(memList[++memCount], "%s", entry);
+		snprintf(memList[++memCount], MIXER_NAME_SIZE, "%s", entry);
 	return(NULL);
 }
 
@@ -1015,7 +1018,7 @@ songShowList(guiSynth *synth)
 	 * Then show the memory entries in the panel from the list with the 
 	 * given index
 	 */
-	sprintf(text, "%s", functionMenu[21].title.title);
+	snprintf(text, MIXER_TEXT_SIZE, "%s", functionMenu[21].title.title);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY1);
 
 	displayPanel(synth, memList[mi], 0, FUNCTION_PANEL, DISPLAY2);
@@ -1043,7 +1046,7 @@ memoryShowList(guiSynth *synth)
 	 * Then show the memory entries in the panel from the list with the 
 	 * given index
 	 */
-	sprintf(text, "%s", functionMenu[20].title.title);
+	snprintf(text, MIXER_TEXT_SIZE, "%s", functionMenu[20].title.title);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY1);
 
 	displayPanel(synth, memList[mi], 0, FUNCTION_PANEL, DISPLAY2);
@@ -1130,7 +1133,7 @@ printMemMenu(guiSynth *synth)
 	displayPanel(synth, functionMenu[14].title.title,
 		0, FUNCTION_PANEL, DISPLAY1);
 
-	sprintf(text, "Name: %s                         ", memscratch);
+	snprintf(text, MIXER_TEXT_SIZE, "Name: %s                         ", memscratch);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY2);
 
 	displayPanel(synth,
@@ -1157,7 +1160,7 @@ printMidiMenu(guiSynth *synth)
 		functionMenu[17].line[0].title,
 		0, FUNCTION_PANEL, DISPLAY2);
 
-	sprintf(text, "Channel: %i                       ", synth->midichannel + 1);
+	snprintf(text, MIXER_TEXT_SIZE, "Channel: %i                       ", synth->midichannel + 1);
 	displayPanel(synth, text, 0, FUNCTION_PANEL, DISPLAY3);
 
 	displayPanel(synth,

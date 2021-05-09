@@ -717,7 +717,7 @@ logthread(char *process)
 				f_out = -1;
 			}
 
-			sprintf(outputtext, "[%05.6f] %s\n",
+			snprintf(outputtext, BUFSZE, "[%05.6f] %s\n",
 				(float) (((int) tv.tv_usec) < uztime?
 					(int) tv.tv_sec - ztime - 1:
 					(int) tv.tv_sec - ztime)
@@ -736,7 +736,7 @@ logthread(char *process)
 		// The one taken is similar to syslog format:
 		strftime(ttext, BUFSZE, "%b %e %T", tm);
 
-		sprintf(outputtext, "%s %-8s [%05.6f] %s\n",
+		snprintf(outputtext, BUFSZE, "%s %-8s [%05.6f] %s\n",
 			ttext, process,
 			(float) (((int) tv.tv_usec) < uztime?
 				(int) tv.tv_sec - ztime - 1:
@@ -755,7 +755,7 @@ logthread(char *process)
 	}
 
 	/*
-	sprintf(outputtext, "%s %-8s [%05.6f] %s\n",
+	snprintf(outputtext, BUFSZE, "%s %-8s [%05.6f] %s\n",
 		ttext, process,
 		(float) (((int) tv.tv_usec) < uztime?
 			(int) tv.tv_sec - ztime - 1:

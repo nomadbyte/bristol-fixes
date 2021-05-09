@@ -549,6 +549,7 @@ int loc, int o, int x, int y)
 	int fd, i, pSel;
 	brightonEvent event;
 	float pw[4];
+	const char * const memtag = (name ? name : synth->resources->name);
 
 	/*
 	 * Memory loading should be a few phases. Firstly see which layer is visible
@@ -588,24 +589,20 @@ int loc, int o, int x, int y)
 	/*
 	 * Now we need to consider the second layer.
 	 */
-	if ((name != 0) && (name[0] == '/'))
+	if (memtag[0] == '/')
 	{
-		sprintf(synth->mem.algo, "%s", name);
-		sprintf(path, "%s", name);
+		sprintf(path, "%s", memtag);
 	} else {
 		sprintf(path, "%s/memory/%s/%s%i.mem",
-			getBristolCache("midicontrollermap"), name, name, loc);
-		sprintf(synth->mem.algo, "%s", name);
-		if (name == NULL)
-			sprintf(synth->mem.name, "no name");
-		else
-			sprintf(synth->mem.name, "%s", name);
+			getBristolCache("midicontrollermap"), memtag, memtag, loc);
 	}
+	sprintf(synth->mem.algo, "%s", memtag);
+	sprintf(synth->mem.name, "%s", memtag);
 
 	if ((fd = open(path, O_RDONLY, 0770)) < 0)
 	{
 		sprintf(path, "%s/memory/%s/%s%i.mem",
-			global.home, name, name, loc);
+			global.home, memtag, memtag, loc);
 
 		if ((fd = open(path, O_RDONLY, 0770)) < 0)
 		{
@@ -697,7 +694,7 @@ printf("Load %f %f %f %f\n", pw[0], pw[1], pw[2], pw[3]);
 	/*
 	 * Finally load and push the sequence information for this memory.
 	 */
-	loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+	loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 	fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 }
 
@@ -713,7 +710,7 @@ obxaMidiCallback(brightonWindow *win, int controller, int value, float n)
 		case MIDI_PROGRAM:
 			printf("midi program: %x, %i\n", controller, value);
 			synth->location = value;
-			obxaLoadMemory(synth, "obxa", 0, synth->bank * 10 + synth->location,
+			obxaLoadMemory(synth, synth->resources->name, 0, synth->bank * 10 + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
@@ -1425,7 +1422,7 @@ synth->mem.param[MOD_START + OB_MODCOUNT + 4]);
 	/*
 	 * Just save a single sequencer, not one per memory. Can that, save lots
 	 */
-	saveSequence(synth, "obxa", loc, 0);
+	saveSequence(synth, synth->resources->name, loc, 0);
 
 	/*
 	 * Now we need to consider the second layer.
@@ -1472,7 +1469,7 @@ obxaSequence(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	printf("obxaSequence\n");
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1668,7 +1665,7 @@ printf("obxaArpeggiate: %i %i\n", c, v);
 	}
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1734,7 +1731,7 @@ obxaChord(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	printf("Chord request: %i\n", v);
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1800,12 +1797,12 @@ obxaMemory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	switch (c) {
 		case 16:
 			/* Load */
-			obxaLoadMemory(synth, "obxa", 0, synth->bank * 10 + synth->location,
+			obxaLoadMemory(synth, synth->resources->name, 0, synth->bank * 10 + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case 17:
 			/* Save */
-			obxaSaveMemory(synth, "obxa", 0,
+			obxaSaveMemory(synth, synth->resources->name, 0,
 				synth->bank * 10 + synth->location, 0);
 			break;
 		case 0:
@@ -2438,7 +2435,7 @@ obxaConfigure(brightonWindow *win)
 	 * For the OBXa, most of the following has to be moved into the memory
 	 * load routines. It is a new paradigm - one panel, two synths.
 	 */
-	obxaLoadMemory(synth, "obxa", 0, initmem,
+	obxaLoadMemory(synth, synth->resources->name, 0, initmem,
 		synth->mem.active, FIRST_DEV, 0);
 
 	synth->mem.param[LAYER_SWITCH] = 0;

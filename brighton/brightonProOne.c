@@ -836,23 +836,23 @@ pro1Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 static void
 pro1ShowParam(guiSynth *synth, int index, float value)
 {
-	char showthis[64];
+	char showthis[32];
 
 	if (index >= pro1App.resources[0].ndevices)
 		return;
 
 	if (pro1App.resources[0].devlocn[index].name[0] == '\0') {
 		if (pro1App.resources[0].devlocn[index].to == 1.0)
-			sprintf(showthis, "%i: %1.3f", index, value);
+			snprintf(showthis, 32, "%i: %1.3f", index, value);
 		else
-			sprintf(showthis, "%i: %1.1f", index, value);
+			snprintf(showthis, 32, "%i: %1.1f", index, value);
 	} else {
 		if (pro1App.resources[0].devlocn[index].to == 1.0)
-			sprintf(showthis, "%s: %1.3f",
+			snprintf(showthis, 32, "%s: %1.3f",
 				pro1App.resources[0].devlocn[index].name,
 				value);
 		else
-			sprintf(showthis, "%s: %1.1f",
+			snprintf(showthis, 32, "%s: %1.1f",
 				pro1App.resources[0].devlocn[index].name,
 				value);
 	}
