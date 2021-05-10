@@ -46,7 +46,6 @@ int clickset[128];
 #include "hammond.h"
 
 static float note_diff;
-int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildHammondSound(bristolOP *, unsigned char);

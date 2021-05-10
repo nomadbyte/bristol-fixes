@@ -47,7 +47,6 @@
 #include "bit1osc.h"
 
 static float note_diff;
-int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildBitoneSound(bristolOP *, bristolOPParams *);

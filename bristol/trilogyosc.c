@@ -41,7 +41,6 @@
 #include "trilogyosc.h"
 
 static float note_diff;
-int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildTrilogySound(bristolOP *, bristolOPParams *);
