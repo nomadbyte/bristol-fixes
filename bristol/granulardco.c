@@ -39,7 +39,7 @@
 #include "granulardco.h"
 
 static float note_diff;
-float samplerate;
+/* static int init_samplerate; */
 
 #define BRISTOL_SQR 4
 
@@ -368,6 +368,8 @@ regrain(bristolGRANULARDCOlocal *local, bristolGRANULARDCO *specs,
 bristolOPParams *param, int count, int channel)
 {
 	unsigned int cri = local->runtime[channel].cri, i, wave;
+	int samplerate = specs->spec.io[DCO_IN_FREQ].samplerate;
+	/* int samplerate = init_samplerate; */
 
 	/*
 	 * When we have implemented the wavetables this is going to be either a
@@ -666,7 +668,7 @@ quantuminit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	*operator = bristolOPinit(operator, index, samplecount);
 
-	samplerate = samplerate;
+	/* init_samplerate = samplerate; */ /* saving here for use in regrain */
 
 #ifdef BRISTOL_DBG
 	printf("quantuminit(%x(%x), %i, %i, %i)\n",
