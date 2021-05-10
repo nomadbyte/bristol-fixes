@@ -147,7 +147,6 @@ static int destroy(bristolOP *operator)
 }
 
 #define ROOT2 1.4142135623730950488
-double pidsr;
 
 /*
  * Reset any local memory information.
