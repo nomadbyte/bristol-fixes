@@ -45,7 +45,7 @@ extern int bristolJackInterface();
 extern int dupfd;
 extern char *outputfile;
 extern int buildCurrentTable(Baudio *, float);
-extern void initMicrotonalTable(fTab []);
+extern void initMicrotonalTable(fTab [], int);
 
 static void initPalette();
 static void freePalette();
@@ -766,7 +766,7 @@ initBristolAudio(audioMain *audiomain, Baudio *baudio)
 		bristolGetFreqMap(file, "microTonalMap",
 			baudio->microtonalmap, 128, 0, audiomain->samplerate);
 
-		/* initMicrotonalTable(&baudio->microtonalmap[0]); */
+		/* initMicrotonalTable(&baudio->microtonalmap[0], audiomain->samplerate); */
 
 		if (baudio->microtonalmap[0].step == baudio->microtonalmap[127].step)
 		{
@@ -779,7 +779,7 @@ initBristolAudio(audioMain *audiomain, Baudio *baudio)
 			if ((audiomain->debuglevel & BRISTOL_DEBUG_MASK) > BRISTOL_DEBUG4)
 				printf("no private microtonal mapping for %s\n",
 					bristolAlgos[(audiomain->midiflags & BRISTOL_PARAMMASK)].name);
-			initMicrotonalTable(&baudio->microtonalmap[0]);
+			initMicrotonalTable(&baudio->microtonalmap[0], audiomain->samplerate);
 		} else
 			printf("micro first %f last %f (%s)\n",
 				baudio->microtonalmap[0].step, baudio->microtonalmap[127].step,

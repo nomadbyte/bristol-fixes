@@ -633,17 +633,12 @@ buildCurrentTable(Baudio *baudio, float gtune)
  *	previous frequency * (2^^(1/12))
  * Since A is constand whole numbers we can calcuate each octave from A.
  */
-static int init_samplerate;
-
 int
 initFrequencyTable(int samplerate)
 {
-	float rate;
+	float rate = samplerate;
 	int i;
 	float gain_diff, accum = 1.0;
-
-	init_samplerate = samplerate;
-	rate = samplerate;
 
 	/*
 	 * For any given frequency, we need given number of cycles per second, and
@@ -732,15 +727,10 @@ initFrequencyTable(int samplerate)
  * our internal table steps.
  */
 void
-initMicrotonalTable(float table[])
+initMicrotonalTable(float table[], int samplerate)
 {
-	float rate;
+	float rate = samplerate;
 	int i;
-
-	if (init_samplerate == 0)
-		init_samplerate = 44100; /* If still zero set a default */
-
-	rate = init_samplerate;
 
 	/*
 	 * For any given frequency, we need given number of cycles per second, and
@@ -792,11 +782,10 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 	printf("initMidiRoutines()\n");
 #endif
 
-	if (init_samplerate == 0)
+	if (audiomain->samplerate == 0)
 	{
+		audiomain->samplerate = 44100; /* Set default */
 		printf("Fixing samplerate at %i\n", audiomain->samplerate);
-		if ((init_samplerate = audiomain->samplerate) == 0)
-			init_samplerate = audiomain->samplerate = 44100; /* Set default */
 	}
 
 	midiRoutines[0].callback = midiNoteOff;
@@ -908,7 +897,7 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 	 * more options. Either way, these need to be converted into wave table
 	 * steps.
 	 */
-	initMicrotonalTable(&midiRoutines[7].floatmap[0]);
+	initMicrotonalTable(&midiRoutines[7].floatmap[0], audiomain->samplerate);
 
 	initFrequencyTable(audiomain->samplerate);
 }
