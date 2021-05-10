@@ -41,7 +41,7 @@
 #include "cs80osc.h"
 #include "bristolcs80.h"
 
-float note_diff;
+static float note_diff;
 int samplecount;
 
 static void fillWave(float *, int, int);

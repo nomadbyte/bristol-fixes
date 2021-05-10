@@ -45,7 +45,7 @@ int clickset[128];
 #include "bristol.h"
 #include "hammond.h"
 
-float note_diff;
+static float note_diff;
 int samplecount;
 
 static void fillWave(float *, int, int);

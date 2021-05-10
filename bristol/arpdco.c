@@ -39,7 +39,8 @@
 #include "bristolblo.h"
 #include "arpdco.h"
 
-float note_diff, *zbuf;
+static float note_diff;
+static float *zbuf;
 
 #define BRISTOL_SQR 4
 

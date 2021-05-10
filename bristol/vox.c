@@ -40,7 +40,7 @@
 #include "bristolblo.h"
 #include "vox.h"
 
-float note_diff;
+static float note_diff;
 int samplecount;
 
 static void fillWave(float *, int, int);

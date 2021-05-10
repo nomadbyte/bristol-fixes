@@ -39,7 +39,7 @@
 #include "bristolblo.h"
 #include "dco.h"
 
-float note_diff;
+static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.

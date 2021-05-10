@@ -40,7 +40,7 @@
 #include "bristolblo.h"
 #include "expdco.h"
 
-float note_diff;
+static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.

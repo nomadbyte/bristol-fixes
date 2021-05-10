@@ -38,7 +38,7 @@
 #include "bristol.h"
 #include "granulardco.h"
 
-float note_diff;
+static float note_diff;
 float samplerate;
 
 #define BRISTOL_SQR 4

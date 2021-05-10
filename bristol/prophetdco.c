@@ -47,7 +47,7 @@
 #include "bristolblo.h"
 #include "prophetdco.h"
 
-float note_diff;
+static float note_diff;
 
 #define BRISTOL_SQR 4
 
