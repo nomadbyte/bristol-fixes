@@ -58,8 +58,8 @@ static void fillVoxM2Wave(bristolOP *, bristolOPParams *);
  */
 static int *wavelevel;
 
-float *wave1;
-float *wave2;
+static float *wave1;
+static float *wave2;
 
 /*
  * This can be a single list, it is used to generate the different pipes.
