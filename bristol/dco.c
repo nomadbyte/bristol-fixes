@@ -459,7 +459,7 @@ fillWave(float *mem, int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = blosquare[i];
+					mem[i] = blo.square[i];
 				return;
 			}
 			for (i = 0; i < count / 2; i++)
@@ -480,7 +480,7 @@ fillWave(float *mem, int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = blopulse[i];
+					mem[i] = blo.pulse[i];
 				return;
 			}
 			for (i = 0; i < count / 5; i++)
@@ -501,7 +501,7 @@ fillWave(float *mem, int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = bloramp[i];
+					mem[i] = blo.ramp[i];
 				return;
 			}
 			for (i = count - 1; i >= 0; i--)
@@ -518,7 +518,7 @@ fillWave(float *mem, int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = blotriangle[i];
+					mem[i] = blo.triangle[i];
 				return;
 			}
 			for (i = 0; i < count / 2; i++)
@@ -537,7 +537,7 @@ fillWave(float *mem, int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = (blosaw[i] + blosaw[(i * 2) & 1023]) * 0.5;
+					mem[i] = (blo.saw[i] + blo.saw[(i * 2) & 1023]) * 0.5;
 
 				return;
 			}

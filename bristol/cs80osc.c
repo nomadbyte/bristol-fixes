@@ -681,7 +681,7 @@ fillWave(register float *mem, register int count, int type)
 				int i;
 
 				for (i = 0; i < count; i++)
-					mem[i] = blosine[i];
+					mem[i] = blo.sine[i];
 				return;
 			}
 			fillPDwave(mem, count, 1.0);
@@ -695,7 +695,7 @@ fillWave(register float *mem, register int count, int type)
 				int i;
 
 				for (i = 0; i < count; i++)
-					mem[i] = bloramp[i];
+					mem[i] = blo.ramp[i];
 				return;
 			}
 			fillPDwave(mem, count, 20.0);
@@ -711,7 +711,7 @@ fillWave(register float *mem, register int count, int type)
 			if (blo.flags & BRISTOL_BLO)
 			{
 				for (i = 0; i < count; i++)
-					mem[i] = blosquare[i];
+					mem[i] = blo.square[i];
 				return;
 			}
 			for (i = 0; i < count / 2; i++)
@@ -728,7 +728,7 @@ fillWave(register float *mem, register int count, int type)
 				if (blo.flags & BRISTOL_BLO)
 				{
 					for (i = 0; i < count; i++)
-						mem[i] = blotriangle[i];
+						mem[i] = blo.triangle[i];
 					return;
 				}
 
