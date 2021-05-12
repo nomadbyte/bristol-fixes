@@ -436,19 +436,19 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->bank = value - (value % 8);
 			synth->location = value % 8;
 			loadMemory(synth, "pro1", 0, synth->bank * 10 + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}

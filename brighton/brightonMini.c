@@ -98,7 +98,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		0, 0},
 	{"Mod", 0, 80, R4, S1, S1, 0, 1, 0, "bitmaps/knobs/knob4.xpm", 
 		0, 0}, /*3 */
-/* OSCILATORS */
+/* OSCILLATORS */
 	{"Osc1 Transpose", 0, C1, R1, S1, S1, 0, 5, 0, "bitmaps/knobs/knob4.xpm", 
 		0, 0},
 	{"Osc2 Transpose", 0, C1, R3, S1, S1, 0, 5, 0, "bitmaps/knobs/knob4.xpm", 
@@ -206,7 +206,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/digits/8.xpm", 0, BRIGHTON_CHECKBUTTON},
 	{"", 2, R7 + S4 * 2, R6, S4, S5, 0, 1, 0,
 		"bitmaps/digits/9.xpm", 0, BRIGHTON_CHECKBUTTON},
-	/* Up down midi */
+	/* Up down MIDI */
 	{"", 2, R7 + S4, 415, S4, S5, 0, 1, 0,
 		"bitmaps/digits/Down.xpm", 0, BRIGHTON_CHECKBUTTON},
 	{"", 2, R7 + S4 * 2, 415, S4, S5, 0, 1, 0,
@@ -232,7 +232,7 @@ brightonApp miniApp = {
 	"mini",
 	0, /* no blueprint on wood background. */
 	"bitmaps/textures/wood6.xpm",
-	0, /*BRIGHTON_STRETCH, // default is tesselate */
+	0, /*BRIGHTON_STRETCH, // default is tessellate */
 	miniInit,
 	miniConfigure, /* 3 callbacks, unused? */
 	midiCallback,
@@ -357,12 +357,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	//printf("midi callback: %x, %i\n", controller, value);
+	//printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			//printf("midi program: %x, %i\n", controller, value);
+			//printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value + synth->bank * 10;
 			if (loadMemory(synth, synth->resources->name, 0,
 				synth->location, synth->mem.active, FIRST_DEV, 0) < 0)
@@ -371,7 +371,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 				displayText(synth, "PRG", synth->location, FIRST_DEV + 59);
 			break;
 		case MIDI_BANK_SELECT:
-			//printf("midi banksel: %x, %i\n", controller, value);
+			//printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			synth->location = (synth->location % 10) + value * 10;
 			if (loadMemory(synth, synth->resources->name, 0,
@@ -740,7 +740,7 @@ miniInit(brightonWindow *win)
 	bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4,
 		CONTROLLER_RANGE - 1);
 	/*
-	 * Filter type, this selects a Houvilainen filter
+	 * Filter type, this selects a Huovilainen filter
 	 */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 4, 4, 4);
 	/*
@@ -973,7 +973,7 @@ miniConfigure(brightonWindow *win)
 	 * 0.9 release but configurable per synth. These are detune and gain to
 	 * start with. Some of this code could be separated as it is likely to be
 	 * common to each synth. These parameters will be sent to the engine using
-	 * midi non-registered parameters. These will be sent as NRP-98/99 and Data
+	 * MIDI non-registered parameters. These will be sent as NRP-98/99 and Data
 	 * Entry-6/38. To simplify the interface we should be able to make one call
 	 * send a NRP including the number and its 14 bit value. It is up to the
 	 * interface to decide how to send it depending on whether it is a repeat

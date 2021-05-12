@@ -32,7 +32,7 @@
 typedef struct solinaMods {
 	float pwm;
 	float vibrato;
-	float tremelo;
+	float tremolo;
 	float glide;
 	int lowsplit;
 	int highsplit;

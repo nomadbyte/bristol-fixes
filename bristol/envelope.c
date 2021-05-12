@@ -317,10 +317,10 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 		local->cstate = STATE_ATTACK;
 		/*
-		 * This is for Jack Sample Accurate support. It is a compromise as I am
+		 * This is for JACK Sample Accurate support. It is a compromise as I am
 		 * not a great fan of the feature: the envelope will delay its attack
 		 * event by the number of frames indicated in the voice offset, that
-		 * offset is taken from the Jack event (it is zero for all other bristol
+		 * offset is taken from the JACK event (it is zero for all other bristol
 		 * MIDI interface drivers).
 		 *
 		 * State changes will not be sample accurate in the first version - they
@@ -573,7 +573,7 @@ envinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

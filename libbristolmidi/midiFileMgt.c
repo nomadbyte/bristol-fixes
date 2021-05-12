@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -21,10 +21,10 @@
 
 /*
  * This started out primarily to load arrays of values, they being used for
- * whatever purposes required by the caller. The midi interface uses them to
+ * whatever purposes required by the caller. The MIDI interface uses them to
  * define the gain parameters for velocity and any other control settings.
  * The Hammond preacher algorithm uses them to load the the tonewheel settings,
- * not really a midi function however the code is reasonably general.
+ * not really a MIDI function however the code is reasonably general.
  */
 
 #include <stdio.h>
@@ -221,7 +221,7 @@ bristolGetMap(char *file, char *match, float *points, int count, int flags)
 	float from, delta;
 
 	/*
-	 * Open and read configuration. Should consider seaching
+	 * Open and read configuration. Should consider searching
 	 * $HOME/.bristol/memory and $BRISTOL_DB/memory.
 	 */
 	sprintf(tmppath, "%s/memory/profiles/%s", getBristolCache("profiles"), file);
@@ -412,7 +412,7 @@ int sr)
 /*
  * This could also go into the library so the engine could use the same code?
  *
- * We want to go through the midi controller mapping file for this synth and
+ * We want to go through the MIDI controller mapping file for this synth and
  * search for directives for value maps. The names are taken from the midi
  * header file and we want to add a few others for preconfigured value tables.
  */
@@ -814,7 +814,7 @@ bristolOpenStdio(int mode)
 			close(std_out);
 			std_out = f_out;
 			/*
-			 * We need this to log into the file rather than stdtio
+			 * We need this to log into the file rather than stdout
 			 */
 			printf("\nstarting file logging [@%i.%i]\n",
 				(int) tv.tv_sec, (int) tv.tv_usec);

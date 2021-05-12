@@ -28,12 +28,12 @@
 #define NEW_CLICK
 
 /*
- * These are the midi note offsets for any given key harmonics.
+ * These are the MIDI note offsets for any given key harmonics.
  */
 static int offsets[BUS_COUNT] = {-12, 7, 0, 12, 19, 24, 28, 31, 36};
 
 /*
- * Get a humungous chunk of memory, SAMPLE_COUNT should come from the audiomain
+ * Get a humongous chunk of memory, SAMPLE_COUNT should come from the audiomain
  * structure. This is the pointer to that chunk of 'current buffer working mem'.
  */
 static float *oscillators = NULL;
@@ -252,7 +252,7 @@ static float rtapers[OSC_LIMIT][9] = {
 static float wheeltemplates[2][OSC_LIMIT][WAVE_SIZE];
 static float *tonewheel[OSC_LIMIT];
 static int *wheelnumbers = &wi[36];
-static float toneindeces[OSC_LIMIT];
+static float toneindexes[OSC_LIMIT];
 #define NORMAL 0
 #define BRIGHT 1
 static float toneEQ[2][OSC_LIMIT];

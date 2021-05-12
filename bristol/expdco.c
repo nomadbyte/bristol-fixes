@@ -316,7 +316,7 @@ static int operate(bristolOP *operator,
 	 * Go jumping through the wavetable, with each jump defined by the value
 	 * given on our input line, making sure we fill one output buffer.
 	 *
-	 * This is quite an intentive oscillator due to the requirements for
+	 * This is quite an intensive oscillator due to the requirements for
 	 * waveform morphs ala PWM between different waves.
 	 */
 	for (obp = 0; obp < count; obp++)
@@ -374,7 +374,7 @@ static int operate(bristolOP *operator,
 						* gain2;
 		} else if (wform <= 0.66) {
 			/*
-			 * Crossrade ramp into square, however I want the square to be
+			 * Crossfade ramp into square, however I want the square to be
 			 * a difference of two ramps.....
 			 */
 			wt1 = param->param[3].mem; /* Triangular */
@@ -471,7 +471,7 @@ expdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -601,7 +601,7 @@ fillPDsine(float *mem, int count, int compress)
 	float j = 0, i, inc1, inc2;
 
 	/*
-	 * Resample the sine wave as per casio phase distortion algorithms.
+	 * Resample the sine wave as per Casio phase distortion algorithms.
 	 *
 	 * We have to get to M_PI/2 in compress steps, hence
 	 *
@@ -749,7 +749,7 @@ fillWave(float *mem, int count, int type)
 			return;
 		case 6:
 			/*
-			 * Tangiential wave. We limit some of the values, since they do get
+			 * Tangential wave. We limit some of the values, since they do get
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */

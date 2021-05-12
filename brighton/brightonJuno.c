@@ -390,12 +390,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			if (loadMemory(synth, "juno", 0, synth->bank + synth->location,
 				synth->mem.active, FIRST_DEV, 0) < 0)
@@ -404,7 +404,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 				displayText(synth, "PRG", synth->location, DISPLAY_DEV);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			synth->location = (synth->location % 10) + value * 10;
 			if (loadMemory(synth, "juno", 0, synth->bank + synth->location,
@@ -796,7 +796,7 @@ junoInit(brightonWindow *win)
 		dispatch[MEM_MGT + 14].routine = dispatch[MEM_MGT + 15].routine
 			= (synthRoutine) junoMemory;
 
-	/* Midi management */
+	/* MIDI management */
 	dispatch[MIDI_MGT].routine = dispatch[MIDI_MGT + 1].routine =
 		(synthRoutine) junoMidi;
 	dispatch[MIDI_MGT].controller = 2;

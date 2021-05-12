@@ -25,7 +25,7 @@
  * mastering file, one to write the header, and one to close the file.
  *
  * openMaster()
- *	The calling rouine will pass the file type. Expects an answer of:
+ *	The calling routine will pass the file type. Expects an answer of:
  *		-1: failure - forget mastering.
  *		Anything else - do mastering with output to that FD number.
  *
@@ -34,7 +34,7 @@
  *	must format data as necessary.
  *
  * closeMaster()
- *	The calling rouine will pass the file type, and the number of bytes written.
+ *	The calling routine will pass the file type, and the number of bytes written.
  */
 #include <slabrevisions.h>
 #include <slabaudiodev.h>
@@ -209,7 +209,7 @@ writeMaster(duplexDev *audioDev, int type, int fd, void *buffer, int size)
 #ifdef MASTER_CDR
 		case MASTER_CDR:
 			/*
-			 * We need to byteswap first. Oops, this should cater for differnt
+			 * We need to byteswap first. Oops, this should cater for different
 			 * output data types.
 			 */
 			cdrFormat(buffer, size >> 2);
@@ -248,7 +248,7 @@ closeMaster(duplexDev *audioDev, int fd, int type, int count)
 #ifdef MASTER_CDR
 		case MASTER_CDR:
 			/*
-			 * We need to pad the file to frag boundry.
+			 * We need to pad the file to frag boundary.
 			 */
 			cdrPad(fd, count);
 			break;
@@ -257,7 +257,7 @@ closeMaster(duplexDev *audioDev, int fd, int type, int count)
 #ifdef MASTER_MP3ONLINE
 		case MASTER_MP3ONLINE:
 			/*
-			 * We cannot kick the child yet, since it may not be finnished.
+			 * We cannot kick the child yet, since it may not be finished.
 			 */
 			break;
 #endif

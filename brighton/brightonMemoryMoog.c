@@ -318,7 +318,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/touch.xpm", BRIGHTON_CHECKBUTTON|BRIGHTON_NOSHADOW},
 	{"", 0, C11 - 5, R0, S3, S4, 0, 1, 0, "bitmaps/knobs/knob6.xpm", 0, BRIGHTON_NOTCH},
 
-	/* Memory/Midi - 94 */
+	/* Memory/MIDI - 94 */
 	/* Load/Save */
 	{"", 2, C20 - 4, R3, S2, S1, 0, 1, 0, "bitmaps/buttons/touchogb.xpm",
 		"bitmaps/buttons/touchgb.xpm", BRIGHTON_CHECKBUTTON|BRIGHTON_NOSHADOW},
@@ -571,18 +571,18 @@ MMmidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value + synth->bank;
 			loadMemory(synth, "memoryMoog", 0, synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value + 10;
 			synth->location = (synth->location % 10) + synth->bank;
 			loadMemory(synth, "memoryMoog", 0, synth->location,
@@ -611,7 +611,7 @@ memMoogModCallback(brightonWindow *win, int panel, int index, float value)
 		float bend = synth->mem.param[89];
 		/*
 		 * Value is between 0 and 1 latching at 0.5. Have to scale the value
-		 * and subtrace if from the mid point
+		 * and subtract if from the mid point
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->midichannel,
 			BRISTOL_EVENT_PITCH, 0,
@@ -810,7 +810,7 @@ memMoogOscTranspose(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		return;
 
 	/*
-	 * We need to configure the radio set and then request the tranpose value.
+	 * We need to configure the radio set and then request the transpose value.
 	 */
 	if (synth->dispatch[c].other2)
 	{
@@ -836,7 +836,7 @@ memMoogOscTranspose(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 	if (o > 17) {
 		/*
-		 * Osc 3 - tranpose depends on mem[27]
+		 * Osc 3 - transpose depends on mem[27]
 		 */
 		if (synth->mem.param[27])
 			return;
@@ -859,7 +859,7 @@ memMoogLFOWave(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		return;
 
 	/*
-	 * We need to configure the radio set and then request the tranpose value.
+	 * We need to configure the radio set and then request the transpose value.
 	 */
 	if (synth->dispatch[c].other2)
 	{
@@ -895,7 +895,7 @@ memMoogTranspose(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		return;
 
 	/*
-	 * We need to configure the radio set and then request the tranpose value.
+	 * We need to configure the radio set and then request the transpose value.
 	 */
 	if (synth->dispatch[c].other2)
 	{

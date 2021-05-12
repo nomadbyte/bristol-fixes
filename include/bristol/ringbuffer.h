@@ -107,7 +107,7 @@ void jack_ringbuffer_get_read_vector(const jack_ringbuffer_t *rb,
 				     jack_ringbuffer_data_t *vec);
 
 /**
- * Fill a data structure with a description of the current writable
+ * Fill a data structure with a description of the current writeable
  * space in the ringbuffer.  The description is returned in a two
  * element array of jack_ringbuffer_data_t.  Two elements are needed
  * because the space available for writing may be split across the end
@@ -144,7 +144,7 @@ size_t jack_ringbuffer_read(jack_ringbuffer_t *rb, char *dest, size_t cnt);
  * Read data from the ringbuffer. Opposed to jack_ringbuffer_read()
  * this function does not move the read pointer. Thus it's
  * a convenient way to inspect data in the ringbuffer in a
- * continous fashion. The price is that the data is copied
+ * continuous fashion. The price is that the data is copied
  * into a user provided buffer. For "raw" non-copy inspection
  * of the data in the ringbuffer use jack_ringbuffer_get_read_vector().
  *

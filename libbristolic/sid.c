@@ -21,7 +21,7 @@
 
 /*
  * Emulator code for the C64 SID audio chip. All the register numbers and bit
- * masks are defined in bristolsid.h, code will accept the register addressess,
+ * masks are defined in bristolsid.h, code will accept the register addresses,
  * parse the register bit values into some internal tables and then allow IO to
  * generate all the signals. The SID chip was partly digital (Osc/Env/Noise)
  * and partly analogue (Filter). This is emulated as integer code and floating
@@ -76,8 +76,8 @@
  * has been lowered. This is as per the original, and whilst it would have 
  * been easy to change here it was emulated as per the SID design.
  *
- * The filter is a chamberlain 12dB multimode and is probably a bit colder
- * than the original. As an option the LPF can be selected as a houvilainen
+ * The filter is a chamberlin 12dB multimode and is probably a bit colder
+ * than the original. As an option the LPF can be selected as a huovilainen
  * 24dB/octave, warmer but more CPU intensive. The 24dB version can also give
  * different levels of feedforward mixing of the other poles to also alter the
  * roll-off characteristics. The different dB/octave versions can also be mixed
@@ -108,7 +108,7 @@
  * 	mono (with detune then between voices in emulator)
  * 	three voice poly-1: all play same sound
  * 	three voice poly-2: all have their own sound
- * 	two voice poly, voice 3 arpeggio - argeggiate all other held notes
+ * 	two voice poly, voice 3 arpeggio - arpeggiate all other held notes
  * 	two voice poly, voice 3 mod only
  *
  * Arpeggiator to have rate, retrig and wavescanning, rates down to X samples.
@@ -387,8 +387,8 @@ typedef struct SidVoice {
 
 /*
  * Two different filter algorithms will be available. Both are floating point
- * as the original was analogue. One is the chamberlain, it is 12dB multimode
- * as per the original. The other is a houvilainen LPF as a option, a lot 
+ * as the original was analogue. One is the chamberlin, it is 12dB multimode
+ * as per the original. The other is a huovilainen LPF as a option, a lot 
  * warmer. Only one can be selected at any given time.
  */
 typedef struct SidFilter {
@@ -396,12 +396,12 @@ typedef struct SidFilter {
 	float cutoff;
 	float resonance;
 	float fmix;
-	/* For the Chamberlain code */
+	/* For the Chamberlin code */
 	float delay1;
 	float delay2;
 	float delay3;
 	float delay4;
-	/* For the houvilainen code */
+	/* For the huovilainen code */
 	float az1;
 	float az2;
 	float az3;
@@ -530,7 +530,7 @@ bSidFilter(int id, unsigned char comm, unsigned char param)
 	SID[id]->reg[comm] = param;
 
 	/*
-	 * The filter cutoff will go from 0 to nyquist and this parameter is only
+	 * The filter cutoff will go from 0 to Nyquist and this parameter is only
 	 * supposed to have a range up to 12kHz.
 	 */
 	switch (comm) {
@@ -540,7 +540,7 @@ bSidFilter(int id, unsigned char comm, unsigned char param)
 				((float) ((SID[id]->reg[B_SID_FILT_HI] << 3)
 					+ (SID[id]->reg[B_SID_FILT_LO] & 0x07))) / 2048.0;
 
-			/* We use 24K here since cutoff only goes up to nyquist */
+			/* We use 24K here since cutoff only goes up to Nyquist */
 			SID[id]->filter.cutoff =
 				SID[id]->filter.cutoff
 					* 24000.0 / SID[id]->samplerate;
@@ -1071,7 +1071,7 @@ unsigned int psample)
  * Attack was always linear.
  *
  * In the first iteration this was a linear decay and release, then an 
- * accumulator was added in that fead more delay into the decays to extende
+ * accumulator was added in that fed more delay into the decays to extend
  * them.
  */
 static void
@@ -1156,9 +1156,9 @@ bSidDoEnv(sidVoice *voice, unsigned char vflags)
  *
  * We are going to look at two filter algorithms, both floating point.
  *
- * The default will be a chamberlain 12dB/Octave multimode HP/BP/LP.
+ * The default will be a chamberlin 12dB/Octave multimode HP/BP/LP.
  *
- * An optional Houvilainen 24dB/Octave LP will be integrated, and since the
+ * An optional Huovilainen 24dB/Octave LP will be integrated, and since the
  * cutoff is tied at 12kHz or lower then we will not bother with oversampling.
  *
  * If no filter poles are selected then we pass input to output, this is not 
@@ -1178,7 +1178,7 @@ bSidDoFilter(bSid *s)
 		return;
 	}
 
-	/* chamberlain */
+	/* chamberlin */
 	kfc = s->filter.cutoff; // * 12000 / s->samplerate;
 
 	if (kfc <= 0.000001)
@@ -1198,7 +1198,7 @@ bSidDoFilter(bSid *s)
 	highpass = s->filter.delay2 - s->filter.delay4 - qres * s->filter.delay3;
 	s->filter.delay3 = kfc * highpass + s->filter.delay3;
 
-	/* Houvilainen LPF-24 */
+	/* Huovilainen LPF-24 */
 	if (s->reg[B_SID_CONTROL] & B_SID_C_LPF)
 	{
 		float kfcr;
@@ -1570,7 +1570,7 @@ bSidIOInit(int id, float samplerate)
 }
 
 /*
- * Demultiplexor for address being given, parse the value into the registers and
+ * Demultiplexer for address being given, parse the value into the registers and
  * interpret them into our local structure, finally return the current content.
  */
 int

@@ -52,7 +52,7 @@ extern void *initMixerMemory(int count);
  *
  * Personally I think we should define a memory structure that is overlayed 
  * onto the array of floats that defines the actual memory space. To allow for
- * extensability then bussing should come first, then tracks listed from '1'.
+ * extensibility then bussing should come first, then tracks listed from '1'.
  * The function section which includes master volume is not saved.
  */
 
@@ -231,7 +231,7 @@ static brightonLocations locations[MEM_COUNT] = {
 		"bitmaps/buttons/pressoffSy.xpm", "bitmaps/buttons/pressonSy.xpm", BRIGHTON_NOSHADOW},
 
 	/*
-	 * Effects select: reverb, echo, chorus, flanger, tremelo, vibrato, delay
+	 * Effects select: reverb, echo, chorus, flanger, tremolo, vibrato, delay
 	 */
 	{"", 2, C12, R14 + 6, SB3, SB7, 0, 1.01, 0,
 		"bitmaps/buttons/pressoffSg.xpm", "bitmaps/buttons/pressonSg.xpm", BRIGHTON_NOSHADOW},
@@ -845,7 +845,7 @@ mixMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
  * This is non-trivial, since the GUI does not support radio buttons, and the
  * memory subsystem should not know about them. Consequently they have to be
  * handled here, and it can create issues where the GUI, the mixer and its
- * memory subsystem are not in agreament.
+ * memory subsystem are not in agreement.
 MARK
  */
 int currentInSelect[MAX_CHAN_COUNT] = {
@@ -1165,7 +1165,7 @@ trackOp(guiSynth *synth, int panel, int track, int operator, float value)
  * The memory structure is going to be large. To cater for future extensions
  * each memory component (track, bus, etc) is going to have extra memory 
  * allocated. New parameters will occupy the extra space allowing for 
- * compatability of memories over releases.
+ * compatibility of memories over releases.
  */
 static int
 mixCallback(brightonWindow * win, int panel, int index, float value)

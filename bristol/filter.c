@@ -39,7 +39,7 @@
  */
 /*
  * This implements three filter algorithms used by the different bristol
- * emulations. These are a butterworth used by the leslie, a chamberlain 
+ * emulations. These are a butterworth used by the leslie, a chamberlin 
  * used generally, and a rooney used for some of the filter layering and
  * eventually the mixing.
  */
@@ -97,7 +97,7 @@ btanhf(int mode, float v)
 {
 	/*
 	 * This should be 4 modes as we have two bit flags. Mode 1 are the real
-	 * lightweight chamberlain. That is more work on flag checking.
+	 * lightweight chamberlin. That is more work on flag checking.
 	 */
 	switch (mode) {
 		case 0: return(v);
@@ -112,7 +112,7 @@ btanhfeed(int mode, float v)
 {
 	/*
 	 * This should be 4 modes as we have two bit flags. Mode 1 are the real
-	 * lightweight chamberlain. That is more work on flag checking.
+	 * lightweight chamberlin. That is more work on flag checking.
 	 */
 	switch (mode) {
 		default:
@@ -301,7 +301,7 @@ param(bristolOP *operator, bristolOPParams *param,
 				float floatvalue =
 					((float) param->param[0].int_val) / CONTROLLER_RANGE;
 
-				printf("Selected chamberlain filter\n");
+				printf("Selected chamberlin filter\n");
 				param->param[index].int_val = 0;
 				param->param[0].float_val = floatvalue / 3;
 
@@ -338,7 +338,7 @@ register float gain, register int count) /* Filter loop */
 
 /*
  * This looks odd being global however it is for denormal reduction, we inject
- * a stupidly small amount of noise into the houvilainen filter to give is some
+ * a stupidly small amount of noise into the huovilainen filter to give is some
  * constant signal. The noise algorithm will work over multiple voices with no
  * detrimental effect.
  */
@@ -367,7 +367,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 	/*
 	 * Every operator accesses these variables, the count, and a pointer to
-	 * each buffer. We should consider passing them as readymade parameters?
+	 * each buffer. We should consider passing them as ready-made parameters?
 	 *
 	 * The Filter now takes normalised inputs, in ranges of 12PO.
 	 */
@@ -456,7 +456,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 			/*
 			 * Find out our current BLim. We have a specified limit, the
-			 * cuttoff. We have our mod signal, and an amount of that mod
+			 * cutoff. We have our mod signal, and an amount of that mod
 			 * signal. The ADSR produces a value between 0.0 and 1.0, so we
 			 * could add this to BLim?
 			 *
@@ -567,7 +567,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		 * historically they have used 1.0 per octave rather than +/-1.0).
 		 *
 		 * This one does not oversample - if the cutoff does not approach
-		 * nyquist then we do not have to correct for its inaccuracies.
+		 * Nyquist then we do not have to correct for its inaccuracies.
 		 */
 		float az1 = local->az1;
 		float az2 = local->az2;
@@ -596,16 +596,16 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		 * the key is used for tracking purposes, it should be possible to make
 		 * it reasonably linear at somewhere under unity
 		 *
-		 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking should be reviewed,
+		 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
 		 * the value should be quite linear for the filter, 0..Nyquist
 		 *
-		 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
+		 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
 		 * our samplerate we should be able to fix some tuning:
 		 *
 		 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 		 *
 		 * We want to position param[3] such that it tunes at 0.5 and can then
-		 * be notched in the GUI, hence srate/4 rathern than /2.
+		 * be notched in the GUI, hence srate/4 rather than /2.
 		 *
 		 * Needed some changes to key tracking, it was a bit bipolar.
 		coff = (param->param[0].float_val * param->param[0].float_val)
@@ -644,7 +644,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 			 * as the filter is 2x oversampling?
 			 *
 			 * We should really interpret coff (the configured frequency) as
-			 * a function up to about 20KHz whatever the resampling rate.
+			 * a function up to about 20kHz whatever the resampling rate.
 			 */
 			if ((kfc = coff + *mb++ * Mod) > lim)
 				kfc = lim;
@@ -723,16 +723,16 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		 * the key is used for tracking purposes, it should be possible to make
 		 * it reasonably linear at somewhere under unity
 		 *
-		 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking should be reviewed,
+		 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
 		 * the value should be quite linear for the filter, 0..Nyquist
 		 *
-		 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
+		 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
 		 * our samplerate we should be able to fix some tuning:
 		 *
 		 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 		 *
 		 * We want to position param[3] such that it tunes at 0.5 and can then
-		 * be notched in the GUI, hence srate/4 rathern than /2.
+		 * be notched in the GUI, hence srate/4 rather than /2.
 		 *
 		 * Needed some changes to key tracking, it was a bit bipolar.
 		coff = (param->param[0].float_val * param->param[0].float_val)
@@ -769,7 +769,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 			 * as the filter is 2x oversampling?
 			 *
 			 * We should really interpret coff (the configured frequency) as
-			 * a function up to about 20KHz whatever the resampling rate.
+			 * a function up to about 20kHz whatever the resampling rate.
 			 */
 			if ((kfc = coff + *mb++ * Mod) > 0.5)
 				kfc = 0.5;
@@ -837,7 +837,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		local->amf = amf;
 
 	} else {
-		/* The chamberlain */
+		/* The chamberlin */
 		register float freqcut, highpass, qres,
 			delay1 = local->delay1,
 			delay2 = local->delay2, 
@@ -937,7 +937,7 @@ filterinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -990,7 +990,7 @@ filterinit(bristolOP **operator, int index, int samplerate, int samplecount)
 	specs->spec.param[3].flags = BRISTOL_BUTTON;
 
 	specs->spec.param[4].pname = "filter type";
-	specs->spec.param[4].description = "Chamberlain or Rooney filter";
+	specs->spec.param[4].description = "Chamberlin or Rooney filter";
 	specs->spec.param[4].type = BRISTOL_TOGGLE;
 	specs->spec.param[4].low = 0;
 	specs->spec.param[4].high = 1;

@@ -88,7 +88,7 @@ doLoadMixerMemory(guiSynth *synth)
 	 * to the GUI to draw the mixer, that will notify the engine and set the
 	 * parameters here again (as an undesirable sideffect);
 	 *
-	 * Going to start with the steroe bus section as it is (comparatively) easy.
+	 * Going to start with the stereo bus section as it is (comparatively) easy.
 	 */
 	for (channel = 0; channel < 4; channel++)
 	{
@@ -477,7 +477,7 @@ getMixerMemory(mixerMem *m, int op, int param)
 
 			/*
 			 * Call a set of routines that will open the directory and then
-			 * return its contents until finnished.
+			 * return its contents until finished.
 			 */
 			return(entry->d_name);
 		default:

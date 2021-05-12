@@ -43,7 +43,7 @@ extern guimain global;
 #include "brightonKeys.h"
 
 #define DEVICE_COUNT 61
-#define ACTIVE_DEVS 61 /* Actually 57 - should not sve pitch control. */
+#define ACTIVE_DEVS 61 /* Actually 57 - should not have pitch control. */
 #define MEM_START 0
 #define MIDI_START (MEM_START + 18)
 
@@ -588,18 +588,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "odyssey", 0, synth->bank + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -614,7 +614,7 @@ odysseyMidiSendMsg(void *synth, int fd, int chan, int c, int o, int v)
 }
 
 /*
- * This will be called back with memories, midi and panel switch.
+ * This will be called back with memories, MIDI and panel switch.
  */
 static int
 odysseyMemory(brightonWindow * win, int panel, int index, float value)
@@ -693,19 +693,19 @@ odysseyMemory(brightonWindow * win, int panel, int index, float value)
 			break;
 		case 18:
 			/*
-			 * Midi down
+			 * MIDI down
 			 */
 			odysseyMidi(synth, 1);
 			break;
 		case 19:
 			/*
-			 * Midi Up
+			 * MIDI Up
 			 */
 			odysseyMidi(synth, 0);
 			break;
 		case 20:
 			/*
-			 * Midi Panel Switch
+			 * MIDI Panel Switch
 			 */
 			odysseyPanelSwitch(win);
 			break;
@@ -740,10 +740,10 @@ odysseyMidi(guiSynth *synth, int c)
 		/*
 		 * To overcome that we should consider checking a sequence number in
 		 * the message library? That is non trivial since it requires that
-		 * our midi messges have a 'ack' flag included - we cannot check for
+		 * our MIDI messages have a 'ack' flag included - we cannot check for
 		 * ack here (actually, we could, and in the app is probably the right
 		 * place to do it rather than the lib however both would have to be
-		 * changed to suppor this - nc).
+		 * changed to support this - nc).
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid,
 			127, 0, BRISTOL_MIDICHANNEL|newchan);
@@ -784,7 +784,7 @@ odysseyPanelSwitch(brightonWindow * win)
 		event.intvalue = 1;
 		brightonParamChange(synth->win, 0, -1, &event);
 		oMark = 0;
-		/* And toggle the filter type - chamberlain. */
+		/* And toggle the filter type - chamberlin. */
 		bristolMidiSendMsg(global.controlfd, synth->sid, 3, 4, 0);
 	}
 
@@ -1216,7 +1216,7 @@ odysseyInit(brightonWindow *win)
 	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 2, 16383);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 7, 4, 16383);
 
-	/* Ringmodd parameters. */
+	/* Ringmod parameters. */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 0, 16383);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 1, 128);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 8, 2, 16383);

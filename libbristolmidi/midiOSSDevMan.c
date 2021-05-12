@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -20,7 +20,7 @@
  */
 
 /*
- * This code should open the midi device (working with ALSA raw midi only for
+ * This code should open the MIDI device (working with ALSA raw MIDI only for
  * the moment (9/11/01)), and read data from it. Not sure how it will be read,
  * either buffers, events, or perhaps just raw data. At some point in the 
  * development this will become a separate thread in the synth code.
@@ -49,7 +49,7 @@ int (*callback)(), void *param, int dev, int handle)
 
 	if ((bmidi.dev[dev].fd = open(devname, O_RDWR)) < 0)
 	{
-		printf("Could not open OSS midi interface\n");
+		printf("Could not open OSS MIDI interface\n");
 		return(BRISTOL_MIDI_DRIVER);
 	}
 

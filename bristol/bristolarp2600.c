@@ -77,7 +77,7 @@ arp2600ClearPatchtable()
 
 	/*
 	 * We need to put in all the default patches such that all the inputs 
-	 * point to the desised output buffers.
+	 * point to the desired output buffers.
 	 */
 	for (i = 0; i < ARP_INCOUNT; i++)
 	{
@@ -532,7 +532,7 @@ bristolVoice *voice, register float *startbuf)
 	 * We need to make this connection for CV KBD open again. If nothing is
 	 * patched in then we execute this code, or rather, this freq table goes
 	 * into a buffer which is the default input. If the control is repatched
-	 * then we need to configure a 1/Octave intepretter for the alternative
+	 * then we need to configure a 1/Octave interpreter for the alternative
 	 * buffer. This leads to a few issues with the filter which I think takes
 	 * a linear 1.0f for frequency control - these differences are historical
 	 * and we should see about resolving them for this emulator, later the 
@@ -566,7 +566,7 @@ bristolVoice *voice, register float *startbuf)
 		 * about 400 times.
 		 *
 		 * Frequency of OSC without keyboard control is under management of
-		 * midi continuous controller 1.
+		 * MIDI continuous controller 1.
 		 */
 		for (i = 0; i < sc; i+=8)
 		{
@@ -651,7 +651,7 @@ bristolVoice *voice, register float *startbuf)
 		 * about 400 times.
 		 *
 		 * Frequency of OSC without keyboard control is under management of
-		 * midi continuous controller 1.
+		 * MIDI continuous controller 1.
 		 */
 		for (i = 0; i < sc; i+=8)
 		{
@@ -735,7 +735,7 @@ bristolVoice *voice, register float *startbuf)
 		 * about 400 times.
 		 *
 		 * Frequency of OSC without keyboard control is under management of
-		 * midi continuous controller 1.
+		 * MIDI continuous controller 1.
 		 */
 		for (i = 0; i < sc; i+=8)
 		{
@@ -961,7 +961,7 @@ bristolVoice *voice, register float *startbuf)
 	 * Still need to get the specifications of the mixer output. It minimally
 	 * goes into the panning as seen in the postOps, but there are two other
 	 * input/outputs and they are either full mix outputs, or, as done here,
-	 * 'postfades' on the respetive inputs.
+	 * 'postfades' on the respective inputs.
 	 *
 	 * Mixing:
 	 *	This is the polyphonic algorithm. There are several components that 

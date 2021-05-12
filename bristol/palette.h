@@ -207,7 +207,7 @@ struct bristolAlgos {
 	{NULL, NULL},
 	{bristolProphet52Init, "prophet52"}, /* Uses Prophet algorithm with added FX. */
 	{bristolOBXInit, "obx"}, /* Used by OB-X and two for OB-Xa */
-	{NULL, NULL}, /* THis was for the OBXA? */
+	{NULL, NULL}, /* This was for the OBXA? */
 	{NULL, NULL},
 	{bristolPolyInit, "mono"},
 	{bristolPoly6Init, "poly"},

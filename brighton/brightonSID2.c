@@ -122,7 +122,7 @@ static int dc, mbh = 0;
  * also some voice controls I need to add.
  *
  * FIX:
- * 	Velocity opion per voice - could be in PolyMods?
+ * 	Velocity option per voice - could be in PolyMods?
  * 	Keyboard ranging per voice (and arpeggiate?)
  * 	Pan - per voice or Mono/All use slightly different positioning +/-
  *
@@ -284,7 +284,7 @@ brightonLocations modwheel[5] = {
 static
 brightonLocations locations[DEVICE_COUNT] = {
 	/*
-	 * Three voices with same parameterisation, roughly
+	 * Three voices with same parametrisation, roughly
 	 * Tri/Ramp/Square/Noise Buttons
 	 * RM/SYNC/Mute/Routing(Multi global) Buttons
 	 * PW/Tune/transpose(/Glide?) - Pots
@@ -867,7 +867,7 @@ brightonLocations locations[DEVICE_COUNT] = {
 	{"", 2, S2C21, S2R9, VBW1, VBH1, 0, 1, 0, "bitmaps/buttons/sidb.xpm",
 		"bitmaps/buttons/sidbon.xpm", BRIGHTON_CHECKBUTTON},
 
-	/* Midi */
+	/* MIDI */
 	{"", 2, S3C5, S2R2, VBW1, VBH1, 0, 1, 0, "bitmaps/buttons/sidb.xpm",
 		"bitmaps/buttons/sidbon.xpm", BRIGHTON_CHECKBUTTON},
 	{"", 2, S3C5, S2R3, VBW1, VBH1, 0, 1, 0, "bitmaps/buttons/sidb.xpm",
@@ -942,9 +942,9 @@ brightonApp sid2App = {
 };
 
 /*
- * We really want to just use one midi channel and let the midi library decide
+ * We really want to just use one MIDI channel and let the MIDI library decide
  * that we have multiple synths on the channel with their own split points.
- * The lower layer should define the midi channel, split point and transpose 
+ * The lower layer should define the MIDI channel, split point and transpose 
  * of upper layer.
  */
 static int
@@ -974,7 +974,7 @@ sid2KeyCallback(brightonWindow *win, int panel, int index, float value)
 /*
  * At this point we have loaded a memory so we need to send those actual new
  * parameters to the engine. This is an issue for MIDI program load, perhaps
- * we should consid2er dual load above memory 74 as per the original?
+ * we should consider dual load above memory 74 as per the original?
  *
  * The path of least resistance here is to scan through the the memory table
  * incrementing the input selector and delivering the memory value to the
@@ -1081,12 +1081,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			 * We should accept 0..74 as lower layer and above that as dual
 			 * loading requests.
 			 */
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemoryMidiShim(synth, synth->location);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -1377,7 +1377,7 @@ sid2Memory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			}
 			synth->flags &= ~BANK_SELECT;
 
-			/* Doubleclick on load will toggle debugging */
+			/* Double-click on load will toggle debugging */
 			if (brightonDoubleClick(dc) != 0)
 				bristolMidiSendMsg(fd, synth->sid2, 126, 4, 1);
 

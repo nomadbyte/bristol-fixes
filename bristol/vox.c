@@ -296,7 +296,7 @@ voxdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -779,7 +779,7 @@ fillVoxM2Wave(bristolOP *operator, bristolOPParams *params)
 
 	/*
 	 * Do Draw-II for the flute, or sine waves. This is 5-1/3 and 1-3/5
-	 * which are indeces 3 and 7. There is an optional percussive.
+	 * which are indexes 3 and 7. There is an optional percussive.
 	 */
 	gain = ((float) (wavelevel[6] * wavelevel[4])) / 64.0;
 	if (gain != 0)
@@ -821,7 +821,7 @@ fillVoxM2Wave(bristolOP *operator, bristolOPParams *params)
 	{
 		oscindex = 0;
 		/*
-		 * Take the rempwave and the destination wave.
+		 * Take the rampwave and the destination wave.
 		 */
 		source = specs->wave[7];
 		dest = wave1;

@@ -427,7 +427,7 @@ bristolVoice *voice, register float *startbuf)
 
 		if (baudio->mixflags & P800_SYNC) {
 			/*
-			 * If sync is enabled then the LFO was not fead into DCO1 but we
+			 * If sync is enabled then the LFO was not fed into DCO1 but we
 			 * do want it in DCO-2 for sync modulations. It is still possible
 			 * to get vibrato on DCO1 with sync but it requires the joystick.
 			 */

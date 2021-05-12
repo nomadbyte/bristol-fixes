@@ -133,8 +133,8 @@ printSoundList(Baudio *baudio, bristolSound *sound[])
 
 /*
  * Initialising an algorithm requires minimally that the audio thread is 
- * dormant, and preferably also the midi thread. We build a voice template
- * configuration. It may be the responsiblity of the MIDI handler to init any
+ * dormant, and preferably also the MIDI thread. We build a voice template
+ * configuration. It may be the responsibility of the MIDI handler to init any
  * voices we use.
  */
 void
@@ -180,7 +180,7 @@ freeSoundAlgo(Baudio *baudio, int algo, bristolSound *sound[])
 		int j;
 
 		/*
-		 * And then for each parameter, see if it has assigmed any local
+		 * And then for each parameter, see if it has assigned any local
 		 * memory.
 		 */
 		for (j = 0; j < BRISTOL_PARAM_COUNT; j++)

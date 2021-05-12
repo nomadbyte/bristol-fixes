@@ -148,7 +148,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 			break;
 		case 0: /* Tune in large amounts */
 			/*
-			 * This should be exponential 15 to 15 KHz for an audible oscillator
+			 * This should be exponential 15 to 15 kHz for an audible oscillator
 			 * and something like 0.02 to 500 Hz for an 'LFO'.
 			 */
 			{
@@ -212,7 +212,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 					param->param[4].float_val);
 			}
 			break;
-		case 5: /* LFO.... Encodes the type of oscilllator. */
+		case 5: /* LFO.... Encodes the type of oscillator. */
 			param->param[index].int_val = value * CONTROLLER_RANGE;
 			break;
 		case 7: /* sync flag */
@@ -297,7 +297,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 
 /*
  * This oscillator takes an input frequency buffer that is related to the 
- * midi key, glide and pitch bend, all frequency matched so that glide is 
+ * MIDI key, glide and pitch bend, all frequency matched so that glide is 
  * at a constant rate irrespective of pitch and pitch bend is +/- a given 
  * range. It then takes a mod buf which contains anything we want to put into
  * it - for the AKS it is the result of all the patch pins in the matrix. It
@@ -305,13 +305,13 @@ static int param(bristolOP *operator, bristolOPParams *param,
  * [Notes 3 Nov 06: Perhaps the freq buf should not be used. Pitch bend will
  * be mapped to the X axis of the joystick in the modbuffer, and glide was not
  * implemented by this synth and will have the value 0 (no glide)].
- * [Alternatively allow the midi library to map pitch bend (coarse and fine) to 
+ * [Alternatively allow the MIDI library to map pitch bend (coarse and fine) to 
  * another set of controllers that can then be used here for X axis modulation.]
  *
  * There are then two output buffers, one for each of the generated waveforms.
  *
- * Target tuning is 0.02 Hz to 16KHz, and we are probably going to have two
- * coarrse/fine controllers to cover it, 28bits.
+ * Target tuning is 0.02 Hz to 16kHz, and we are probably going to have two
+ * coarse/fine controllers to cover it, 28bits.
  */
 static int operate(bristolOP *operator,
 	bristolVoice *voice,
@@ -359,7 +359,7 @@ static int operate(bristolOP *operator,
 		 * Take a sample from the wavetable into the output buffer. This 
 		 * should also be scaled by gain parameter.
 		 *
-		 * We can seperate this into subroutine calls, or we can take our
+		 * We can separate this into subroutine calls, or we can take our
 		 * values and take each wave?
 		 */
 		gdelta = wtp - ((float) ((int) wtp));
@@ -415,7 +415,7 @@ aksdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -619,7 +619,7 @@ fillSineWave(float *mem, float count, float distort, float gain)
 	 * We are going to distort the sine wave by altering the rate at which it
 	 * scans through each of its two halves. The value can go from 0 to 1.0
 	 * and that should be controlled.
-	 * It defines the poing at which we reach  PI, or half of a sine.
+	 * It defines the point at which we reach  PI, or half of a sine.
 	 */
 	inc1 = ((float) M_PI) / (distort * count);
 	inc2 = ((float) M_PI) / (count - distort * count);

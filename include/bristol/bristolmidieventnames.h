@@ -50,7 +50,7 @@ static char eventNames[8][32] = {
 
 /*
  * These are the control names encoded as 7 bits in the second byte of any
- * related midi message, the value is encoded as 7 bits in the 3rd byte. For
+ * related MIDI message, the value is encoded as 7 bits in the 3rd byte. For
  * some controls there are two messages for high and low order bytes for 14
  * bit resolution however the sequencing of the two messages is a little
  * ambiguous.

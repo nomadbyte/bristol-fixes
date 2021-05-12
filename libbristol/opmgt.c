@@ -21,7 +21,7 @@
 
 /*
  * Library routines for operator management. Initialisation, creation and
- * destruction of operator.s
+ * destruction of operators
  */
 
 #include "bristol.h"

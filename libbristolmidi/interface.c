@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -20,14 +20,14 @@
  */
 
 /*
- * This code should open the midi device and read data from it.
+ * This code should open the MIDI device and read data from it.
  *
  * All requests will be dispatched to the relevant handlers, with support for
  * OSS (/dev/midi*), ALSA (hw:0,0) and as of release 0.8 also the ALSA sequencer
  * (with client.port config).
  *
  * All events will be converted into a bristol native message format for
- * independency from the driver.
+ * independence from the driver.
  */
 #include <unistd.h>
 #include <strings.h>
@@ -115,7 +115,7 @@ void *param)
 		return(handle);
 
 	//bmidi.msgforwarder = NULL;
-	bmidi.handle[handle].handle = handle; /* That looks kind of wierd! */
+	bmidi.handle[handle].handle = handle; /* That looks kind of weird! */
 	bmidi.handle[handle].state = BRISTOL_MIDI_OK;
 	bmidi.handle[handle].channel = chan;
 	bmidi.handle[handle].dev = -1;
@@ -125,7 +125,7 @@ void *param)
 	/*
 	 * We should then check to see if this dev is open, and if so link
 	 * another handle to it. We should support multiple destinations of the
-	 * same midi information.
+	 * same MIDI information.
 	 */
 	if (((flags & BRISTOL_CONN_FORCE) == 0)
 		&& ((devnum = bristolMidiFindDev(dev)) >= 0))
@@ -624,7 +624,7 @@ bristolMidiControl(int handle, int channel, int operator, int controller,
 {
 	unsigned char comm = 0xb0, ctr, val;
 
-/*	printf("Midi Control %i %i %i %i\n", channel, operator, controller, value); */
+/*	printf("MIDI Control %i %i %i %i\n", channel, operator, controller, value); */
 
 	comm |= channel;
 	ctr = controller;

@@ -171,7 +171,7 @@ brightonLocations mem[MEM_COUNT] = {
 	{"", 2, mC5, mR4, S4, S5, 0, 1, 0,
 		"bitmaps/buttons/pressoff.xpm", 
 		"bitmaps/buttons/presson.xpm", 0},
-	/* mem U/D, midi U/D, Load + Save */
+	/* mem U/D, MIDI U/D, Load + Save */
 	{"", 2, mC11, mR2, S4, S5, 0, 1, 0,
 		"bitmaps/buttons/pressoffg.xpm", 
 		"bitmaps/buttons/pressong.xpm", BRIGHTON_CHECKBUTTON},
@@ -196,7 +196,7 @@ brightonLocations mem[MEM_COUNT] = {
 
 /*
  * Should try and make this one as generic as possible, and try to use it as
- * a general memory routine. has Midi u/d, mem u/d, load/save and a display.
+ * a general memory routine. has MIDI u/d, mem u/d, load/save and a display.
  */
 int
 memCallback(brightonWindow* win, int panel, int index, float value)
@@ -212,7 +212,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 
 	/*
 	 * We need to convert the index into an offset into the mem structure.
-	 * To do this we make a simple parse of the panels preceeding this panel.
+	 * To do this we make a simple parse of the panels preceding this panel.
 	 */
 	for (i = 0; i < panel; i++)
 		memindex += synth->resources->resources[i].ndevices;
@@ -269,7 +269,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 		switch(index) {
 			case 10:
 				/*
-				 * Midi Down
+				 * MIDI Down
 				 */
 				if ((newchan = synth->midichannel - 1) < 0)
 				{
@@ -287,7 +287,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 				break;
 			case 11:
 				/*
-				 * Midi Up
+				 * MIDI Up
 				 */
 				if ((newchan = synth->midichannel + 1) > 15)
 				{
@@ -476,18 +476,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, synth->resources->name, 0, synth->bank + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}

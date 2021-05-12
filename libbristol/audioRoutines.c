@@ -26,7 +26,7 @@
  * then call our audio open library, also from SLab. The benefits of this are
  * the need to only maintain one audio library for any new driver release 
  * across all the audio applications. It requires a bit of work here, but the
- * benefits far outway the extra work. It does require that I import a lot of
+ * benefits far outweigh the extra work. It does require that I import a lot of
  * structures (ie, headers) from SLab.
  */
 
@@ -189,7 +189,7 @@ bristolAudioWrite(register float *buf, register int count)
 		printf("Write Failed: %i\n", result);
 		/*
 		 * We could get into a panic here. The device originally opened 
-		 * correctly (otherwise we would assumably not be writing here. Lets
+		 * correctly (otherwise we would assumedly not be writing here. Lets
 		 * just close and reopen the device, and see how things go.
 		 *
 		 * We should actually return a bad value, and continue, letting the

@@ -330,7 +330,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 #define S5 17
 #define S6 20
 
-	/* Memory/Midi */
+	/* Memory/MIDI */
 	/* Load/Save */
 	{"", 2, C20, R22_1, S5, S6, 0, 1, 0, "bitmaps/buttons/touchnl.xpm",
 		"bitmaps/buttons/touchgb.xpm", BRIGHTON_CHECKBUTTON|BRIGHTON_NOSHADOW},
@@ -855,7 +855,7 @@ sAksInit(brightonWindow *win)
 	dispatch[MIDI_START].routine = dispatch[MIDI_START + 1].routine =
 		(synthRoutine) sAksMidi;
 
-	/* Set the oscillator indeces */
+	/* Set the oscillator indexes */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 1, 5, 1);
 	bristolMidiSendMsg(global.controlfd, synth->sid, 2, 5, 2);
 	/* Pink noise source (is variable with filter) */

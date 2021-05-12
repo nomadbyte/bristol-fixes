@@ -307,7 +307,7 @@ register int count, register float inv)
  *	count.
  *	gain.
  *
- * This oscillator is going to have 4 continous controllers for the signal
+ * This oscillator is going to have 4 continuous controllers for the signal
  * strengths of the different harmonics, 32/16/8/4. It will have different
  * gain levels for the tri and ramp waves. Finally the phase shifting pulse
  * wave will function probably on the lowest selected harmonic at first since
@@ -345,7 +345,7 @@ static int operate(bristolOP *operator,
 	 * different harmonics. Quite CPU intensive. The sweeps should be factored
 	 * by detune as well however that is not available from the voice.....
 	 *
-	 * Reparameterize the operator for
+	 * Reparametrise the operator for
 	 * 	controllable detune
 	 *	controllable spread
 	 *	controllable distorts
@@ -429,7 +429,7 @@ trilogyoscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -767,7 +767,7 @@ fillPDcos(float *mem, int count, float compress)
 		comp = 1;
 
 	/*
-	 * Resample the sine wave as per casio phase distortion algorithms.
+	 * Resample the sine wave as per Casio phase distortion algorithms.
 	 *
 	 * We have to get to M_PI/2 in compress steps, hence
 	 *
@@ -792,7 +792,7 @@ fillPDcos(float *mem, int count, float compress)
 }
 
 /*
- * Resample the sine wave as per casio phase distortion algorithms.
+ * Resample the sine wave as per Casio phase distortion algorithms.
  *
  * We have to get to M_PI/2 in compress steps, hence
  *

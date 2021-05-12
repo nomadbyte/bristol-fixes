@@ -119,7 +119,7 @@ static int dc, mbh = 0, crl = 0;
 
 /*
  * We really need to define parameter types and ranges here to make the
- * interface complete. For example, the midi channels only go from 1 to 16 and
+ * interface complete. For example, the MIDI channels only go from 1 to 16 and
  * when selected as the input then the pot should configure this range.
  *
  * Similarly, if this is a button it should be 0 for the first half and 1 for
@@ -262,8 +262,8 @@ p800range poly800Range[DEVICE_COUNT] = {
 	{POLY800_CONTINUOUS, 0, 15, 126, 22, 0}, /* DCO */
 	{POLY800_CONTINUOUS, 0, 15, 126, 23, 0}, /* VCF */
 	{POLY800_STEPPED,	 0, 1, 126, 11, 0}, /* LFO Multi entry */
-	{POLY800_STEPPED,	 1, 16, 126, 126, P800_REZERO}, /* Midi Chan Shim */
-	{POLY800_STEPPED,	 0, 1, 126, 126, 0}, /* Midi Prog Change */
+	{POLY800_STEPPED,	 1, 16, 126, 126, P800_REZERO}, /* MIDI Chan Shim */
+	{POLY800_STEPPED,	 0, 1, 126, 126, 0}, /* MIDI Prog Change */
 	{POLY800_STEPPED,	 1, 2, 126, 126, P800_REZERO}, /* OMNI */
 
 };
@@ -684,7 +684,7 @@ brightonLocations p800mods[MODS_COUNT] = {
 	/* Entry pot 18 */
 	{"DataEntry", 0, 835, 750, 100, 140, 0, 1, 0, "bitmaps/knobs/knob1.xpm", 0, 0},
 
-	/* Midi is now in the memory */
+	/* MIDI is now in the memory */
 	{"", 2, 0, 0, 25, 140, 0, 1, 0, "bitmaps/buttons/polywhiteV.xpm",
 		"bitmaps/buttons/polyredV.xpm",BRIGHTON_CHECKBUTTON|BRIGHTON_WITHDRAWN},
 	{"", 2, 600, 340, 18, 35, 0, 1, 0, "bitmaps/textures/p8b.xpm",
@@ -861,9 +861,9 @@ poly800ChordInsert(arpeggiatorMemory *seq, int note, int transpose)
 }
 
 /*
- * We really want to just use one midi channel and let the midi library decide
+ * We really want to just use one MIDI channel and let the MIDI library decide
  * that we have multiple synths on the channel with their own split points.
- * The lower layer should define the midi channel, split point and transpose 
+ * The lower layer should define the MIDI channel, split point and transpose 
  * of upper layer.
  */
 static int
@@ -972,12 +972,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			 * We should accept 0..74 as lower layer and above that as dual
 			 * loading requests.
 			 */
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemoryShim(synth, synth->location);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}

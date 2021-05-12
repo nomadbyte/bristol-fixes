@@ -93,10 +93,10 @@ audioThread(audioMain *audiomain)
 		printf("starting audio thread\n");
 
 	/*
-	 * Due to the nature of the jack interface, we need to have this file be
-	 * minimally jack aware. The rest of the code takes an audio device, does
+	 * Due to the nature of the JACK interface, we need to have this file be
+	 * minimally JACK aware. The rest of the code takes an audio device, does
 	 * its own read and write calls, then dispatches to doAudioOps(). This is
-	 * not the same with jack, we register a callback and let it do the work
+	 * not the same with JACK, we register a callback and let it do the work
 	 * for us.
 	 */
 
@@ -106,7 +106,7 @@ audioThread(audioMain *audiomain)
 		while (audiomain->atReq != BRISTOL_REQSTOP)
 		{
 			/*
-			 * This will not return except when problem arise with the jack
+			 * This will not return except when problem arise with the JACK
 			 * interface. The returning code will decide whether to flag a
 			 * reqstop to exit
 			 */
@@ -138,7 +138,7 @@ audioThread(audioMain *audiomain)
 		while (audiomain->atReq != BRISTOL_REQSTOP)
 		{
 			/*
-			 * This will not return except when problem arise with the jack
+			 * This will not return except when problem arise with the JACK
 			 * interface. The returning code will decide whether to flag a
 			 * reqstop to exit
 			 */
@@ -146,14 +146,14 @@ audioThread(audioMain *audiomain)
 
 			audiomain->atStatus = BRISTOL_EXIT;
 
-			printf("jack audio interface returned\n");
+			printf("JACK audio interface returned\n");
 
 			_exit(0);
 		}
 
 		return;
 #else
-		printf("jack requested but not compiled with engine\n");
+		printf("JACK requested but not compiled with engine\n");
 
 		audiomain->atStatus = BRISTOL_EXIT;
 
@@ -170,15 +170,15 @@ audioThread(audioMain *audiomain)
 			< 0)
 	{
 		/*
-		 * If we have Jack support but have not request jack audio then this
-		 * failure is typically due to not giving the -jack option. Chekc for
+		 * If we have JACK support but have not request JACK audio then this
+		 * failure is typically due to not giving the -jack option. Check for
 		 * it and report.
 		 */
 #ifdef _BRISTOL_JACK
 		if (~audiomain->flags & BRISTOL_JACK)
 		{
 			printf("Failed to open audio device %s\n", device);
-			printf("If jack is running then use 'startBristol -jack'\n");
+			printf("If JACK is running then use 'startBristol -jack'\n");
 		} else
 #endif
 			printf("Problem opening audio device %s, exiting audio thread\n",
@@ -424,7 +424,7 @@ bristolMidiController(Baudio *baudio, int NRP, float value)
 				case 0: /* was heavyweight, now medium */
 					break;
 				case 1:
-					/* Chamberlains - not changed */
+					/* Chamberlins - not changed */
 					baudio->mixflags |= BRISTOL_LW_FILTER;
 					break;
 				case 2:
@@ -467,14 +467,14 @@ bristolMidiController(Baudio *baudio, int NRP, float value)
 			return(0);
 		case BRISTOL_NRP_DEBUG:
 			/*
-			 * This is a little unfortunte, we do not have direct access to
-			 * the midi library structures here so can only enable MIDI debug
+			 * This is a little unfortunate, we do not have direct access to
+			 * the MIDI library structures here so can only enable MIDI debug
 			 * for the emulator. This does not have to be an issue, it allows
-			 * us to view what each emulation is delivered by midi through the
+			 * us to view what each emulation is delivered by MIDI through the
 			 * bristol API.
 			 *
 			 * 052009 - integrate code to request the MIDI library include byte
-			 * debuging of interfaces.
+			 * debugging of interfaces.
 			 */
 			if ((value * C_RANGE_MIN_1) == 0)
 				baudio->midiflags &= ~(BRISTOL_MIDI_DEBUG1|BRISTOL_MIDI_DEBUG2);
@@ -517,10 +517,10 @@ bristolMidiController(Baudio *baudio, int NRP, float value)
 /*
  * This could also go into the library so the engine and GUI use the same code?
  * It might have been possible other than that the GUI code works with integer
- * values (mappings the actual controller indeces) and this code is for the
+ * values (mappings the actual controller indexes) and this code is for the
  * float curves in the engine, will leave that FFS.
  *
- * We want to go through the midi controller mapping file for this synth and
+ * We want to go through the MIDI controller mapping file for this synth and
  * search for directives for value maps. The names are taken from the midi
  * header file and we want to add a few others for preconfigured value tables.
  */
@@ -692,7 +692,7 @@ mapVelocityCurve(int velocity, float map[128])
 }
 
 /*
- * This was initiallly a call made in the MIDI thread. That naturally led to 
+ * This was initially a call made in the MIDI thread. That naturally led to 
  * problems with timing and was eventually moved as a request from the MIDI
  * thread to the audio thread.
  */
@@ -916,7 +916,7 @@ initAudioThread(audioMain *audiomain)
 		bristolmalloc0(sizeof(bristolOP *) * audiomain->opCount);
 
 	/*
-	 * Now that we have some basic stuctures we should start initiating the
+	 * Now that we have some basic structures we should start initiating the
 	 * operators. This is done one by one, for the
 	 *
 	 *	DCO/DCF/DCA/ADSR/NOISE/LFO/FX/OTHERS
@@ -983,7 +983,7 @@ freeBristolAudio(audioMain *audiomain, Baudio *baudio)
 		for (i = 0; i < audiomain->voiceCount; i++)
 		{
 			/*
-			 * Free the inividual locals.
+			 * Free the individual locals.
 			 */
 			if (baudio->FXlocals[i][0] == NULL)
 				continue;

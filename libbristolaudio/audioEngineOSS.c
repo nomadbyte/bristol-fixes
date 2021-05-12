@@ -247,7 +247,7 @@ int fragSize;
 }
 
 /*
- * Needs to be ALSAfied - ie, binned if we have alsa - this is GUI stuff.
+ * Needs to be ALSAfied - ie, binned if we have ALSA - this is GUI stuff.
  */
 static void
 checkAudioCaps2(audioDev, devID, fd)

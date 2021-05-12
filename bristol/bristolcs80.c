@@ -94,7 +94,7 @@ printf("bristolcs80Control(%i, %i, %f)\n", operator, controller, value);
 			/*
 			 * Since we are using here 'lpan = 1.0 - rpan' we could consider
 			 * just using one value. It is maintained as two since we may still
-			 * reinvoke the midi spec panning at some point.
+			 * reinvoke the MIDI spec panning at some point.
 			 */
 			((csmods *) baudio->mixlocals)->lpan[CH_I] = (1.0 - value);
 			((csmods *) baudio->mixlocals)->rpan[CH_I] = value;
@@ -116,7 +116,7 @@ printf("bristolcs80Control(%i, %i, %f)\n", operator, controller, value);
 			break;
 		case 5:
 			/*
-			 * This is a correct midi paninng calculation roughly as taken from
+			 * This is a correct MIDI panning calculation roughly as taken from
 			 * MMA corrective notes for stereo panning. It does not work
 			 * too well for an L/R mix though as it applies a constant power 
 			 * algorithm and gets very unbalanced at full throws.
@@ -415,7 +415,7 @@ bristolVoice *voice, bristolSound **sound, int channel)
 	 * have to split the calculation up a little bit.
 	 *
 	 * Need to make sure the filters work to expectation as well since the
-	 * brilliance value also widens the bandpass apeture.
+	 * brilliance value also widens the bandpass aperture.
 	 */
 	if (bkey <= 30) {
 		if (bkey <= 0) {
@@ -778,7 +778,7 @@ bristolCs80Init(audioMain *audiomain, Baudio *baudio)
 	 *
 	 *	LFO - PWM
 	 *	DCO - modified bitone oscillator.
-	 *	VCF - two, one HP onoe LP
+	 *	VCF - two, one HP one LP
 	 *	ENV - two, filter and amp. One needs some mods for IL
 	 *
 	 * Global operators:
@@ -787,14 +787,14 @@ bristolCs80Init(audioMain *audiomain, Baudio *baudio)
 	 *	RingMod
 	 *	LFO - subosc modifier.
 	 *	VibraChorus
-	 *	Tremelo
+	 *	Tremolo
 	 *
 	 * We need to work on ensuring that brilliance is implemented and that
-	 * polyphonic aftertouch is emulated. Brilliance should affect serveral 
+	 * polyphonic aftertouch is emulated. Brilliance should affect several 
 	 * components:
 	 *
 	 *	Filter cutoff should be adjusted
-	 *	VCO harmoonics should be layred in
+	 *	VCO harmonics should be layered in
 	 *
 	 * The brilliance also has several options that probably need to be totalled
 	 * up to a maximum value then applies:
@@ -805,7 +805,7 @@ bristolCs80Init(audioMain *audiomain, Baudio *baudio)
 	 * 	Keyboard span setting
 	 *
 	 * Keyboard response also has its own modifiers from low to high. Touch also
-	 * drives into the global LFO speed and moification depths but need to find
+	 * drives into the global LFO speed and modification depths but need to find
 	 * out if this was velocity or polypressure.
 	 */
 	baudio->soundCount = 19; /* Number of operators in this voice */
@@ -858,7 +858,7 @@ bristolCs80Init(audioMain *audiomain, Baudio *baudio)
 	/* AMP */
 	initSoundAlgo(2,	17, baudio, audiomain, baudio->sound);
 
-	/* VibraChorus - Tremelo is an osc that gets mixed in with the AMP ADSR */
+	/* VibraChorus - Tremolo is an osc that gets mixed in with the AMP ADSR */
 	initSoundAlgo(16,	18, baudio, audiomain, baudio->sound);
 
 	baudio->param = cs80Controller;

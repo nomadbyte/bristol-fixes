@@ -26,7 +26,7 @@
  * applications.
  *
  * The operations for audio control are rather ugly. The application sets up
- * a number of values in the controlBuffer, and the engine intermittanly looks
+ * a number of values in the controlBuffer, and the engine intermittently looks
  * to see if these values are initialised. If so, it acts on the values, and
  * then clears them. The reason we have to use this indirection is that the
  * front end applications do not own the audio device, this is under control

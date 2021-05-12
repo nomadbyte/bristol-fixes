@@ -36,7 +36,7 @@
 typedef struct roadrunnerMods {
 	float pwm;
 	float vibrato;
-	float tremelo;
+	float tremolo;
 	int lowsplit;
 	int highsplit;
 } roadrunnermods;

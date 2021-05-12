@@ -167,7 +167,7 @@ BNextEvent(brightonDisplay *display, brightonEvent *event)
 
 	/*
 	 * This is a bit of overkill, I want to just use NextEvent however I need
-	 * to also get some notifications from the midi control channel into this
+	 * to also get some notifications from the MIDI control channel into this
 	 * thread since they may update the screen. Only have a callback active 
 	 * means this is not easy. It would probably have been better to reconsider
 	 * the thread separation but anyway, we check for masked and typed events,

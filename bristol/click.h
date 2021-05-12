@@ -20,7 +20,7 @@
  */
 
 /*
- * We shoudl try and document roughly what each click is taken from: the kind
+ * We should try and document roughly what each click is taken from: the kind
  * of signal. We have clicks, shelves and samples here but none are very 
  * specific.
  */

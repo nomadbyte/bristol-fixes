@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -23,7 +23,7 @@
  * This will take a character filename and a float mapping, attempt to find the
  * specified file with a few different names/locations and then parse the
  * contents into the float array. The end result is a set of frequency tables
- * that can be converted separately into the midi frequency map.
+ * that can be converted separately into the MIDI frequency map.
  *
  * Bounds checking is done to limit the float map to 128 entries.
  *

@@ -46,7 +46,7 @@ static float blopulse[BRISTOL_BLO_SIZE];
 /*
  * Generate the waveforms to the given harmonic reference size. The code could
  * be optimised however it is really only likely to ever be called once at
- * startup or 'intermittently' whilst programmming a synth (depending on the
+ * startup or 'intermittently' whilst programming a synth (depending on the
  * oscillator implementation - most use a private cache stuffed at init time).
  */
 void

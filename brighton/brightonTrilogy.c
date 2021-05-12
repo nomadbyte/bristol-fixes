@@ -21,7 +21,7 @@
 
 /*
  * This file is just the visible presentation code for the trilogy. The stratus
- * was already architected to support the extra parameterisation for the trilogy
+ * was already architected to support the extra parametrisation for the trilogy
  * so this just now needed a different layout of a few of the parameters.
  *
  * Check String options.

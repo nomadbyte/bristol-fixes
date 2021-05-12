@@ -156,7 +156,7 @@ offset = 99;
 		voice->dfreq = baudio->microtonalmap[mn].freq;
 	} else if (bristolMidiRoutines.bmr[7].floatmap[mn] > 0.0) {
 		/*
-		 * This is the synth private microtonal map (eg, scala file)
+		 * This is the synth private microtonal map (e.g., scala file)
 		voice->dFreq = bristolMidiRoutines.freq[mn].step;
 		voice->dfreq = bristolMidiRoutines.freq[mn].freq;
 		 */
@@ -301,8 +301,8 @@ printf("midiNoteOff %i\n", msg->params.key.key);
 		&& (~audiomain->flags & BRISTOL_JACK_DUAL))
 	{
 		/*
-		 * The message came from Jack and we have selected a single registration
-		 * which means we are actually in the audio thread and can conginue with
+		 * The message came from JACK and we have selected a single registration
+		 * which means we are actually in the audio thread and can continue with
 		 * the note on event.
 		 */
 	    if ((audiomain->debuglevel & BRISTOL_DEBUG_MASK) > BRISTOL_DEBUG2)
@@ -564,7 +564,7 @@ doMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg, Baudio *baudio, int key)
 	 * a note is played within a reasonably small (configurable) range. This
 	 * will be used to emulate temperature sensitivity of the old synths.
 	 * It should be configurable per synth so perhaps we will make it a MIDI
-	 * unassigned opererator? The engine should respond to this operator, the
+	 * unassigned operator? The engine should respond to this operator, the
 	 * GUI will sent it, and any other arbitrary control may send it to the 
 	 * engine as well.
 	 */
@@ -647,7 +647,7 @@ doMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg, Baudio *baudio, int key)
 		 * glide times but it is also arguably incorrect as it should be a
 		 * multiplier that is applied a given number of times - that way the
 		 * glide is also constant per octave, not the case with the original
-		 * linear incrementor:
+		 * linear incrementer:
 		 */
 		cFreqmult = powf(M_E, logf(dFreq/cFreq)
 			/ (baudio->glide * audiomain->samplerate));
@@ -894,18 +894,18 @@ midiNoteOn(audioMain *audiomain, bristolMidiMsg *msg)
 	}
 
 	/*
-	 * So, if this came from a jack handle, and we are single open then don't
+	 * So, if this came from a JACK handle, and we are single open then don't
 	 * dump this in the ringbuffer - call the handler directly
 	 *
 	 * The JDO flags is straightforward. We then need to check if 'from' is 
-	 * a jack handle.
+	 * a JACK handle.
 	 */
 	if ((msg->params.key.flags & BRISTOL_KF_JACK)
 		&& (~audiomain->flags & BRISTOL_JACK_DUAL))
 	{
 		/*
-		 * The message came from Jack and we have selected a single registration
-		 * which means we are actually in the audio thread and can conginue with
+		 * The message came from JACK and we have selected a single registration
+		 * which means we are actually in the audio thread and can continue with
 		 * the note on event.
 		 */
 	    if ((audiomain->debuglevel & BRISTOL_DEBUG_MASK) > BRISTOL_DEBUG2)
@@ -941,7 +941,7 @@ rbMidiNoteOn(audioMain *audiomain, bristolMidiMsg *msg)
 
 	/*
 	 * Find an associated baudio structure. We have to go through the
-	 * baudio lists, and find the correct midi channel. Link up the locals
+	 * baudio lists, and find the correct MIDI channel. Link up the locals
 	 * list.
 	 */
 	while (baudio != (Baudio *) NULL)
@@ -1038,7 +1038,7 @@ sustainedNotesOff(audioMain *audiomain, int channel)
 	}
 
 	if ((voice != NULL) && (voice->baudio->midiflags & BRISTOL_MIDI_DEBUG2))
-		printf("midi sustained notes off\n");
+		printf("MIDI sustained notes off\n");
 }
 
 void
@@ -1062,7 +1062,7 @@ allNotesOff(audioMain *audiomain, int channel)
 	}
 
 	if ((voice != NULL) && (voice->baudio->midiflags & BRISTOL_MIDI_DEBUG2))
-		printf("midi all notes off\n");
+		printf("MIDI all notes off\n");
 }
 
 #ifndef BRISTOL_SEMAPHORE

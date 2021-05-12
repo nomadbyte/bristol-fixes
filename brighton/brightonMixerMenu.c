@@ -91,7 +91,7 @@ guiSynth *theSynth;
 /*
  * We should not really have to rely on timers within the GUI: The engine will
  * evaluate RMS and Peak signal values for the channels, and save them. The 
- * Midi thread should take these values X times per second (ie, with a timer)
+ * MIDI thread should take these values X times per second (ie, with a timer)
  * and send a message to the GUI over the interface tap.
  *
  * Whenever the GUI gets a VU message it should update the VU meter display.
@@ -175,7 +175,7 @@ Menu functionMenu[MENU_COUNT] = {
 		{"Track                VU      ", 3, 12, 0, 0},
 		{"Audio                Mem     ", 13, 14, 0, 0},
 		{"Stats             Print     ", 15, -1, 0, printInterface},
-		{"Midi                 Quit   ", 17, 16, 0, 0}},
+		{"MIDI                 Quit   ", 17, 16, 0, 0}},
 	},
 	{
 		{"     Effects Menu           ", 0, 2, 0, 0},
@@ -310,7 +310,7 @@ Menu functionMenu[MENU_COUNT] = {
 		{"No                   Yes    ", 0, 3, 0, removeInterface}},
 	},
 	{
-		{"       Midi Menu         ", 0, 0, printMidiMenu, 0},
+		{"       MIDI Menu         ", 0, 0, printMidiMenu, 0},
 		{{"                            ", -1, -1, 0, 0},
 		{"Channel:                    ", -1, -1, 0, 0},
 		{"                      Up    ", -1, -1, 0, midiUp},
@@ -1153,7 +1153,7 @@ printMidiMenu(guiSynth *synth)
 	/*
 	 * Create text for track display
 	 */
-	displayPanel(synth, "       Midi Menu              ",
+	displayPanel(synth, "       MIDI Menu              ",
 		0, FUNCTION_PANEL, DISPLAY1);
 
 	displayPanel(synth,

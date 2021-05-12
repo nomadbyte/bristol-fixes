@@ -20,7 +20,7 @@ synth, is common to all the emulations. The filter implements a few different
 algorithms and these do separate each of the synths: the Explorer layering
 two low pass filters on top of each other: the OB-Xa using different types
 depending on 'Pole' selection. Since release 0.20.8 the emulator has had a
-Houvillainen non-linear ladder filter integrated which massively improves 
+Huovilainen non-linear ladder filter integrated which massively improves 
 the quality at considerable expense to the CPU.
 There is one further filter algorithm used solely for the Leslie rotary 
 emulator crossover, this is a butterworth type filter.
@@ -32,7 +32,7 @@ original instrument, and the author maintains that if you want the original
 sound then you are advised to seek out the original product. Alternatively a
 number of the original manufacturers now provide their own vintage collections
 which are anticipated to be more authentic. All names and trademarks used by
-Bristol are ownership of the respective companies and it is not inteded to 
+Bristol are ownership of the respective companies and it is not intended to 
 misappropriate their use here. If you have concerns you are kindly requested
 to contact the author.
 
@@ -46,7 +46,7 @@ really want to know about the synths that are not in this document then you
 might want to search for their owners manuals.
 
 All emulations are available from the same engine, just launch multiple GUIs
-and adjust the midi channels for multi timbrality and layering.
+and adjust the MIDI channels for multitimbrality and layering.
 
 It is noted here that the engine is relatively 'dumb'. Ok, it generates a very
 broad range of sounds, currently about 25 different synthesisers and organs,
@@ -56,7 +56,7 @@ calls a memory routine that configures all the GUI controllers and a side effect
 of setting the controllers is that their values are sent to the engine. This is
 arguably the correct model but it can affect the use of MIDI master keyboards.
 The reason is that the GUI is really just a master keyboard for the engine and
-drives it with MIDI SYSEX messages over TCP sessions. If you were to alter the
+drives it with MIDI SysEx messages over TCP sessions. If you were to alter the
 keyboard transpose, for example, this would result in the GUI sending different
 'key' numbers to the engine when you press a note. If you were already driving
 the synth from a master keyboard then the transpose button in the Brighton GUI
@@ -97,7 +97,7 @@ Popular as it was about the first non-modular synthesiser, built as a fixed
 configuration of the racked or modular predecessors.
 
 Best known at the time on Pink Floyd 'Dark Side of the Moon' and other albums.
-Rick Wakeman used it as did Jean Michel Jarre. Wakefield could actually
+Rick Wakeman used it as did Jean-Michel Jarre. Wakefield could actually
 predict the sound it would make by just looking at the settings, nice to be
 able to do if a little unproductive but it went to show how this was treated
 as an instrument in its own right. It takes a bit of work to get the same sweet,
@@ -200,10 +200,10 @@ Contour:
 
 Improvements to the Mini would be some better oscillator waveforms, plus an
 alternative filter as this is a relatively simple synthesiser and could do
-with a warmer filter (this was fixed with integration of the houvillanen filters
+with a warmer filter (this was fixed with integration of the Huovilainen filters
 although the do consume a lot of CPU to do it).
 
-The Output selection has a Midi channel up/down selector and memory selector.
+The Output selection has a MIDI channel up/down selector and memory selector.
 To read a memory either use the up/down arrows to go to the next available
 memory, or type in a 3 digit number on the telephone keypad and press 'L' for
 load or 'S' for save.
@@ -269,7 +269,7 @@ Sequential circuits released amongst the first truly polyphonic synthesisers
 where a group of voice circuits (5 in this case) were linked to an onboard
 computer that gave the same parameters to each voice and drove the notes to
 each voice from the keyboard. The device had some limited memories to allow 
-for real live stage work. The synth was amazingly flexible regaring the
+for real live stage work. The synth was amazingly flexible regarding the
 oscillator options and modulation routing, producing some of the fattest 
 sounds around. They also had some of the fattest pricing as well, putting it
 out of reach of all but the select few, something that maintained its mythical
@@ -353,7 +353,7 @@ Global:
 
     Master Volume
     A440 - stable sine wave at A440 Hz for tuning.
-    Midi: channel up/down
+    MIDI: channel up/down
     Release: release all notes
     Tune: autotune oscillators.
     Glide: amount of portamento
@@ -448,14 +448,14 @@ Memories can be selected with either submitting a 3 digit number on the keypad,
 or selecting the orange up/down buttons.
 
 An improvement could be more preset memories with different sounds that can
-then be modified, ie, more library sounds. There are some improvements that
+then be modified, i.e., more library sounds. There are some improvements that
 could be made to polyphonic mods from key velocity and channel/poly pressure
 that would not be difficult to implement.
 
 The addition of triangle of other complex waveforms could be a fun development
 effort (if anyone were to want to do it).
 
-The DX still has a prependancy to seg fault, especially when large gains are
+The DX still has a prependency to segfault, especially when large gains are
 applied to input signals. This is due to loose bounds checking that will be
 extended in a present release.
 
@@ -510,7 +510,7 @@ DCO:
     ENV/LFO/MANUAL: Modulator for PWM
 
     Waveform:
-        Pulse or Ramp wave. Pulse has PWM capabily.
+        Pulse or Ramp wave. Pulse has PWM capability.
     
     Sub oscillator:
         On/Off first fundamental square wave.
@@ -702,11 +702,11 @@ the memory section plus a panel that can modify any of the synth parameters as
 a real time control. Press the first mouse key here and move the mouse around
 to adjust the controls. Default values are LFO frequency and filter cutoff 
 but values can be changed with the 'panel' button. This is done by selecting
-'panel' rather than 'midi', and then using the up/down keys to select parameter
+'panel' rather than 'MIDI', and then using the up/down keys to select parameter
 that will be affected by the x and y motion of the mouse. At the moment the
 mod routing from the pad controller is not saved to the memories, and it will
 remain so since the pad controller is not exactly omnipresent on MIDI master
-keyboards - the capabilities was put into the GIU to be 'exact' to the design.
+keyboards - the capabilities was put into the GUI to be 'exact' to the design.
 
 This synth is amazingly flexible and difficult to advise on its best use. Try
 starting by mixing just oscillator 1 through to the filter, working on mod 
@@ -726,8 +726,8 @@ will show whether it is is free (FRE) or programmed already (PRG).
 
 The author first implemented the Hammond module, then extended it to the B3
 emulation. Users of this are too numerous to mention and the organ is still
-popular. Jimmy Smith, Screaming Jay Hawkins, Kieth Emerson, Doors and 
-almost all american gospel blues. Smith was profuse, using the instrument for
+popular. Jimmy Smith, Screaming Jay Hawkins, Keith Emerson, Doors and 
+almost all American gospel blues. Smith was profuse, using the instrument for
 a jazz audience, even using its defects (key noise) to great effect. Emerson
 had two on stage, one to play and another to kick around, even including
 stabbing the keyboard with a knife to force keylock during performances
@@ -751,7 +751,7 @@ fared only a little better than that. The age of the Hammond organ had arrived.
 
 The company had a love/hate relationship with the Leslie speaker company - the
 latter making money by selling their rotary speakers along with the organ to
-wide acceptance. The fat hammond 'chorus' was a failed attempt to distance
+wide acceptance. The fat Hammond 'chorus' was a failed attempt to distance
 themselves from Leslie. That was never achieved due to the acceptance of the
 Leslie, but the chorus did add another unique sound to the already awesome
 instrument. The rotary speaker itself still added an extra something to the
@@ -761,7 +761,7 @@ range of operating modes most of which are included in this emulator.
 The chorus emulation is an 8 stage phase shifting filter algorithm with a 
 linear rotor between the taps.
 
-Parameterisation of the first B3 window follows the original design:
+Parametrisation of the first B3 window follows the original design:
 
     Leslie: Rotary speaker on/off
     Reverb: Reverb on/off
@@ -1016,14 +1016,14 @@ wearing gloves to quite good effect. After that The Specials began the Mod/Ska
 revival using one. The sharp and strong harmonic content has the ability to
 cut into a mix and make its presence known.
 
-The organ was a british design, eventually sold (to Crumar?) and made into a
+The organ was a British design, eventually sold (to Crumar?) and made into a
 number of plastic alternatives. Compared to the Hammond this was a fully 
 electronic instrument, no moving parts, and much simpler. It had a very
 characteristic sound though, sharper and perhaps thinner but was far cheaper
 than its larger cousin. It used a master oscillator that was divided down to
 each harmonic for each key (as did the later Hammonds for price reasons). This
 oscillator division design was used in the first of the polyphonic synthesisers
-where the divided note was fead through individual envelope generators and
+where the divided note was fed through individual envelope generators and
 a shared or individual filter (Polymoog et al).
 
 The Vox is also a drawbar instrument, but far simplified compared to the
@@ -1092,7 +1092,7 @@ were not big sellers, they were temperamental and liable to be temperature
 sensitive due to the amount of electronics hidden away inside. The original
 layering and 'unison' allowed the original to function as two independent
 synths, a pair of layered synths (both keyboards then played the same sound),
-as a monophonic synth in 'unison' mode on one keybaord with a second polyphonic
+as a monophonic synth in 'unison' mode on one keyboard with a second polyphonic
 unit on the other, or even all 10 voices on a single keyed note for a humongous
 20 oscillator monophonic monster.
 
@@ -1126,7 +1126,7 @@ Sequential circuits released amongst the first truly polyphonic synthesisers
 where a group of voice circuits (5 in this case) were linked to an onboard
 computer that gave the same parameters to each voice and drove the notes to
 each voice from the keyboard. The device had some limited memories to allow 
-for real live stage work. The synth was amazingly flexible regaring the
+for real live stage work. The synth was amazingly flexible regarding the
 oscillator options and modulation routing, producing some of the fattest 
 sounds around. They also had some of the fattest pricing as well, putting it
 out of reach of all but the select few, something that maintained its mythical
@@ -1210,7 +1210,7 @@ Global:
 
     Master Volume
     A440 - stable sine wave at A440 Hz for tuning.
-    Midi: channel up/down
+    MIDI: channel up/down
     Release: release all notes
     Tune: autotune oscillators.
     Glide: amount of portamento
@@ -1309,7 +1309,7 @@ Oscillators:
 
     ** If no waveform is selected then a triangle is generated.
 
-    *** The original synth had Osc-2 crossmodifying Osc-1, this is not totally
+    *** The original synth had Osc-2 cross-modifying Osc-1, this is not totally
     feasible with the sync options as they are not mutually exclusive here.
     Cross modulation is noisy if the source or dest wave is pulse, something
     that may be fixed in a future release.
@@ -1370,7 +1370,7 @@ me know.
 
 This is almost two OB-X in a single unit. With one keyboard they could provide
 the same sounds but with added voicing for split/layers/poly options. The OB-Xa
-did at least work with all 10 voices, had a single keyboard, and is renound for
+did at least work with all 10 voices, had a single keyboard, and is renown for
 the sounds of van Halen 'Jump' and Stranglers 'Strange Little Girl'. The sound
 had the capability to cut through a mix to upstage even guitar solo's. Oberheim
 went on to make the most over the top analogue synths before the cut price
@@ -1413,7 +1413,7 @@ Modulation:
     PWM: Amount of LFO going to:
         PWM Osc-1
         PWM Osc-2
-        Tremelo
+        Tremolo
 
 Oscillators:
 
@@ -1532,7 +1532,7 @@ The chord memory is similar to the Unison mode except that Unison plays all
 voices with the same note. Chording will assign one voice to each notes in
 the chord for a richer sound. To enable Chording press the 'Hold' button. This
 is not the same as the original since it used the hold button as a sustain
-option however that does not function well with a Gui and so it was reused.
+option however that does not function well with a GUI and so it was reused.
 
 To reprogram the Chord memory do the following: press the PRG button then the
 Hold button. You can then press the keys, up to 8, that you want in the chord,
@@ -1594,7 +1594,7 @@ configure all the oscillators/filters/envelopes. The synth stages do follow the
 typical synth design, there are modulation controllers and an FX section
 feeding into the oscillators and filter. The effects section is a set of
 controllers that can be configured and then enabled/disabled with a button
-press. The overall layout is rather kludgy, with some controllers that are
+press. The overall layout is rather kludgey, with some controllers that are
 typically grouped being dispersed over the control panel.
 
 Control:
@@ -1602,7 +1602,7 @@ Control:
     Volume
 
     Arpeg:
-        Whether arpegiator steps up, down, or down then up. This works in
+        Whether arpeggiator steps up, down, or down then up. This works in
         conjunction with the 'Hold' mode described later.
 
     Glide: glissando note to note. Does not operate in all modes
@@ -1675,14 +1675,14 @@ Mode:
         Mono: First 4 keypresses are memorised, further notes are then chorded
             together monophonically.
         Poly:
-            Notes are argeggiated in sequence, new note presses are appended
+            Notes are arpeggiated in sequence, new note presses are appended
             to the chain. Arpeggiation is up, down or up/down.
         Share:
-            First 4 notes are memorised and are then argeggiated in sequence,
+            First 4 notes are memorised and are then arpeggiated in sequence,
             new note presses will transpose the arpeggiation. Stepping is up,
             down or up/down.
 
-    There are several controllers that affect arpeggation:
+    There are several controllers that affect arpeggiation:
 
         Arpeg - direction of stepping
         MG-2 - Frequency of steps from about 10 seconds down to 50 bps.
@@ -1691,7 +1691,7 @@ Mode:
 Effects:
 
     There are three main effects, or perhaps rather modulations, that are
-    controlled in this section. These are vibrato, crossmodulated frequency
+    controlled in this section. These are vibrato, cross-modulated frequency
     and oscillator synchronisation. The application of each mod is configured
     with the controllers and then all of them can be enabled/disabled with
     the 'Effects' button. This allows for big differences in sound to be 
@@ -1702,13 +1702,13 @@ Effects:
     be changed afterwards for Effects/Poly for example, and they work with the
     arpeggiation function.
 
-    X-Mod: frequency crossmodulation between oscillators
-    Freq: frequency modulation by MG-1 (vibrato) or Envlope (sweep)
+    X-Mod: frequency cross-modulation between oscillators
+    Freq: frequency modulation by MG-1 (vibrato) or Envelope (sweep)
 
     Mode:
         Syn: Oscillators are synchronised
-        X-M: Oscillators are crossmodulated
-        S-X: Oscillators are crossmodulated and synchronised
+        X-M: Oscillators are cross-modulated
+        S-X: Oscillators are cross-modulated and synchronised
 
     SNG:
         Single mode: synth had a master oscillator (1) and three slaves (2/3/4)
@@ -1793,7 +1793,7 @@ different Slave modes. This is the first and probably the only bristol synth tha
 will have an inbuilt arpeggiator. The feature was possible here due to the mono
 synth specification, and whilst it could be built into the MIDI library for
 general use it is left up to the MIDI sequencers (that largely came along to 
-replace the 1980s arpeggiators anyway) that are generally availlable on Linux.
+replace the 1980s arpeggiators anyway) that are generally available on Linux.
 [Other instruments emulated by bristol that also included arpeggiation but do
 not have in the emulation were the Juno-6, Prophet-10, Oberheim OB-Xa, Poly6].
 
@@ -1810,7 +1810,7 @@ assignment may be wrong.
 Korg in no way endorses this emulation of their classic synthesiser and have
 their own emulation product that gives the features offered here. Korg,
 Mono/Poly, Poly-6, MS-20, Vox and Continental are all registered names or
-trademarks of Korg Inc of Japan.
+trademarks of Korg Inc. of Japan.
 
 Quite a few liberties were taken with this synth. There were extremely few  
 differences between the original and the Roland Juno 6, they both had one osc  
@@ -1917,7 +1917,7 @@ different. The emulation does not have an arpeggiator.
     VCA:  
 
         Env: When on, this causes the Amplitude envelope to affect the sound.
-            I.E, If you have a long attack time, you get a long attack time. 
+            i.e., If you have a long attack time, you get a long attack time. 
         Gate: When on, this causes the Amplitude envelope only (not the filter
             envelope) to be be bypassed.  
         Gain: Gain of signal. 
@@ -1931,12 +1931,12 @@ different. The emulation does not have an arpeggiator.
  
         Intensity: How much the effects affect the output. 
 
-There are some mildly anomolous effects possible from the MG section, especially
+There are some mildly anomalous effects possible from the MG section, especially
 with the VCA. The MG and the env are summed into the VCA which means if the env
 decays to zero then the LFO may end up pumping the volume, something that may
 be unexpected. Similarly, if the LFO is pumping and the voice finally stops its
 cycle then the closing gate may cause a pop on the MG signal. These can be 
-resolved however the current behavious is probably close to the original.
+resolved however the current behaviour is probably close to the original.
 
 Bristol thanks Andrew Coughlan for patches, bug reports, this manual page and
 diverse suggestions to help improve the application.
@@ -1944,7 +1944,7 @@ diverse suggestions to help improve the application.
 Korg in no way endorses this emulation of their classic synthesiser and have  
 their own emulation product that gives the features offered here. Korg,  
 Mono/Poly, Poly-6, MS-20, Vox and Continental are all registered names or  
-trademarks of Korg Inc of Japan.
+trademarks of Korg Inc. of Japan.
 
 
 
@@ -1988,7 +1988,7 @@ TBD.
 This is actually a lot warmer than the Mini emulator, largely due to being
 later code. The mini should be revisited but I am saving that pleasure for when
 some more filters are available. [This was done during the 0.20 stream using the
-Houvilainen filters and bandwidth limited oscillators to produce a far richer
+Huovilainen filters and bandwidth limited oscillators to produce a far richer
 sound. Also incorporate a number of fixes to the emulation stages.].
 
 
@@ -2019,7 +2019,7 @@ can be repatched into any of the 50 or so inputs. Patches cause no overhead in
 the engine as it uses default buffering when not repatched, so feel free to put
 in as many cables as you can fit. Patches in the GUI still demand a lot of CPU
 cycles. Release -77 improved this about 5-fold and further improvements are in
-the pipeline: the 0.10 stream implemented color caching and XImage graphics
+the pipeline: the 0.10 stream implemented colour caching and XImage graphics
 interface which massively improved GUI performance.
 
 
@@ -2125,14 +2125,14 @@ from the poly section. This is a minor issue as the poly oscillator can be
 zeroed out in the mixer.
 
 It is noted here that this emulation is just a freebie, the interface is kept
-simple with no midi channel selection (start it with the -channel option and
+simple with no MIDI channel selection (start it with the -channel option and
 it stays there) and no real memories (start it with the -load option and it
 will stay on that memory location). There is an extra button on the front
 panel (a mod?) and pressing it will save the current settings for next time
 it is started. I could have done more, and will if people are interested, but
 I built it since the current developments were a granular synth and it was
 hard work getting my head around the grain/wave manipulations, so to give 
-myself a rest I put this together one weekend. The Rhodesbass and ARP AXXE
+myself a rest I put this together one weekend. The Rhodesbass and ARP Axxe
 were done for similar reasons. I considered adding another mod button, to make
 the mono section also truly polyphonic but that kind of detracts from the
 original. Perhaps I should put together a Polymoog sometime that did kind of
@@ -2140,7 +2140,7 @@ work like that anyway.
 
 This was perhaps a strange choice, however I like the way it highlights the
 difference between monophonic, polyphonic and 'neopolyphonic' synthesised
-organs (such as the polymoog). Its a fun synth as well, few people are likely
+organs (such as the Polymoog). Its a fun synth as well, few people are likely
 to every bother buying one as they cost more now than when they were produced
 due to being collectable: for the few hundred dollars they would set you back
 on eBay you can get a respectable polyphonic unit.
@@ -2185,7 +2185,7 @@ the feature.
 The lower manual responds to the MIDI channel on which the emulation was 
 started. The upper manual responds to notes greater than MIDI key 48 on the
 next channel up. The Bass section also responds to this second channel on keys
-lower than #48. Once started you cannot change the midi channel - use the 
+lower than #48. Once started you cannot change the MIDI channel - use the 
 '-channel' option at startup to select the one you want. The actual available
 max is 15 and that is enforced.
 
@@ -2253,7 +2253,7 @@ PWM:
     Modified by Env-1 or LFO
 
 DCO-1:
-    Crossmod (FM) from DCO2 to DCO1
+    Cross-mod (FM) from DCO2 to DCO1
     Modified by Env-1
 
     Octave range 16' to 2' (all mixable)
@@ -2342,7 +2342,7 @@ this will initiate the recording. It does not matter which of the mode is
 selected since they will all start the recording sequence. When you have
 finished then select the mode button again (you may want to clear the function
 key if still active). You can record up to 256 steps, either from the GUI
-keyboard or from a master controller and the notes are saved into a midi
+keyboard or from a master controller and the notes are saved into a MIDI
 key memory.
 
 There is no capability to edit the sequences once they have been entered, that
@@ -2427,7 +2427,7 @@ in either the Jupiter-6 or -8.
 
 There are several parts to the synth memories. Layer parameters govern sound
 generation, synth parameters that govern operating modes such Dual/Split,
-Solo/Unison etc, Function settings that modify internal operations, the
+Solo/Unison etc., Function settings that modify internal operations, the
 parameters for the mod panel and finally the Arpeggiator sequences. These
 sequences are actually separate from the arpeggiator settings however that
 was covered in the notes above.
@@ -2509,7 +2509,7 @@ cleaner and not as phat as the original. You might say it sounds more like
 something that comes from Uranus rather than Jupiter and consideration was
 indeed given to a tongue in cheek renaming of the emulation..... The author is
 allowed this criticism as he wrote the application - as ever, if you want the
-original sound then buy the original synth (or get Rolands own emulation?).
+original sound then buy the original synth (or get Roland's own emulation?).
 
 A few notes are required on oscillator sync since by default it will seem to 
 be quite noisy. The original could only product a single waveform at a single
@@ -2518,7 +2518,7 @@ oscillator which generates complex waveforms. The Bristol Bitone can generate
 up to 4 waveforms simultaneously at different levels for 5 different harmonics
 and the consequent output is very rich, the waves can be slightly detuned, 
 the pulse output can be PW modulated. As with all the bristol oscillators that
-support sync, the sync pulse is extracted as a postive leading zero crossing.
+support sync, the sync pulse is extracted as a positive leading zero crossing.
 Unfortunately if the complex bitone output is used as input to sync another
 oscillator then the result is far too many zero crossings to extract a good
 sync. For the time being you will have to simplify the sync source to get a
@@ -2677,8 +2677,8 @@ code maintains separate directories.
 
 There are three slightly different Bit GUI's. The first is the bit-1 with a 
 limited parameter set as it only had 64 parameters. The second is the bit-99
-that included midi and split options in the GUI and has the white design that
-was an offered by Crumar. The third is a slightly homogenous design that is 
+that included MIDI and split options in the GUI and has the white design that
+was an offered by Crumar. The third is a slightly homogeneous design that is 
 specific to bristol, similar to the black panelled bit99 but with a couple of
 extra parameters. All the emulations have the same parameters, some require you
 use the data entry controls to access them. This is the same as the original, 
@@ -2939,7 +2939,7 @@ oscillator which generates complex waveforms. The Bristol Bitone can generate
 up to 4 waveforms simultaneously at different levels for 5 different harmonics
 and the consequent output is very rich, the waves can be slightly detuned, 
 the pulse output can be PW modulated. As with all the bristol oscillators that
-support sync, the sync pulse is extracted as a postive leading zero crossing.
+support sync, the sync pulse is extracted as a positive leading zero crossing.
 Unfortunately if the complex bitone output is used as input to sync another
 oscillator then the result is far too many zero crossings to extract a good
 sync.
@@ -2956,7 +2956,7 @@ results are far better
 Sequential circuits released amongst the first truly polyphonic synthesisers
 where a group of voice circuits (5 to 10 of them) were linked to an onboard
 computer that gave the same parameters to each voice and drove the notes to
-each voice from the keyboard. The costs were nothing short of exhorbitant and
+each voice from the keyboard. The costs were nothing short of exorbitant and
 this lead to Sequential releasing a model with just one voice board as a mono-
 phonic equivalent. The sales ran up to 10,000 units, a measure of its success
 and it continues to be recognised alongside the Mini Moog as a fat bass synth.
@@ -3023,7 +3023,7 @@ Filter:
     Cutoff: cuttof frequency
     Res: Resonance/Q/Emphasis
     Env: amount of modulation affecting to cutoff.
-    KBD: amount of keyboard trackingn to cutoff
+    KBD: amount of keyboard tracking to cutoff
 
 Envelopes: One each for PolyMod (filter) and amplifier.
 
@@ -3078,7 +3078,7 @@ it has not been coded that way).
 The filter envelope is configured to ignore velocity.
 
 The default filters are quite expensive. The -lwf option will select the less
-computationally expensive lightweight Chamberlain filters which have a colder
+computationally expensive lightweight Chamberlin filters which have a colder
 response but require zonks fewer CPU cycles.
 
 
@@ -3208,11 +3208,11 @@ the memory section plus a panel that can modify any of the synth parameters as
 a real time control. Press the first mouse key here and move the mouse around
 to adjust the controls. Default values are LFO frequency and filter cutoff 
 but values can be changed with the 'panel' button. This is done by selecting
-'panel' rather than 'midi', and then using the up/down keys to select parameter
+'panel' rather than 'MIDI', and then using the up/down keys to select parameter
 that will be affected by the x and y motion of the mouse. At the moment the
 mod routing from the pad controller is not saved to the memories, and it will
 remain so since the pad controller is not exactly omnipresent on MIDI master
-keyboards - the capabilities was put into the GIU to be 'exact' to the design.
+keyboards - the capabilities was put into the GUI to be 'exact' to the design.
 
 This synth is amazingly flexible and difficult to advise on its best use. Try
 starting by mixing just oscillator 1 through to the filter, working on mod 
@@ -3231,7 +3231,7 @@ will show whether it is is free (FRE) or programmed already (PRG).
     ------------
 
 This original design was made by an engineer who had previously worked with 
-Moog on the big modular systems, Gene Zumchek. He tried to get Moog Inc to 
+Moog on the big modular systems, Gene Zumchek. He tried to get Moog Inc. to 
 develop a small standalone unit rather than the behemoths however he could 
 not get heard. After leaving he built a synth eventually called a Sonic-5 that
 did fit the bill but sales volumes were rather small. He had tied up with a
@@ -3240,7 +3240,7 @@ not being known, muSonics.
 This was quickly overcome by accident. Moog managed to run his company into
 rather large debt and the company folded. Bill Waytena, working with Zumcheck,
 gathered together the funding needed to buy the remains of the failed company
-and hence Moog Inc was labled on the rebadged Sonic-6. Zumcheck was eventually
+and hence Moog Inc. was labeled on the rebadged Sonic-6. Zumcheck was eventually
 forced to leave this company (or agreed to) as he could not work with Moog.
 After a few modifications Bob Moog actually used this unit quite widely for
 lecturing on electronic music. For demonstrative purposes it is far more
@@ -3260,7 +3260,7 @@ the original
 The original was duophonic, kind of. It had a keyboard with high note and low
 note precedence and the two oscillators could be driven from different notes.
 Its not really duophony and was reportedly not nice to play but it added some
-flexibility to the instrument. This features was dropped largley because it
+flexibility to the instrument. This features was dropped largely because it
 is ugly to emulate in a polyphonic environment but the code still has glide
 only on Osc-B. It has the two LFO that can be mixed, or at full throw of the 
 GenXY mixer they will link X->A and Y->B giving some interesting routing, two
@@ -3275,7 +3275,7 @@ There is currently no likely use for an external signal even though the
 graphics are there.
 
 The original envelope was AR or ASR. The emulator has a single ADSR and a 
-control switch to select AR (actually AD), ASR, ADSD (MiniMoog envelope) or
+control switch to select AR (actually AD), ASR, ADSD (Minimoog envelope) or
 ADSR.
 
 Generator-Y has a S/H function on the noise source for a random signal which 
@@ -3357,7 +3357,7 @@ Modulators:
         Envelope:
 
             AR/ASR/ADSD/ADSR
-            Velociy on/off
+            Velocity on/off
 
             Trigger:
 
@@ -3407,7 +3407,7 @@ result is a lot more predictable.
 The Sonic-6 as often described as having bad tuning, that probably depends on 
 model since different oscillators were used at times. Also, different units
 had different filters (Zumchek used a ladder of diodes to overcome the Moog
-ladder of transister patent). The original was often described as only being
+ladder of transistor patent). The original was often described as only being
 useful for sound effects. Personally I don't think that was true however the
 design is extremely flexible and the mods are applied with high gains so to
 get subtle sounds they only have to be applied lightly. Also, this critique
@@ -3430,7 +3430,7 @@ a save button which should require a double click but does not yet (0.30.0),
 a pair of buttons for searching up and down the available memories and a button
 called 'Find' which will select the next available free memory.
 
-Midi options include channel, channel down and, er, thats it.
+MIDI options include channel, channel down and, er, that's it.
 
 
 
@@ -3470,10 +3470,10 @@ fatter than the original. In 'Mono' mode there is only one LFO that all voices
 will share and the envelope is triggered in Legato style, ie, only once for
 a sequence of notes - all have to be released for the envelope to recover.
 
-VCO: The original allowed for wavaeform selection to alternate between notes, 
+VCO: The original allowed for waveform selection to alternate between notes, 
 something that is rather ugly to do with the bristol architecture. This is 
 replaced with a VCO selector where each note will only take the output from
-one of the two avalable oscillators and gives the ntoes a little more
+one of the two available oscillators and gives the notes a little more
 separation. The legato mode works whereby the oscillator selection is only
 made for the first note in a sequence to give a little more sound consistency.
 
@@ -3614,8 +3614,8 @@ produced 4 pure (infinite bandwidth) square waves that were mixed together,
 an overly weak result. The emulator adds a waveform distort (P3), an notched
 control that produces a pure sine wave at centre point. Going down it will
 generate gradually increasing 3rd and 5th harmonics to give it a squarey wave
-with a distinct hammond tone. The distortion actually came from the B3 emulator
-which models the distort on the shape of the hammond tonewheels themselves.
+with a distinct Hammond tone. The distortion actually came from the B3 emulator
+which models the distort on the shape of the Hammond tonewheels themselves.
 Going up from centre point will produce gradually sharper sawtooth waves using
 a different phase distortion.
 
@@ -3629,7 +3629,7 @@ audible clicks from the key on and off events or when selected will produce
 something akin to a percussive ping for the start of the note.
 
 The result for the organ section is that it can produce some quite nice sounds
-reminiscent of the farfisa range to not quite hammond, either way far more
+reminiscent of the Farfisa range to not quite Hammond, either way far more
 useful than the flat, honking square waves. The original sound can be made by
 waveform to a quarter turn or less, spacialisation and mod to zero, key
 grooming off.
@@ -3655,7 +3655,7 @@ used to have the filter open up with velocity if desired.
 The mod application is different from the original. It had a three way selector
 for routing the LFO to either VCO, VCA or VCF but only a single route. This
 emulation uses a continuous notched control where full off is VCO only, notch
-is VCF only and full on is VCA however the intermidiate positions will route
+is VCF only and full on is VCA however the intermediate positions will route
 proportional amounts to two components.
 
 The LFO has more options (Ramp and Saw) than the original (Tri and Square).
@@ -3695,7 +3695,7 @@ oscillator which generates complex waveforms. The Bristol Bitone can generate
 up to 4 waveforms simultaneously at different levels for 5 different harmonics
 and the consequent output is very rich, the waves can be slightly detuned, 
 the pulse output can be PW modulated. As with all the bristol oscillators that
-support sync, the sync pulse is extracted as a postive leading zero crossing.
+support sync, the sync pulse is extracted as a positive leading zero crossing.
 Unfortunately if the complex bitone output is used as input to sync another
 oscillator then the result is far too many zero crossings to extract a good
 sync. For the time being you will have to simplify the sync source to get a
@@ -3737,10 +3737,10 @@ fatter than the original. In 'Mono' mode there is only one LFO that all voices
 will share and the envelope is triggered in Legato style, ie, only once for
 a sequence of notes - all have to be released for the envelope to recover.
 
-VCO: The original allowed for wavaeform selection to alternate between notes, 
+VCO: The original allowed for waveform selection to alternate between notes, 
 something that is rather ugly to do with the bristol architecture. This is 
 replaced with a VCO selector where each note will only take the output from
-one of the two avalable oscillators and gives the ntoes a little more
+one of the two available oscillators and gives the notes a little more
 separation. The legato mode works whereby the oscillator selection is only
 made for the first note in a sequence to give a little more sound consistency.
 
@@ -3866,8 +3866,8 @@ produced 4 pure (infinite bandwidth) square waves that were mixed together,
 an overly weak result. The emulator adds a waveform distort (P3), an notched
 control that produces a pure sine wave at centre point. Going down it will
 generate gradually increasing 3rd and 5th harmonics to give it a squarey wave
-with a distinct hammond tone. The distortion actually came from the B3 emulator
-which models the distort on the shape of the hammond tonewheels themselves.
+with a distinct Hammond tone. The distortion actually came from the B3 emulator
+which models the distort on the shape of the Hammond tonewheels themselves.
 Going up from centre point will produce gradually sharper sawtooth waves using
 a different phase distortion.
 
@@ -3881,7 +3881,7 @@ audible clicks from the key on and off events or when selected will produce
 something akin to a percussive ping for the start of the note.
 
 The result for the organ section is that it can produce some quite nice sounds
-reminiscent of the farfisa range to not quite hammond, either way far more
+reminiscent of the Farfisa range to not quite Hammond, either way far more
 useful than the flat, honking square waves. The original sound can be made by
 waveform to a quarter turn or less, spacialisation and mod to zero, key
 grooming off.
@@ -3907,7 +3907,7 @@ used to have the filter open up with velocity if desired.
 The mod application is different from the original. It had a three way selector
 for routing the LFO to either VCO, VCA or VCF but only a single route. This
 emulation uses a continuous notched control where full off is VCO only, notch
-is VCF only and full on is VCA however the intermidiate positions will route
+is VCF only and full on is VCA however the intermediate positions will route
 proportional amounts to two components.
 
 The LFO has more options (Ramp and Saw) than the original (Tri and Square).
@@ -3947,7 +3947,7 @@ oscillator which generates complex waveforms. The Bristol Bitone can generate
 up to 4 waveforms simultaneously at different levels for 5 different harmonics
 and the consequent output is very rich, the waves can be slightly detuned, 
 the pulse output can be PW modulated. As with all the bristol oscillators that
-support sync, the sync pulse is extracted as a postive leading zero crossing.
+support sync, the sync pulse is extracted as a positive leading zero crossing.
 Unfortunately if the complex bitone output is used as input to sync another
 oscillator then the result is far too many zero crossings to extract a good
 sync. For the time being you will have to simplify the sync source to get a
@@ -3972,7 +3972,7 @@ would be indicative of a divider circuit.
 
 It featured 8 oscillators that could be applied as either 4 voices with dual
 osc or 8 voices with a single osc. The architecture was verging on the
-interesting since each oscillator was fead into an individual envelope generator
+interesting since each oscillator was fed into an individual envelope generator
 (described below) and then summed into the single filter, the filter having
 another envelope generator, 9 in total. This lead to cost reduction over having
 a filter per voice however the single filter leads to breathing, also discussed
@@ -3982,7 +3982,7 @@ The control panel has a volume, global tuning control and a 'Bend' control
 that governs the depth of the pitch bend from the joystick and the overall 
 amount of DCO modulation applied by the joystick. There is no sequencer in
 this emulation largely because there are far better options now available than
-this had but also due to a shortage of onscreen realestate.
+this had but also due to a shortage of on-screen real estate.
 
 The Poly, Chord and Hold keys are emulated, hold being a sustain key. The
 Chord relearn function works follows:
@@ -4069,11 +4069,11 @@ available from the original instrument:
     DE 83 Mod DCO
     DE 84 Mod VCF
 
-    DE 86 Midi channel
-    DE 87 Midi program change enable
-    DE 88 Midi OMNI
+    DE 86 MIDI channel
+    DE 87 MIDI program change enable
+    DE 88 MIDI OMNI
 
-Of these 25 pararmeters, the emulation has changed 88 to be OMNI mode rather 
+Of these 25 parameters, the emulation has changed 88 to be OMNI mode rather 
 than the original sequence clock as internal or external. This is because the
 sequencer function was dropped as explained above.
 
@@ -4097,7 +4097,7 @@ the noise signal level.
 
 The single filter always responded to the highest note on the keyboard. This
 gives a weaker overall sound and if playing with two hands then there is a
-noticible effect with keytracking - left hand held chords will cause filter
+noticeable effect with keytracking - left hand held chords will cause filter
 breathing as the right hand plays solos and the keyboard tracking changes 
 from high to low octaves. Note that the emulator will implement a single
 filter if you select DE 46 filter envelope retrigger to be single trigger, it
@@ -4153,13 +4153,13 @@ gain:
 
 This gives some interesting velocity tracking capabilities where just one osc
 can track velocity to introduce harmonic content keeping the filter at a fixed
-cutoff frequence. Having a bit of detune applied globally and locally will keep
+cutoff frequency. Having a bit of detune applied globally and locally will keep
 the sound reasonably fat for each oscillator.
 
 The filter envelope does not track velocity for any of the distributed voices,
 this was intentional since when using high resonance it is not desirable that
 the filter cutoff changes with velocity, it tends to be inconsistently 
-disonant.
+dissonant.
 
 If you want to use this synth with controller mappings then map the value 
 entry pot to your easiest to find rotary, then click the mouse on the membrane
@@ -4194,9 +4194,9 @@ locations on the front panel with Load, Save and Increment buttons and one
 panel of options to adjust a few parameters on the oscillator and filters. It
 is possible to get extra memories by loading banks with -load: if you request
 starting in memory #21 the emulator will stuff 20 into the bank and 1 into the
-memory location. There is no apparant midi channel selector, use -channel <n>
+memory location. There is no apparent MIDI channel selector, use -channel <n>
 and then stay on it. This could have been put into the options panel however 
-having midi channel in a memory is generally a bad idea.
+having MIDI channel in a memory is generally a bad idea.
 
     A. MOD
 
@@ -4273,7 +4273,7 @@ it interprets signal ramps and drains from an analogue circuit this is one area
 of improvement in the emulator. There are options to produce multiple waveforms
 described below.
 
-The resonant filter is implemented with a single Houvilainen and actually only
+The resonant filter is implemented with a single Huovilainen and actually only
 runs at 24dB/Oct. There are controls for remixing the different taps, a form
 of feedforward and when in 'Flat' mod there is more remixing of the poles, this
 does generate a slower roll off but gives the signal a bit more warmth than a
@@ -4325,7 +4325,7 @@ triggers.
 
 The options from section G are only loaded under two circumstances: at system
 start from the first selected memory location and if the Load button is given
-a DoubleClick. All other memory load functions will inherrit the settings that
+a double-click. All other memory load functions will inherit the settings that
 are currently active.
 
 
@@ -4337,7 +4337,7 @@ are currently active.
 The BassMaker is not actually an emulator, it is a bespoke sequencer design but
 based on the capabilities of some of the early analogue sequencers such as the
 Korg SQ-10. Supplying this probably leaves bristol open to a lot of feature
-requests for sequencer functionaliity and it is stated here that the BassMaker
+requests for sequencer functionality and it is stated here that the BassMaker
 is supposed to be simple so excess functionality will probably be declined as
 there are plenty of other sequencing applications that can provide a richer
 feature set.
@@ -4398,7 +4398,7 @@ following functions:
     Memory:
         0..9 key entry buttons, 1000 memories available
         Load
-        Save: doubleclick to save current sequence
+        Save: double-click to save current sequence
 
     Menu Panel
         Up, Down menu
@@ -4427,13 +4427,13 @@ menu or activate any option. The 'Fn' button returns one level:
         expression pedal (controller value)
         note events
 
-    First midi channel
+    First MIDI channel
 
-        Primary midi channel for note events
+        Primary MIDI channel for note events
 
-    Second midi channel
+    Second MIDI channel
 
-        Secondary midi channel when 'Control' configured to 'Note' events.
+        Secondary MIDI channel when 'Control' configured to 'Note' events.
 
     Global Transpose
 
@@ -4470,8 +4470,8 @@ code, for the filter and S/N generation.
 The oscillators will run as per the original using a single phase accumulator
 and 16 bit frequency space. All the waveforms are extracted logically from the
 ramp waveform generated by the phase accumulation. Sync and RingMod are also
-extracted with the same methods. The noise generation is exor/add as per the
-original however the noise signal will not degenerate when mixing waveforms.
+extracted with the same methods. The noise generation is XOR/add as per the
+original, however the noise signal will not degenerate when mixing waveforms.
 The output waves are ANDed together. The bristol control register has an option
 for Multi waveforms and when selected each oscillator will have its own phase
 accumulator, can have a detune applied and will be mixed by summation rather
@@ -4483,7 +4483,7 @@ exponential decay and release. Attack is a linear function and the sustain level
 can only be decreased when active as the counter also refuses to count back up
 when passed its peak.
 
-The filter implements a 12dB/Octave multimode chamberlain filter providing LP,
+The filter implements a 12dB/Octave multimode Chamberlin filter providing LP,
 BP and HP signals. This is not the best filter in the world however neither was
 the original. An additional 24dB/Octave LP filter has been added, optionally 
 available and with feedforward to provide 12/18dB signals. Between them the 
@@ -4542,48 +4542,48 @@ A synthesiser emulation package.
 
     Emulation:
 
-        -mini              - moog mini
-        -explorer          - moog voyager
-        -voyager           - moog voyager electric blue
-        -memory            - moog memory
-        -sonic6            - moog sonic 6
-        -mg1               - moog/realistic mg-1 concertmate
-        -hammond           - hammond module (deprecated, use -b3)
-        -b3                - hammond B3 (default)
-        -prophet           - sequential circuits prophet-5
-        -pro52             - sequential circuits prophet-5/fx
-        -pro10             - sequential circuits prophet-10
-        -pro1              - sequential circuits pro-one
-        -rhodes            - fender rhodes mark-I stage 73
-        -rhodesbass        - fender rhodes bass piano
-        -roadrunner        - crumar roadrunner electric piano
-        -bitone            - crumar bit 01
-        -bit99             - crumar bit 99
-        -bit100            - crumar bit + mods
-        -stratus           - crumar stratus synth/organ combo
-        -trilogy           - crumar trilogy synth/organ/string combo
-        -obx               - oberheim OB-X
-        -obxa              - oberheim OB-Xa
-        -axxe              - arp axxe
-        -odyssey           - arp odyssey
-        -arp2600           - arp 2600
-        -solina            - arp/solina string ensemble
-        -polysix           - korg polysix
-        -poly800           - korg poly-800
-        -monopoly          - korg mono/poly
-        -ms20              - korg ms20 (unfinished: -libtest only)
-        -vox               - vox continental
-        -voxM2             - vox continental super/300/II
-        -juno              - roland juno-60
-        -jupiter           - roland jupiter-8
-        -bme700            - baumann bme-700
-        -bm                - bristol bassmaker sequencer
-        -dx                - yamaha dx-7
-        -cs80              - yamaha cs-80 (unfinished)
-        -sidney            - commodore-64 SID chip synth
-        -melbourne         - commodore-64 SID polyphonic synth (unfinished)
-        -granular          - granular synthesiser (unfinished)
-        -aks               - ems synthi-a (unfinished)
+        -mini              - Moog Mini
+        -explorer          - Moog Voyager
+        -voyager           - Moog Voyager Electric Blue
+        -memory            - Moog Memory
+        -sonic6            - Moog Sonic 6
+        -mg1               - Moog/Realistic MG-1 Concertmate
+        -hammond           - Hammond module (deprecated, use -b3)
+        -b3                - Hammond B3 (default)
+        -prophet           - Sequential Circuits Prophet-5
+        -pro52             - Sequential Circuits Prophet-5/FX
+        -pro10             - Sequential Circuits Prophet-10
+        -pro1              - Sequential Circuits Pro One
+        -rhodes            - Fender Rhodes Mark-I Stage 73
+        -rhodesbass        - Fender Rhodes Piano Bass
+        -roadrunner        - Crumar Roadrunner electric piano
+        -bitone            - Crumar bit 01
+        -bit99             - Crumar bit 99
+        -bit100            - Crumar bit + mods
+        -stratus           - Crumar Stratus synth/organ combo
+        -trilogy           - Crumar Trilogy synth/organ/string combo
+        -obx               - Oberheim OB-X
+        -obxa              - Oberheim OB-Xa
+        -axxe              - ARP Axxe
+        -odyssey           - ARP Odyssey
+        -arp2600           - ARP 2600
+        -solina            - ARP/Solina String Ensemble
+        -polysix           - Korg Polysix
+        -poly800           - Korg Poly-800
+        -monopoly          - Korg Mono/Poly
+        -ms20              - Korg MS-20 (unfinished: -libtest only)
+        -vox               - Vox Continental
+        -voxM2             - Vox Continental Super/300/II
+        -juno              - Roland Juno-60
+        -jupiter           - Roland Jupiter-8
+        -bme700            - Baumann BME-700
+        -bm                - Bristol bassmaker sequencer
+        -dx                - Yamaha DX7
+        -cs80              - Yamaha CS-80 (unfinished)
+        -sidney            - Commodore-64 SID chip synth
+        -melbourne         - Commodore-64 SID polyphonic synth (unfinished)
+        -granular          - Granular synthesiser (unfinished)
+        -aks               - EMS Synthi A (unfinished)
         -mixer             - 16 track mixer (unfinished: -libtest only)
 
     Synthesiser:
@@ -4595,7 +4595,7 @@ A synthesiser emulation package.
         -nnp               - no/last note preference (-mono)
         -retrig            - monophonic note logic legato trigger (-mono)
         -lvel              - monophonic note logic legato velocity (-mono)
-        -channel <c>       - initial midi channel selected to 'c' (default 1)
+        -channel <c>       - initial MIDI channel selected to 'c' (default 1)
         -lowkey <n>        - minimum MIDI note response (0)
         -highkey <n>       - maximum MIDI note response (127)
         -detune <%>        - 'temperature sensitivity' of emulation (0)
@@ -4604,19 +4604,19 @@ A synthesiser emulation package.
         -velocity <v>      - MIDI velocity mapping curve (510) (-mvc)
         -glide <s>         - MIDI glide duration (5)
         -emulate <name>    - search for the named synth or exit
-        -register <name>   - name used for jack and alsa device regisration
+        -register <name>   - name used for JACK and ALSA device registration
         -lwf               - emulator lightweight filters
         -nwf               - emulator default filters
         -wwf               - emulator welterweight filters
         -hwf               - emulator heavyweight filters
         -blo <h>           - maximum # band limited harmonics (31)
-        -blofraction <f>   - band limiting nyquist fraction (0.8)
+        -blofraction <f>   - band limiting Nyquist fraction (0.8)
         -scala <file>      - read the scala .scl tonal mapping table
 
     User Interface:
 
-        -quality <n>       - color cache depth (bbp 2..8) (6)
-        -grayscale <n>     - color or BW display (0..5) (0 = color)
+        -quality <n>       - colour cache depth (bbp 2..8) (6)
+        -grayscale <n>     - colour or BW display (0..5) (0 = colour)
         -antialias <n>     - antialias depth (0..100%) (30)
         -aliastype <s>     - antialias type (pre/texture/all)
         -opacity <n>       - opacity of the patch layer 20..100% (50)
@@ -4634,14 +4634,14 @@ A synthesiser emulation package.
         -mbi <m>           - master bank index (0)
         -activesense <m>   - active sense rate (2000 ms)
         -ast <m>           - active sense timeout (15000 ms)
-        -mct <m>           - midi cycle timeout (50 ms)
+        -mct <m>           - MIDI cycle timeout (50 ms)
         -ar|-aspect        - ignore emulator requested aspect ratio
         -iconify           - start with iconified window
-        -window            - toggle switch to enable X11 window interfacen
+        -window            - toggle switch to enable X11 window interface
         -cli               - enable command line interface
-        -libtest           - gui test option, engine not invoked
+        -libtest           - GUI test option, engine not invoked
 
-        Gui keyboard shortcuts:
+        GUI keyboard shortcuts:
 
             <Ctrl> 's'     - save settings to current memory
             <Ctrl> 'l'     - (re)load current memory
@@ -4671,15 +4671,15 @@ A synthesiser emulation package.
         General:
 
             -engine        - don't start engine (connect to existing engine)
-            -gui           - don't start gui (only start engine)
-            -server        - run engine as a permanant server
-            -daemon        - run engine as a detached permanant server
+            -gui           - don't start GUI (only start engine)
+            -server        - run engine as a permanent server
+            -daemon        - run engine as a detached permanent server
             -log           - redirect diagnostic to $HOME/.bristol/log
             -syslog        - redirect diagnostic to syslog
             -console       - log all messages to console (must be 1st option)
             -cache <path>  - memory and profile cache location (~/.bristol)
             -exec          - run all subprocesses in background
-            -debug <1-16>  - debuging level (0)
+            -debug <1-16>  - debugging level (0)
             -readme [-<e>] - show readme [for emulator <e>] to console
             -glwf          - global lightweight filters - no overrides
             -host <h>      - connect to engine on host 'h' (localhost)
@@ -4688,16 +4688,16 @@ A synthesiser emulation package.
             -gmc           - open a MIDI connection to the brighton GUI
             -oss           - use OSS defaults for audio and MIDI
             -alsa          - use ALSA defaults for audio and MIDI (default)
-            -jack          - use Jack defaults for audio and MIDI
-            -jsmuuid <UUID>- jack session unique identifier
-            -jsmfile <path>- jack session setting path
-            -jsmd <ms>     - jack session file load delay (5000)
+            -jack          - use JACK defaults for audio and MIDI
+            -jsmuuid <UUID>- JACK session unique identifier
+            -jsmfile <path>- JACK session setting path
+            -jsmd <ms>     - JACK session file load delay (5000)
             -session       - disable session management
-            -jdo           - use separate Jack clients for audio and MIDI
+            -jdo           - use separate JACK clients for audio and MIDI
             -osc           - use OSC for control interface (unfinished)
             -forward       - disable MIDI event forwarding globally
-            -localforward  - disable emulator gui->engine event forwarding
-            -remoteforward - disable emulator engine->gui event forwarding
+            -localforward  - disable emulator GUI->engine event forwarding
+            -remoteforward - disable emulator engine->GUI event forwarding
             -o <filename>  - Duplicate raw audio output data to file
             -nrp           - enable NPR support globally
             -enrp          - enable NPR/DE support in engine
@@ -4714,19 +4714,19 @@ A synthesiser emulation package.
             -preload <periods>     - configure preload buffer count (default 4)
             -rate <hz>             - sample rate (44100)
             -priority <p>          - audio RT priority, 0=no realtime (75)
-            -autoconn              - attempt jack port auto-connect
+            -autoconn              - attempt JACK port auto-connect
             -multi <c>             - register 'c' IO channels (jack only)
             -migc <f>              - multi IO input gain scaling (jack only)
             -mogc <f>              - multi IO output gain scaling (jack only)
 
-        Midi driver:
+        MIDI driver:
 
-            -midi [oss|[raw]alsa|jack] - midi driver selection (alsa)
-            -mididev <dev>             - midi device selection
+            -midi [oss|[raw]alsa|jack] - MIDI driver selection (alsa)
+            -mididev <dev>             - MIDI device selection
             -seq                       - use the ALSA SEQ interface (default)
-            -mididbg                   - midi debug-1 enable
-            -mididbg2                  - midi debug-2 enable
-            -sysid                     - MIDI SYSEX system identifier
+            -mididbg                   - MIDI debug-1 enable
+            -mididbg2                  - MIDI debug-2 enable
+            -sysid                     - MIDI SysEx system identifier
 
         LADI driver (level 1 compliant):
 
@@ -4734,7 +4734,7 @@ A synthesiser emulation package.
             -ladi bristol              - only execute LADI in engine
             -ladi <memory>             - LADI state memory index (1024)
 
-    Audio drivers are PCM/PCM_plug or Jack. Midi drivers are either OSS/ALSA
+    Audio drivers are PCM/PCM_plug or JACK. MIDI drivers are either OSS/ALSA
     rawmidi interface, or ALSA SEQ. Multiple GUIs can connect to the single
     audio engine which then operates multitimbrally.
 
@@ -4755,36 +4755,36 @@ A synthesiser emulation package.
 
     startBristol -mini
 
-        Run a minimoog using ALSA interface for audio and midi seq. This is
+        Run a Minimoog using ALSA interface for audio and MIDI seq. This is
         equivalent to all the following options:
         -mini -alsa -audiodev plughw:0,0 -midi seq -count 256 -preload 8 
         -port 5028 -voices 32 -channel 1 -rate 44100 -gain 4 -ingain 4
 
     startBristol -alsa -mini
 
-        Run a minimoog using ALSA interface for audio and midi. This is
+        Run a Minimoog using ALSA interface for audio and MIDI. This is
         equivalent to all the following options:
         -mini -audio alsa -audiodev plughw:0,0 -midi alsa -mididev hw:0
         -count 256 -preload 8 -port 5028 -voices 32 -channel 1 -rate 44100
 
     startBristol -explorer -voices 1 -oss
 
-        Run a moog explorer as a monophonic instrument, using OSS interface for
-        audio and midi.
+        Run a Moog Explorer as a monophonic instrument, using OSS interface for
+        audio and MIDI.
 
     startBristol -prophet -channel 3
 
-        Run a prophet-5 using ALSA for audio and midi on channel 3.
+        Run a Prophet-5 using ALSA for audio and MIDI on channel 3.
 
     startBristol -b3 -count 512 -preload 2
 
-        Run a hammond b3 with a buffer size of 512 samples, and preload two 
+        Run a Hammond B3 with a buffer size of 512 samples, and preload two 
         such buffers before going active. Some Live! cards need this larger
         buffer size with ALSA drivers.
 
     startBristol -oss -audiodev /dev/dsp1 -vox -voices 8
 
-        Run a vox continental using OSS device 1, and default midi device
+        Run a Vox Continental using OSS device 1, and default MIDI device
         /dev/midi0. Operate with just 8 voices.
 
     startBristol -b3 -audio alsa -audiodev plughw:0,0 -seq -mididev 128.0
@@ -4795,16 +4795,16 @@ A synthesiser emulation package.
     startBristol -juno &
     startBristol -prophet -channel 2 -engine
 
-        Start two synthesisers, a juno and a prophet. Both synthesisers will
+        Start two synthesisers, a Juno and a Prophet. Both synthesisers 
         will be executed on one engine (multitimbral) with 32 voices between 
-        them. The juno will be on default midi channel (1), and the prophet on
+        them. The Juno will be on default MIDI channel (1), and the Prophet on
         channel 2. Output over the same default ALSA audio device.
 
     startBristol -juno &
     startBristol -port 5029 -audio oss -audiodev /dev/dsp1 -mididev /dev/midi1
 
-        Start two synthesisers, a juno on the first ALSA soundcard, and a
-        mini on the second OSS soundcard. Each synth is totally independent
+        Start two synthesisers, a Juno on the first ALSA soundcard, and a
+        Minimoog on the second OSS soundcard. Each synth is totally independent
         and runs with 32 voice polyphony (looks nice, not been tested).
 
 The location of the bristol binaries can be specified in the BRISTOL

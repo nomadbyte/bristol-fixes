@@ -876,12 +876,12 @@ arp2600MidiCallback(brightonWindow *win, int command, int value, float v)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", command, value);
+	printf("MIDI callback: %x, %i\n", command, value);
 
 	switch(command)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", command, value);
+			printf("MIDI program: %x, %i\n", command, value);
 			synth->location = value;
 
 			arp2600LoadMemory(synth, "arp2600", 0,
@@ -889,7 +889,7 @@ arp2600MidiCallback(brightonWindow *win, int command, int value, float v)
 
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", command, value);
+			printf("MIDI banksel: %x, %i\n", command, value);
 			synth->bank = value;
 			break;
 	}
@@ -999,10 +999,10 @@ arp2600Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		/*
 		 * To overcome that we should consider checking a sequence number in
 		 * the message library? That is non trivial since it requires that
-		 * our midi messges have a 'ack' flag included - we cannot check for
+		 * our MIDI messages have a 'ack' flag included - we cannot check for
 		 * ack here (actually, we could, and in the app is probably the right
 		 * place to do it rather than the lib however both would have to be
-		 * changed to suppor this - nc).
+		 * changed to support this - nc).
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid,
 			127, 0, BRISTOL_MIDICHANNEL|newchan);
@@ -1101,7 +1101,7 @@ arp2600IOSelect(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	 * can be removed.
 	 *
 	 * The structure we need should have an input and output list, this should
-	 * give the true co-ords for the start and endpoint since it will be used
+	 * give the true coords for the start and endpoint since it will be used
 	 * to evaluate the transforms for the patch source to the on-screen dest
 	 * bitmaps.
 	 *

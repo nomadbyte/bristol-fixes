@@ -150,7 +150,7 @@ int destx, int desty)
 
 		if(bd->shminfo.shmid < 0)
 			return(0);
-		/* attach, and check for errrors */
+		/* attach, and check for errors */
 		bd->shminfo.shmaddr = image->data =
 			(char *) shmat(bd->shminfo.shmid, 0, 0);
 		if (bd->shminfo.shmaddr == (char *) -1)
@@ -162,7 +162,7 @@ int destx, int desty)
 		/*
 		 * This looks odd but now that we have attached it, mark it for
 		 * deletion. This will clear up the mess after all the detaches
-		 * have occured.
+		 * have occurred.
 		 */
 		shmctl(bd->shminfo.shmid, IPC_STAT, &myshmid);
 		shmctl(bd->shminfo.shmid, IPC_RMID, &myshmid);
@@ -204,7 +204,7 @@ int destx, int desty)
 			IPC_CREAT | 0777 );
 		if(bd->shminfo.shmid < 0)
 			return(0);
-		/* attach, and check for errrors */
+		/* attach, and check for errors */
 		bd->shminfo.shmaddr = image->data =
 			(char *) shmat(bd->shminfo.shmid, 0, 0);
 		if (bd->shminfo.shmaddr == (char *) -1)
@@ -216,7 +216,7 @@ int destx, int desty)
 		/*
 		 * This looks odd but now that we have attached it, mark it for
 		 * deletion. This will clear up the mess after all the detaches
-		 * have occured.
+		 * have occurred.
 		 */
 		shmctl(bd->shminfo.shmid, IPC_STAT, &myshmid);
 		shmctl(bd->shminfo.shmid, IPC_RMID, &myshmid);

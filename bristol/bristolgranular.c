@@ -22,12 +22,12 @@
  * This will be a granular synthesiser. We need to build an efficient method to
  * generate a potentially very large number of grains, each of which will take
  *
- *	a gain curve, initially an inverted, normalised cosine or gaussian envelope
+ *	a gain curve, initially an inverted, normalised cosine or Gaussian envelope
  *	a wave table
  *
  * The wavetable will be resampled to a given frequency at some extraction of
  * the given note, and its gain will be defined by a multiple of the resampled
- * gain curve. The multiple will be partially randomised by parameterisation.
+ * gain curve. The multiple will be partially randomised by parametrisation.
  * We should allow for glissando of the waveforms. Grain time shall be from 2
  * to 100ms.
  *

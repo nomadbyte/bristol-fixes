@@ -349,7 +349,7 @@ static int operate(bristolOP *operator,
 	L2 = param->param[DXOP_L2].float_val;
 
 	/*
-	 * If the first level is zero, go into compatability mode, ADSR
+	 * If the first level is zero, go into compatibility mode, ADSR
 	 */
 	if (L1 == 0.0)
 	{
@@ -561,7 +561,7 @@ static int operate(bristolOP *operator,
 					cgain = 1.0;
 					/*
 					 * Correctly spoken, each operator should set a flag to
-					 * say that it has finneshed, and when all 6 have then we
+					 * say that it has finished, and when all 6 have then we
 					 * can clear the voice.
 					 */
 					local->cstate = STATE_DONE;
@@ -1005,7 +1005,7 @@ dxopinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -1246,7 +1246,7 @@ fillWave(float *mem, int count, int type)
 			return;
 		case 6:
 			/*
-			 * Tangiential wave. We limit some of the values, since they do get
+			 * Tangential wave. We limit some of the values, since they do get
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */

@@ -27,7 +27,7 @@
 /*
  * Use of these prophet global buffers will be an issue with use of multiple
  * audio threads, unless we ensure a single thread deals with any given algo
- * type, since then they are only used sequencially.
+ * type, since then they are only used sequentially.
  *
  * These should really be hidden in the pMods structure for multiple instances.
  */
@@ -88,7 +88,7 @@ float value)
 			break;
 		case 4:
 			/*
-			 * Release all notes - issue for midi interface?
+			 * Release all notes - issue for MIDI interface?
 			 */
 			break;
 		case 5:
@@ -466,7 +466,7 @@ bristolVoice *voice, register float *startbuf)
 		/*
 		 * This needs to be fixed however I cannot test it right now:
 		 *	The ADSR should be amplified in as a function of the voice frequency
-		 *	so that it is constand for every note and can then stay in tune.
+		 *	so that it is constant for every note and can then stay in tune.
 		 */
 #warning adsr2osca needs amplification by frequency
 		bufmerge(adsrbuf, 0.04 * ((pmods *) baudio->mixlocals)->pm_filtenv,

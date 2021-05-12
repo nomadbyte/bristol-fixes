@@ -330,7 +330,7 @@ lfoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -560,7 +560,7 @@ fillWave(float *mem, int count, int type)
 			return;
 		case 6:
 			/*
-			 * Tangiential wave. We limit some of the values, since they do get
+			 * Tangential wave. We limit some of the values, since they do get
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */

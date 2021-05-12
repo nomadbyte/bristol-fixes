@@ -172,7 +172,7 @@ static int reset(bristolOP *operator, bristolOPParams *param)
  * depth and variance: gain, frequency, duration.
  * These are applied to each grain as it is generated, one parameter defines
  * the width of the value - its maximum, and the second one defines the variance
- * from that value. With no variance we only take the connfigured value, and as
+ * from that value. With no variance we only take the configured value, and as
  * variance is raised we introduce more randomness into the reproduction.
  */
 static int param(bristolOP *operator, bristolOPParams *param,
@@ -601,7 +601,7 @@ static int operate(bristolOP *operator,
 
 			/*
 			 * The next two paragraphs are the sympathetic grain generation
-			 * sections. The sympathy is a function of parameterisation, when
+			 * sections. The sympathy is a function of parametrisation, when
 			 * the parameters are wide there is little concordance, when the
 			 * values are slight there is stereo separation.
 			 */
@@ -679,7 +679,7 @@ quantuminit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

@@ -662,7 +662,7 @@ brightonFreeGC(brightonWindow *bwin, int index)
 
 /*
  * The primary use of GCs is for color selection, and then also primarily in the
- * forgreound. We are going to request colors as R/G/B tuples, as yet not with
+ * foreground. We are going to request colors as R/G/B tuples, as yet not with
  * any structure management although this may happen. We will consider the use
  * of hash table lookup with best fit, limiting the total number of colours
  * that brighton can reserve, and keep stats on lookup performance for different

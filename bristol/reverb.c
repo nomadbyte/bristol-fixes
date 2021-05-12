@@ -21,7 +21,7 @@
 
 /*
  * For the first releases of the 2600 this was a dual tap feedback loop with 
- * crossover. Cheezy, but so was the original 2600 spring reverb. Second 
+ * crossover. Cheesy, but so was the original 2600 spring reverb. Second 
  * extension was to insert a two pairs of HPF and LPF, one for feedback and
  * another for crossover through the two delay lines. Improved considerably.
  *
@@ -242,7 +242,7 @@ reverbinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

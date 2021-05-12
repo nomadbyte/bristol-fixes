@@ -171,9 +171,9 @@ printf("cs80oscparam(%i, %f) %i\n", index, value, ival);
 		 * but the ramp is on/off from GUI (with extended option). PWM will be
 		 * generated on the fly with a small detune.
 		 *
-		 * There will be two levels of brilliance for two consequetive octaves
+		 * There will be two levels of brilliance for two consecutive octaves
 		 * each with configurable level then affected by brilliance which is
-		 * inherrited from the emulation code in bristolcs80.c
+		 * inherited from the emulation code in bristolcs80.c
 		 *
 		 * Transpose will include sweeps of 16, 8, 5 1/3, 4, 2 2/3 and 2 octave
 		 * which are multipliers 1, 2, 3, 4, 6, 8.
@@ -348,7 +348,7 @@ register int count)
  *	count.
  *	gain.
  *
- * This oscillator is going to have 4 continous controllers for the signal
+ * This oscillator is going to have 4 continuous controllers for the signal
  * strengths of the different harmonics, 32/16/8/4. It will have different
  * gain levels for the tri and ramp waves. Finally the phase shifting pulse
  * wave will function probably on the lowest selected harmonic at first since
@@ -475,7 +475,7 @@ cs80oscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

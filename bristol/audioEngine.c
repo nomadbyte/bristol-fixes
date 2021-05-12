@@ -85,7 +85,7 @@ bristolUnlinkVoice(audioMain *audiomain, bristolVoice *v)
 }
 
 /*
- * This should be organised to be a callback for the Jack and DSSI interfaces.
+ * This should be organised to be a callback for the JACK and DSSI interfaces.
  * there may be issues of internal buffering that will have to be reviewed, and
  * potentially if we are called with less than our desired number of samples
  * then we buffer them internally and return data slightly behind the real
@@ -127,7 +127,7 @@ doAudioOps(audioMain *audiomain, float *outbuf, float *startbuf)
 	{
 #ifndef BRISTOL_SEMAPHORE
 		/*
-		 * This is not threadsafe. We should flag the rb as inactive.
+		 * This is not thread-safe. We should flag the rb as inactive.
 		 */
 		jack_ringbuffer_stop(audiomain->rb);
 		jack_ringbuffer_reset(audiomain->rb);
@@ -417,7 +417,7 @@ doAudioOps(audioMain *audiomain, float *outbuf, float *startbuf)
 			 * then get the locals and params, and call the operator, summing
 			 * the outputs into our single float buf.
 			 *
-			 * Each voice, or channel if you want, has its own independant 
+			 * Each voice, or channel if you want, has its own independent 
 			 * limit on voice counts. This strange hack works only if we have
 			 * allocated a new voice to the head of the list. If we stole an
 			 * existing voice or two it may fail however that is unlikely
@@ -429,7 +429,7 @@ doAudioOps(audioMain *audiomain, float *outbuf, float *startbuf)
 			if (++voice->baudio->cvoices > voice->baudio->voicecount)
 			{
 				/*
-				 * This looks a bit brutal however the assignement code should
+				 * This looks a bit brutal however the assignment code should
 				 * avoid this situation.
 				 */
 				if (voice->baudio->midiflags & BRISTOL_MIDI_DEBUG2)
@@ -572,7 +572,7 @@ doAudioOps(audioMain *audiomain, float *outbuf, float *startbuf)
 				thisaudio = thisaudio->next;
 				continue;
 			}
-#warning - this voice may have been reassigned. check midi channel
+#warning - this voice may have been reassigned. check MIDI channel
 			if (thisaudio->firstVoice != NULL)
 				(*thisaudio->effect[0]).operate(
 					audiomain->palette[index],
@@ -618,7 +618,7 @@ doAudioOps(audioMain *audiomain, float *outbuf, float *startbuf)
 					thisaudio = thisaudio->next;
 					continue;
 				}
-#warning - this voice may have been reassigned. check midi channel
+#warning - this voice may have been reassigned. check MIDI channel
 				if (thisaudio->firstVoice != NULL)
 					(*thisaudio->effect[1]).operate(
 						audiomain->palette[index],

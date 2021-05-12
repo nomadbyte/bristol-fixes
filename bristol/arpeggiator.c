@@ -45,7 +45,7 @@ static void desequence(audioMain *am, Baudio *ba)
  * and does the configuration of the arpeggiator.
  *
  * The code supports sequencing where steps can be learnt from the keyboard
- * and then stepped through them sequencially, chording where a similar learn
+ * and then stepped through them sequentially, chording where a similar learn
  * process is executed and then each note can play the chord singularly, and
  * arpeggiation where we scan through the active (pressed) notes.
  */
@@ -252,7 +252,7 @@ bristolArpeggiator(audioMain *audiomain, bristolMidiMsg *msg)
 			 * arpeggiator or putting in some silly long step time?
 			 *
 			 * When we have requested a resequence then we start accepting
-			 * midi note events in our hook and also key requests from the GUI.
+			 * MIDI note events in our hook and also key requests from the GUI.
 			 * At the moment key requests do not carry velocity, that is for
 			 * future study since we don't even use it here, we just maintain
 			 * it in the engine. Velocity support in the engine would require
@@ -615,7 +615,7 @@ arpeggioCounterCheck(arpSeq *seq, int samplecount)
  *
  * This should be redefined. We have a step sequencer and a chording system
  * however for performance it would be better to have a true arpeggiator:
- *	Out of the available pressed noes scan through them up/down/ud/rnd.
+ *	Out of the available pressed notes scan through them up/down/ud/rnd.
  *
  * This is called once per baudio per frame. Another call, ArpegReFreq() is
  * called per voice.
@@ -639,7 +639,7 @@ bristolArpegReAudio(audioMain *audiomain, Baudio *baudio)
 	 * If we are sequencing or arpeggiating then we need to look at their
 	 * counters here. The counters are moved just once for however many voices
 	 * we have but the counters are separate so we could anticipate sequencing
-	 * arpeggios? Hm, perhaps not, but we can garantee exclusion elsewhere.
+	 * arpeggios? Hm, perhaps not, but we can guarantee exclusion elsewhere.
 	 */
 	if (baudio->mixflags & BRISTOL_SEQUENCE)
 	{

@@ -269,7 +269,7 @@ brightonApp voyagerApp = {
 	"voyager",
 	0, /* no blueprint on wood background. */
 	"bitmaps/textures/voyagerpaint.xpm",
-	0, /* or BRIGHTON_STRETCH, default is tesselate */
+	0, /* or BRIGHTON_STRETCH, default is tessellate */
 	explorerInit,
 	voyagerConfigure, /* 3 callbacks, unused? */
 	midiCallback,
@@ -360,18 +360,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "explorer", 0, synth->bank + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}

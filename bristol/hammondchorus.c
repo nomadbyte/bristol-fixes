@@ -75,7 +75,7 @@ int *tap4 = NULL, *tap5 = NULL, *tap6 = NULL;
 float tapgain[TAPS] = {1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08};
 
 /* float tapfilt[TAPS] = {0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55}; */
-/* These get reset anyway, the are a cummulative multiplication */
+/* These get reset anyway, the are a cumulative multiplication */
 float tapfilt[TAPS] = {0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91};
 
 /*
@@ -527,7 +527,7 @@ hammondchorusinit(bristolOP **operator, int index, int samplerate, int samplecou
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

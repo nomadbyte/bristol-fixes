@@ -923,7 +923,7 @@ main(int argc, char **argv)
 				sysid &= 0x7f7f7f7f;
 				bristolMidiOption(0, BRISTOL_NRP_SYSID_H, sysid >> 16);
 				bristolMidiOption(0, BRISTOL_NRP_SYSID_L, sysid & 0x0000ffff);
-				printf("fixing sysex system id at 0x%x\n", sysid);
+				printf("fixing SysEx system id at 0x%x\n", sysid);
 			}
 		}
 
@@ -1016,7 +1016,7 @@ main(int argc, char **argv)
 			}
 
 			if (global.synths->flags & REQ_DEBUG_MASK)
-				printf("debuging level set to %i\n",
+				printf("debugging level set to %i\n",
 					(global.synths->flags&REQ_DEBUG_MASK)>>12);
 		}
 
@@ -1598,10 +1598,10 @@ main(int argc, char **argv)
 	/*
 	 * We play around with the names here so that the window title gets filled
 	 * with more information than just the emulator name. This enhancement was
-	 * added for JSM but could be any Jack installation. If multiple instances
+	 * added for JSM but could be any JACK installation. If multiple instances
 	 * of the same emulator are started then it is not clear which is which:
 	 * both have the same title bar but different names in Jack. What we do here
-	 * is add the Jack registration name to the title bar.
+	 * is add the JACK registration name to the title bar.
 	 */
 	snprintf(appname, 64, "%s (%s)",
 		synthesisers[global.synths->synthtype]->name, devname);
@@ -1857,7 +1857,7 @@ eventMgr()
 			if ((midiHandle = bristolMidiOpen("brighton",
 				BRISTOL_CONN_SEQ|BRISTOL_RDONLY,
 				-1, -1, brightonMidiInput, &global)) < 0)
-				printf("Error opening midi device %s\n", "0.0");
+				printf("Error opening MIDI device %s\n", "0.0");
 		}
 	}
 
@@ -1870,7 +1870,7 @@ eventMgr()
 	midiFD = bristolGetMidiFD(midiHandle);
 	cFD = bristolGetMidiFD(global.controlfd);
 
-	printf("opened GUI midi handles: %i, %i\n", midiFD, cFD);
+	printf("opened GUI MIDI handles: %i, %i\n", midiFD, cFD);
 
 /*
 	if (global.libtest != 1)
@@ -1942,7 +1942,7 @@ eventMgr()
 		if (r == BRISTOL_MIDI_CHANNEL)
 		{
 			if ((global.synths->flags & REQ_DEBUG_MASK) >= REQ_DEBUG_4)
-				printf("Read failed on Midi FD\n");
+				printf("Read failed on MIDI FD\n");
 			global.flags |= REQ_EXIT;
 
 			pthread_exit(0);
@@ -1967,7 +1967,7 @@ eventMgr()
 		 * We should have some 'tack' in here where we call a routine in the
 		 * library that will execute any timed events that have been requested,
 		 * this will cover things like flashing lights, VU metering. It will
-		 * also be used to cover the midi sequencer.
+		 * also be used to cover the MIDI sequencer.
 		 *
 		 * We should also attempt to recover lost time in graphical processing
 		 * by changing mwt into a target sleep period by getting the current

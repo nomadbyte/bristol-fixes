@@ -95,9 +95,9 @@ bristolSystem(audioMain *audiomain, bristolMidiMsg *msg)
 		{
 			int x, y;
 			/*
-			 * When we get a hello we need to suppress midi processing for a
+			 * When we get a hello we need to suppress MIDI processing for a
 			 * period of time whilst the new emulator is activated. It will be
-			 * reactivated when the algorithm has initted later.
+			 * reactivated when the algorithm has init'ed later.
 			 */
 			bristolMidiOption(0, BRISTOL_NRP_MIDI_GO, 0);
 
@@ -317,10 +317,10 @@ bristolSystem(audioMain *audiomain, bristolMidiMsg *msg)
 
 					/*
 					 * It looks like this should be called first however we do
-					 * still need the audio thread to be called by jack for the
+					 * still need the audio thread to be called by JACK for the
 					 * time being: the audio thread has do clean its stuff up
 					 * before exit. When it has done its cleanup it returns to
-					 * jack immediately if the audiolist is empty so now we can
+					 * JACK immediately if the audiolist is empty so now we can
 					 * unregister the interface and clean up the rest of the
 					 * app
 					 */
@@ -385,7 +385,7 @@ bristolSystem(audioMain *audiomain, bristolMidiMsg *msg)
 				baudio->transpose = ((int) (BRISTOL_PARAMMASK & flags)) - 24;
 
 				if (baudio->midiflags & BRISTOL_MIDI_DEBUG1)
-					printf("tranpose now %i\n", baudio->transpose);
+					printf("transpose now %i\n", baudio->transpose);
 
 				break;
 			}
@@ -486,7 +486,7 @@ bristolSystem(audioMain *audiomain, bristolMidiMsg *msg)
 			printf("cont 2: %i: res %i\n", msg->params.bristol.from, result);
 
 		/*
-		 * return a message, with the controlid assumably at the head
+		 * return a message, with the controlid assumedly at the head
 		 * of the playlist - we have just created it.
 		msg->params.bristol.valueLSB = result;
 		bristolMidiPrint(msg);

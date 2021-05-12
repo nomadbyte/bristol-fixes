@@ -400,7 +400,7 @@ bsmCopy(char *src, char *dst)
 
 /*
  * The next two will copy files into and out of the bristol cache. Read is only
- * really used on system startup if a session file has been given by Jack SM but
+ * really used on system startup if a session file has been given by JACK SM but
  * it could be more general. Write will copy cache files out to wherever they 
  * have been requested.
  */

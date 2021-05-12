@@ -336,8 +336,8 @@ param->param[LEVEL_4].float_val);
 		}
 
 		/*
-		 * This smooths over key reassigments, channel or poly pressure changes
-		 * where the target gain can jump noticably - our operational gain will
+		 * This smooths over key reassignments, channel or poly pressure changes
+		 * where the target gain can jump noticeably - our operational gain will
 		 * tend towards the target. It may cause a bit of breathing however that
 		 * is far preferable to ticking.
 		 */
@@ -383,7 +383,7 @@ env5stageinit(bristolOP **operator, int index, int sr, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

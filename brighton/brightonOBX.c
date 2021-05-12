@@ -442,19 +442,19 @@ obxMidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 /*			loadMemory(synth, "obx", 0, synth->bank + synth->location, */
 /*				synth->mem.active, FIRST_DEV, 0); */
 			obxLoadMemory(synth, global.controlfd, synth->midichannel, 0, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -491,7 +491,7 @@ obxModCallback(brightonWindow *win, int panel, int index, float value)
 		case 1:
 			/*
 			 * Not sure why this should work, and it probably doesn't. It is
-			 * the 'mod' controller but appears to affect Osc-1 tranpose
+			 * the 'mod' controller but appears to affect Osc-1 transpose
 			 */
 			if (narrow != 0)
 				/*sendvalue = (int) ((value * C_RANGE_MIN_1)) >> 3; */
@@ -622,7 +622,7 @@ obxWaveform(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	{
 		/*
 		 * If the sqr is being selected, then PW will modify this oscillator,
-		 * and if going off then it will cotrol the other
+		 * and if going off then it will control the other
 		 */
 		if (v != 0)
 			pwSelect = c;
@@ -681,7 +681,7 @@ multiTune(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 /*
  * The OB-X does not have a lot of memories, just 8 banks of 8 memories. This
- * is a bit sparse for the emulater but it keeps the interface easy. Will be
+ * is a bit sparse for the emulator but it keeps the interface easy. Will be
  * two sets of buttons, one for the bank, one for the index, then load and 
  * save. Load and Save will be intermittent and the banks radio buttons.
  */

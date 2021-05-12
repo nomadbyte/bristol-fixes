@@ -327,7 +327,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 	/*
 	 * Is this one of the presets?
 	 *
-	 * We should consider making these require a doubleclick also.
+	 * We should consider making these require a double-click also.
 	 */
 	if (index >= MEM_START)
 	{
@@ -601,12 +601,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-/*	printf("midi callback: %x, %i\n", controller, value); */
+/*	printf("MIDI callback: %x, %i\n", controller, value); */
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, synth->resources->name, 0, synth->bank
 				+ synth->location,
@@ -616,7 +616,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value * 10;
 			break;
 	}
@@ -778,7 +778,7 @@ voxM2Option(guiSynth *synth, int fd, int chan, int cont, int op, int value)
 			return;
 		case 27:
 			/*
-			 * The next 4 are percusive controls. We have to see if they are
+			 * The next 4 are percussive controls. We have to see if they are
 			 * active and get their values before we send the requests.
 			 *
 			 * We have short/long/soft/loud
@@ -1048,7 +1048,7 @@ voxM2Init(brightonWindow* win)
 	synth->dispatch[MOD_START + 19].controller = 2;
 	synth->dispatch[MOD_START + 19].operator = 0;
 	synth->dispatch[MOD_START + 19].routine = (synthRoutine) voxM2Bass;
-	/* Bass sustain (actualy env release). */
+	/* Bass sustain (actually env release). */
 	synth->dispatch[MOD_START + 20].controller = 3;
 	synth->dispatch[MOD_START + 20].operator = 3;
 

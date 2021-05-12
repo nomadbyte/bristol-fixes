@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -197,7 +197,7 @@ bristolFreeDevice(int dev)
 }
 
 /*
- * A routine to initalise any of our internal structures.
+ * A routine to initialise any of our internal structures.
  */
 void
 initMidiLib(int flags)

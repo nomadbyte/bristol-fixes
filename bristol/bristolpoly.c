@@ -234,7 +234,7 @@ polyController(Baudio *baudio, u_char operator, u_char controller, float value)
 			 * Chord will operate in different modes. There will be MONO chord
 			 * which will accept 4 notes and hold them, and transpose them
 			 * for each keypress. In Poly mode will arpeggiate between the
-			 * notes for cheesey 80's style arpeg and transpose the arpeggiation
+			 * notes for cheesy 80's style arpeg and transpose the arpeggiation
 			 * with new notes. In share mode will just rotate through the notes
 			 * accepting each onto the next in the sequence.
 			 */
@@ -309,7 +309,7 @@ polyNoteOn(audioMain *audiomain, Baudio *baudio, bristolVoice *voice)
 			 * Do transpose stuff, etc. Three modes of operation:
 			 *
 			 * MONO: accept 4 notes and hold them, and transpose them.
-			 * SHARE: arpeggiate between the notes for cheesey 80's style arpeg.
+			 * SHARE: arpeggiate between the notes for cheesy 80's style arpeg.
 			 * POLY: rotate through the notes accepting each.
 			 */
 			if (baudio->mixflags & (P_UNISON|P_SHARE)) {
@@ -396,7 +396,7 @@ polyNoteOn(audioMain *audiomain, Baudio *baudio, bristolVoice *voice)
 			}
 
 			/*
-			 * If this is after the first voice then clear the trigger if nec.
+			 * If this is after the first voice then clear the trigger if necessary.
 			 */
 			if (((baudio->mixflags & P_MULTI) == 0) && (i > 0))
 				voice->flags &= ~(BRISTOL_KEYON|BRISTOL_KEYREON);
@@ -414,7 +414,7 @@ polyNoteOn(audioMain *audiomain, Baudio *baudio, bristolVoice *voice)
 		mods->keydata[i].lastkey = voice->lastkey;
 
 		/*
-		 * If this is after the first voice then clear the trigger if nec.
+		 * If this is after the first voice then clear the trigger if necessary.
 		 */
 		if (((baudio->mixflags & P_MULTI) == 0) && (i > 1))
 			voice->flags &= ~(BRISTOL_KEYON|BRISTOL_KEYREON);
@@ -642,7 +642,7 @@ polyNoteOff(audioMain *audiomain, Baudio *baudio, bristolVoice *voice)
 	pmods *mods = ((pmods *) baudio->mixlocals);
 	int i = 0;
 
-#warning issues here if we have two midi events between frames
+#warning issues here if we have two MIDI events between frames
 	/*
 	 * Find out how many keys are on
 	 */
@@ -1354,7 +1354,7 @@ bristolVoice *voice, register float *startbuf)
 /* Arpeggiated mixer. */
 	/*
 	 * Take each osc buf and mix into leftbuf ready for filter. We need to 
-	 * consider what do to with argep at this point, since if we are chorded
+	 * consider what do to with arpeg at this point, since if we are chorded
 	 * the only selected oscillators may actually voice.
 	 */
 	if (baudio->mixflags & P_CHORD)

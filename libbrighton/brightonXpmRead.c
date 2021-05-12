@@ -40,7 +40,7 @@ extern void brightonSprintColor(brightonWindow *, char *, int);
 #define CTAB_SIZE 2048
 
 /*
- * In the next peice of code we are calling brightonfopen(), brightonfgets()
+ * In the next piece of code we are calling brightonfopen(), brightonfgets()
  * and brightonfclose(), these are empty stubs that would get removed at
  * -O3 or so however I have used them at times for debugging heap corruption
  * and the overhead is minimal and only affects startup, not runtime.
@@ -225,7 +225,7 @@ xpmread(brightonWindow *bwin, char *filename)
 
 	/*
 	 * We now have some reasonable w, h, c and p. Need to parse c color lines.
-	 * We have to build a table of the character indeces from the XPM file. To
+	 * We have to build a table of the character indexes from the XPM file. To
 	 * do this we need a character table and index. Rather than define them in
 	 * this file I am going to re-use some parts of the bitmap structure.
 	 */
@@ -495,7 +495,7 @@ brightonXpmWrite(brightonWindow *bwin, char *file)
 	for (cindex = 0; cindex < ccnt; cindex++)
 	{
 		/*
-		 * We have to be reasonably intelligent with the color indeces. The
+		 * We have to be reasonably intelligent with the color indexes. The
 		 * first attempt failed when we went over about 80 colors. The index
 		 * needs to become a string. We could go for two digits immediately?
 		 */

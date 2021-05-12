@@ -148,7 +148,7 @@ fixWavepointers(sampleData *sd, int layer)
 			/*
 			 * Since we do not have a wave loaded on this note we need to
 			 * evaluate the rate at which the related sample should be
-			 * played. This is 2s power twelth of the distance between the
+			 * played. This is 2s power twelfth of the distance between the
 			 * notes.
 			 */
 			freqstep = ckey - target;

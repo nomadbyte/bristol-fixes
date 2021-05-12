@@ -52,7 +52,7 @@
 #define PCOUNT 16 /* As of 0.30.6 this was the max */
 #define IOCOUNT 5
 
-/* IO indeces */
+/* IO indexes */
 #define NRO_IN_IND 0
 #define NRO_OUT_IND 1
 #define NRO_PWM_IND 2
@@ -698,7 +698,7 @@ genTriTendency(bristolNRO *gt, bristolNROlocal *t, float *fb, float *mb, float *
 
 /*
  * Convert to samples per cycle for whole waveforms, ramp and saw for example,
- * but also square since it take the frequency and appliesa PWM modulation.
+ * but also square since it take the frequency and applies a PWM modulation.
  */
 static void
 convertF2S(float *src, float *dst, float trans, float sr, int c)
@@ -1153,7 +1153,7 @@ nroinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

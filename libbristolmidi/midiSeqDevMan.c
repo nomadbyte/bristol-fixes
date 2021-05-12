@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -20,7 +20,7 @@
  */
 
 /*
- * This code should open the midi device (working with ALSA raw midi only for
+ * This code should open the MIDI device (working with ALSA raw MIDI only for
  * the moment (9/11/01)), and read data from it. Not sure how it will be read,
  * either buffers, events, or perhaps just raw data. At some point in the 
  * development this will become a separate thread in the synth code.
@@ -406,7 +406,7 @@ translate_event(snd_seq_event_t *ev, bristolMidiMsg *msg, int dev)
 
 	/*
 	 * Go look at the event. We are only concerned for now (ns-18/06/02) with
-	 * midi realtime messages - note on/off, controllers, pressures, pitch.
+	 * MIDI realtime messages - note on/off, controllers, pressures, pitch.
 	 */
 	switch (ev->type) {
 		case SND_SEQ_EVENT_NOTE:
@@ -487,7 +487,7 @@ translate_event(snd_seq_event_t *ev, bristolMidiMsg *msg, int dev)
 #endif
 
 			/*
-			 * Hm, we may need to recode these to 7 bit midi values?
+			 * Hm, we may need to recode these to 7 bit MIDI values?
 			 */
 			msg->command = MIDI_CONTROL| ev->data.note.channel;
 			msg->channel = ev->data.control.channel;
@@ -548,7 +548,7 @@ translate_event(snd_seq_event_t *ev, bristolMidiMsg *msg, int dev)
 #endif
 
 			/*
-			 * Hm, we may need to recode these to 7 bit midi values?
+			 * Hm, we may need to recode these to 7 bit MIDI values?
 			 */
 			msg->command = MIDI_PITCHWHEEL| ev->data.note.channel;
 			msg->channel = ev->data.control.channel;

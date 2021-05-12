@@ -186,7 +186,7 @@ u_char operator, float value)
 				baudio->mixflags |= FILTER_PEDAL;
 			break;
 		case 27:
-			/* Velocitry tracking in emulator or envelope */
+			/* Velocity tracking in emulator or envelope */
 			if (ivalue == 0)
 				baudio->mixflags |= TOUCH_SENSE;
 			else

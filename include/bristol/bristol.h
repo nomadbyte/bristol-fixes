@@ -128,7 +128,7 @@
 
 #define SYSTEM_CHANNEL			0x07f /* used for initialisation requests. */
 
-#define BRISTOL_CHAN_OMNI		127 /* Denotes any midi channel. */
+#define BRISTOL_CHAN_OMNI		127 /* Denotes any MIDI channel. */
 
 //#define BRISTOL_VOICECOUNT		32 /* Was 16, now increased for GM-2 24/32 */
 #define BRISTOL_MAXVOICECOUNT	128
@@ -223,7 +223,7 @@
 #define B_NRO			35
 
 /*
- * Audio interface types. The loest bytes is resevered.
+ * Audio interface types. The lowest bytes is reserved.
  *
  * These are for audiomain.flags, there are 8 drivers available of which are
  * defined, one is deprecated leaving six. The Pulse has two interfaces one of
@@ -255,9 +255,9 @@
 
 #define BRISTOL_MIDI_WAIT		0x00800000
 
-/* Audio connection to Jack ports */
+/* Audio connection to JACK ports */
 #define BRISTOL_AUTO_CONN		0x00008000
-/* Separate registration for audio and midi */
+/* Separate registration for audio and MIDI */
 #define BRISTOL_JACK_DUAL		0x00004000
 
 #define BRISTOL_TERM -3
@@ -377,7 +377,7 @@ typedef struct BristolVoice {
 	char ***locals;
 	/*
 	 * We need an event structure for each possible poly event. These will be
-	 * fead to the voice operators for mods, etc. This should be views as the
+	 * fed to the voice operators for mods, etc. This should be views as the
 	 * PolyMod table, ie, there are only two polyphonic modifiers, the key id
 	 * and any polypressure generated.
 	 */
@@ -388,7 +388,7 @@ typedef struct BristolVoice {
 	pressureMsg pressure;
 	float press;
 	/*
-	 * For polyponic portamento
+	 * For polyphonic portamento
 	 */
 	unsigned char lastkey; /* This should not be voice, but Audio parameter. */
 	/* These are for the tendency generators */
@@ -423,7 +423,7 @@ typedef struct BristolIO {
 	float *bufmem;    /* buffer memory for this IO */
 	int samplecnt;    /* number of samples in buffer */
 	int samplerate;   /* on this IO */
-	bristolModSpec modifiers; /* Midi modifiers to streamed input */
+	bristolModSpec modifiers; /* MIDI modifiers to streamed input */
 } bristolIO;
 
 typedef int (*bristolAlgo)();
@@ -558,7 +558,7 @@ typedef struct BAudio {
 	bristolVoice *firstVoice;
 	int debuglevel;
 	/*
-	 * This should become a generic midi modifier table.
+	 * This should become a generic MIDI modifier table.
 	 */
 	float contcontroller[MIDI_CONTROLLER_COUNT];
 	int GM2values[MIDI_CONTROLLER_COUNT];
@@ -570,7 +570,7 @@ typedef struct BAudio {
 	int controlid;
 	int midichannel;
 	char ***locals; /* Unique locals per voice, a basic necessity. */
-	void ***params; /* Unique params per voice, for midi poly support, etc. */
+	void ***params; /* Unique params per voice, for MIDI poly support, etc. */
 	char ***FXlocals;
 	u_int64_t mixflags;
 	unsigned int midiflags;
@@ -662,12 +662,12 @@ typedef struct AudioMain {
 	int s440holder; /* not used? */
 	char *audiodev; /* both of these really need to become multiheaded? */
 	char *mididev;
-	int port; /* for tcp connecctions */
+	int port; /* for tcp connections */
 	float ingain;
 	float outgain;
 	char *microTonalMappingFile;
 	unsigned int SysID;
-	jack_ringbuffer_t *rb; /* MIDI thread to audio threadd */
+	jack_ringbuffer_t *rb; /* MIDI thread to audio thread */
 	jack_ringbuffer_t *rbfp; /* MIDI/Audio thread to forwarding thread */
 	char jackUUID[BRISTOL_JACK_UUID_SIZE];
 	int iocount;

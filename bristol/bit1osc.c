@@ -497,7 +497,7 @@ bit1oscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -826,7 +826,7 @@ buildBitoneSound(bristolOP *operator, bristolOPParams *param)
 	source = specs->wave[2];
 	for (i = 0; i < 5; i++)
 	{
-		/* We should try some semi random start indeces? */
+		/* We should try some semi random start indexes? */
 		oscindex = 0;
 
 		dest = param->param[0].mem;

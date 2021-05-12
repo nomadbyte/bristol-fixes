@@ -27,7 +27,7 @@
 /*
  * Use of these pro1 global buffers will be an issue with use of multiple
  * audio threads, unless we ensure a single thread deals with any given algo
- * type, since then they are only used sequencially.
+ * type, since then they are only used sequentially.
  *
  * These should really be hidden in the pMods structure for multiple instances.
  */
@@ -401,7 +401,7 @@ bristolVoice *voice, register float *startbuf)
 	/*
 	 * This needs to be fixed however I cannot test it right now:
 	 *	The ADSR should be amplified in as a function of the voice frequency
-	 *	so that it is constand for every note and can then stay in tune.
+	 *	so that it is constant for every note and can then stay in tune.
 	 */
 #warning osc mod needs amplification by frequency
 	if (baudio->mixflags & P1_OSCB_F_WM)

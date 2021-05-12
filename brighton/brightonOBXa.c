@@ -259,7 +259,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/knobs/alpharotary.xpm", 0},
 	{"Reset", 2, C3 + BO, R2a, S2, S3, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", 0},
-	/* This is the Tremelo modifier */
+	/* This is the Tremolo modifier */
 	{"LFO-Mod-VCA", 2, C7 + B2, R4, S2, S3, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", 0},
 	{"Balance", 0, C3, R1 - 100, S1, S1, 0, 1, 0, "bitmaps/knobs/knob5.xpm", 
@@ -703,18 +703,18 @@ obxaMidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			obxaLoadMemory(synth, synth->resources->name, 0, synth->bank * 10 + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -758,7 +758,7 @@ printf("setting split point: %i\n", index);
 	 * each channel. If split then check the key we have selected, and if
 	 * poly send to each voice in turn.
 	 *
-	 * Take the tranpose out of here.
+	 * Take the transpose out of here.
 	 */
 	if (value)
 		bristolMidiSendMsg(global.controlfd, synth->midichannel,
@@ -990,7 +990,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 						126, 29, 0);
 			}
 			break;
-		case 9: /* Ammount - Wide Narrow mods */
+		case 9: /* Amount - Wide Narrow mods */
 			/* Nothing to do - just a flag that affects swing of wheels. */
 			/* That is not wise, it should really go to the engine */
 			break;
@@ -1220,7 +1220,7 @@ obxaWaveform(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	{
 		/*
 		 * If the sqr is being selected, then PW will modify this oscillator,
-		 * and if going off then it will cotrol the other
+		 * and if going off then it will control the other
 		 */
 		if (v != 0)
 			pwSelect = c;
@@ -1884,12 +1884,12 @@ obxaMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 	/*
 	 * For this synth we are going to try and put everything on a single 
-	 * midi channel - split poly is all voices, split will tell the engine
+	 * MIDI channel - split poly is all voices, split will tell the engine
 	 * which ranges apply to which voices on this synth, layer will apply 
 	 * two notes on the channel, and unison all of them. Unison should really
 	 * be an engine feature to setup every voice for a given baudio structure.
 	 *
-	 * This works badly for the Prophet10 though, so may go for two midi 
+	 * This works badly for the Prophet10 though, so may go for two MIDI 
 	 * channels and decide how to intepret them.
 	 */
 	if (c == 2) {
@@ -2234,7 +2234,7 @@ obxaInit(brightonWindow *win)
 	dispatch[FIRST_DEV + 41].controller = 41;
 	dispatch[FIRST_DEV + 41].operator = 0;
 	dispatch[FIRST_DEV + 41].routine = (synthRoutine) obxaDecay;
-	/* Mod to tremelo */
+	/* Mod to tremolo */
 	dispatch[FIRST_DEV + 42].controller = 126;
 	dispatch[FIRST_DEV + 42].operator = 18;
 	/* Balance. Should work as a dispatcher along with master volume? */

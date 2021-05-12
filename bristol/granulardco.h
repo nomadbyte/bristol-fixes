@@ -94,11 +94,11 @@ typedef struct BristolGRANULARDCOlocal {
 } bristolGRANULARDCOlocal;
 
 /*
- * This is the gain table. The original papers referred to having a gaussian
+ * This is the gain table. The original papers referred to having a Gaussian
  * gain, starting from zero and having even distribution. Later implementations
  * used bastardisations of this including csound's rather dumb 'AR' envelope.
  * We are going to use a normalised, inverted cosine. This is a reasonable
- * approximation of the gaussian 'bellcurve' that could be improved upon in
+ * approximation of the Gaussian 'bellcurve' that could be improved upon in
  * later releases.
  *
  * This table is resampled for the different grain sizes.
@@ -237,10 +237,10 @@ float quantumgain[GRANULARDCO_WAVE_SZE + 1] = {
 
 /*
  * This is the 'rand' table. It was generated using rand() and it is a table
- * such that we can have reproducable random numbers so that generated sounds
- * can be put into memories and recalled verbatim. Ok, rand can actualy be used
+ * such that we can have reproducible random numbers so that generated sounds
+ * can be put into memories and recalled verbatim. Ok, rand can actually be used
  * to do this, however rand is already used in other algorithms (preacher) and
- * unless the quantum generator can garantee ordered randomness it will not be
+ * unless the quantum generator can guarantee ordered randomness it will not be
  * able to have memories, hence this table. The reason that we cannot use rand()
  * to generate this table is that rand() may already be arbitrarily seeded by
  * the same process. We will consider the use of rand_r() as a development.

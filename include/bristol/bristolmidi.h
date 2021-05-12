@@ -21,10 +21,10 @@
 
 /*
  * Some structures for device management. These are for the library internal,
- * and not for anybody using the API. If you want to use the midi library, use
+ * and not for anybody using the API. If you want to use the MIDI library, use
  * bristolmdidiapi.h
  *
- * This controls messages on any given midi channel, handles that have been
+ * This controls messages on any given MIDI channel, handles that have been
  * opened for any channel, and global control structures.
  */
 
@@ -126,7 +126,7 @@ typedef struct BristolMidiDev {
 	int lastcommand;
 	int lastcommstate;
 	unsigned int sequence;
-	int handleCount; /* numberof handles using this dev */
+	int handleCount; /* number of handles using this dev */
 	struct {
 		int count;
 		bristolMsg *bm;
@@ -155,7 +155,7 @@ typedef struct BristolMidiMain {
 	bristolMidiHandle handle[BRISTOL_MIDI_HANDLES];
 	int (*msgforwarder)();
 /*	int GM2values[128][16]; // Values all controllers by channel */
-/*	int mapping[128][16]; // default midi conntroller mapping table. */
+/*	int mapping[128][16]; // default MIDI controller mapping table. */
 } bristolMidiMain;
 
 extern int bristolGetMidiFD(int);

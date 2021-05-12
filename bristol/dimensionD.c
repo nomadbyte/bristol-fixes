@@ -142,11 +142,11 @@ static float table[TABSIZE];
  * make this a resampling chorus.
  *
  * Extra parameters could be used to adjust the gain of both the original and
- * the vibrato signal, and we could consider different scaning waveforms. The
+ * the vibrato signal, and we could consider different scanning waveforms. The
  * only one at the moment is a triangular which is close enough to sine, but a
  * front or back loaded tri wave would introduce some interesting leading and
  * trailing pumping effects, something that could be done by a factor that 
- * justs affects the ramp rate, applied +ve when ramping up and -ve when down.
+ * just affects the ramp rate, applied +ve when ramping up and -ve when down.
  */
 static int operate(bristolOP *operator,
 	bristolVoice *voice,
@@ -318,7 +318,7 @@ chorusinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

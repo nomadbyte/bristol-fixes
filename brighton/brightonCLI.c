@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -202,13 +202,13 @@ comSet debugcomm[6] = {
 		"Command Line Debuging on/off",
 		0, 0},
 	{"midi",	B_COM_FIND,
-		"debug level midi interface libraries 0..3",
+		"debug level MIDI interface libraries 0..3",
 		0, 0},
 	{"frontend",	B_COM_FIND,
 		"debug engine interface libraries on/off",
 		0, 0},
 	{"engine",	B_COM_FIND,
-		"engine debuging level 0..15 (0 = off, >9 = verbose)",
+		"engine debugging level 0..15 (0 = off, >9 = verbose)",
 		0, 0},
 	{"", B_COM_LAST, "", 0, 0},
 };
@@ -227,19 +227,19 @@ comSet bristolcom[4] = {
 comSet midicomm[24] = {
 	{"",		B_COM_NOT_USED, "", 0, 0},
 	{"channel",	B_COM_FIND,
-		"configure engine midi channel 1..16",
+		"configure engine MIDI channel 1..16",
 		0, 0},
 	{"sid",	B_COM_FIND,
 		"select internal messaging id",
 		0, 0},
 	{"debug",	B_COM_FIND,
-		"engine debuging level 0..16",
+		"engine debugging level 0..16",
 		0, 0},
 	{"lowkey",	B_COM_FIND,
-		"lower midi keyboard split point 0..127",
+		"lower MIDI keyboard split point 0..127",
 		0, 0},
 	{"highkey",	B_COM_FIND,
-		"higher midi keyboard split point 0..127",
+		"higher MIDI keyboard split point 0..127",
 		0, 0},
 	{"chanpress",	B_COM_FIND,
 		"send a channel pressure event value p=0..127",
@@ -254,7 +254,7 @@ comSet midicomm[24] = {
 		"monophonic note preference logic: hnp/lnp/nnp",
 		0, 0},
 	{"velocity",	B_COM_FIND,
-		"midi velocity curve 0..1000",
+		"MIDI velocity curve 0..1000",
 		0, 0},
 	{"detune",	B_COM_FIND,
 		"engine 'temperature sensitivity' detuning",
@@ -272,7 +272,7 @@ comSet midicomm[24] = {
 		"emulator global gain control",
 		0, 0},
 	{"pwd",	B_COM_FIND,
-		"midi pitch wheel depth semitones",
+		"MIDI pitch wheel depth semitones",
 		0, 0},
 	{"nrp", B_COM_FIND,
 		"enable user interface NRP response on/off",
@@ -281,7 +281,7 @@ comSet midicomm[24] = {
 		"enable engine NRP response on/off",
 		0, 0},
 	{"forwarding",	B_COM_FIND,
-		"enable engine midi message forwarding on/off",
+		"enable engine MIDI message forwarding on/off",
 		0, 0},
 	{"tuning",	B_COM_FIND,
 		"coarse/fine: global tuning 0..1.0",
@@ -290,7 +290,7 @@ comSet midicomm[24] = {
 		"send a value to a continuous controller value",
 		0, 0},
 	{"panic",	B_COM_FIND,
-		"midi all-notes-off, etc",
+		"MIDI all-notes-off, etc",
 		0, 0},
 	{"", B_COM_LAST, "", 0, 0},
 };
@@ -363,7 +363,7 @@ comSet setcomm[B_TTY_ACT_COUNT + 1] = {
 		"'set memory [find|read|write|import|export]",
 		execMemory, memcomm},
 	{"midi",	B_COM_MIDI,
-		"[channel|debug|help] midi control commands",
+		"[channel|debug|help] MIDI control commands",
 		execMidi, midicomm},
 	{"debug",	B_COM_DEBUG,
 		"[on|off|engine [0..15]] debug settings",
@@ -417,7 +417,7 @@ comSet commands[B_TTY_ACT_COUNT + 1] = {
 		"'set memory [find|read|write|import|export]",
 		execMemory, memcomm},
 	{"midi",	B_COM_MIDI,
-		"[channel|debug|help] midi control commands",
+		"[channel|debug|help] MIDI control commands",
 		execMidi, midicomm},
 	{"debug",	B_COM_DEBUG,
 		"[on|off|engine [0..15]] debug settings",
@@ -770,7 +770,7 @@ brightonSetCLIcode(char *input)
 		int i;
 
 		/*
-		 * Search the ommmand table, add entry to templates
+		 * Search the command table, add entry to templates
 		 */
 		for (i = 0 ;
 			(commands[i].map != B_COM_LAST) && (i < B_TTY_ACT_COUNT);
@@ -1416,25 +1416,25 @@ extern int bristolPolyPressureEvent(int, int, int, int, int);
  * access to loads of stuff that many of the GUI may not use because there was
  * no other way to control them.
  *
- * midi channel 1..16
- * midi debug 0..3
- * midi lowkey|highkey 0..127
- * midi filters lwf|nwf|wwf|hwf
- * midi notepref hnp|lnp|nnp
- * midi velocity 1..1000
- * midi chanpressure 0..127
- * midi polypressure 0..127 0..127
- * midi detune 0..500
- * midi glide 0..30
- * midi legato on/off
- * midi trig on/off
- * midi gain 1..
- * midi pwd 0..
- * midi nrp on/off
- * midi forwarding on/off
- * midi tuning fine 0..1.0
- * midi tuning coarse 0..1.0
- * midi panic
+ * MIDI channel 1..16
+ * MIDI debug 0..3
+ * MIDI lowkey|highkey 0..127
+ * MIDI filters lwf|nwf|wwf|hwf
+ * MIDI notepref hnp|lnp|nnp
+ * MIDI velocity 1..1000
+ * MIDI chanpressure 0..127
+ * MIDI polypressure 0..127 0..127
+ * MIDI detune 0..500
+ * MIDI glide 0..30
+ * MIDI legato on/off
+ * MIDI trig on/off
+ * MIDI gain 1..
+ * MIDI pwd 0..
+ * MIDI nrp on/off
+ * MIDI forwarding on/off
+ * MIDI tuning fine 0..1.0
+ * MIDI tuning coarse 0..1.0
+ * MIDI panic
  */
 static int
 execMidi(guimain *global, int c, char **v)
@@ -2663,7 +2663,7 @@ bttySearch(guimain *global)
 
 	/*
 	 * Search through the internal commands and the synth parameters. If only
-	 * one match then commplete it, otherwise list them.
+	 * one match then complete it, otherwise list them.
 	 */
 	if (btty.i >= SYNTHS->win->app->resources[btty.p].ndevices)
 	{
@@ -3089,7 +3089,7 @@ bttyExecute(guimain *global, int c, char **v)
 			btty.i = i;
 
 			switch (n) {
-				case 1: /* Value was set explicity */
+				case 1: /* Value was set explicitly */
 					break;
 				case 2: /* + */
 					value = PDEV(btty.i)->value + 0.01;
@@ -3247,8 +3247,8 @@ bttyInterpret(guimain *global, char *tbuf)
 
 	/*
 	 * This is to 'overlook' cooked commands that start with a colon, they
-	 * typicaly come from retyping ':' due to a damaged output stream from 
-	 * debuging output.
+	 * typically come from retyping ':' due to a damaged output stream from 
+	 * debugging output.
 	 */
 	if ((*comm == ':') && (btty.flags & B_TTY_COOKED))
 		comm++;
@@ -3476,7 +3476,7 @@ bttyCookedMode(guimain *global, char ch)
 	btty.acycle = btty.cycle;
 
 	/*
-	 * Start with escape, this will later become interpretted as it could
+	 * Start with escape, this will later become interpreted as it could
 	 * also by arrows for history functions.
 	 */
 	if (btty.flags & B_TTY_RAW_P2) {
