@@ -330,7 +330,7 @@ register int count, float c1)
 		default:
 			if (bus->flags & SHAPE_OFF)
 			{
-				for (;count > 0; count-=8)
+				for (; count > 0; count-=8)
 				{
 					*dest++ = 0;
 					*dest++ = 0;
@@ -383,7 +383,7 @@ register int count, float c1)
 			break;
 	}
 
-	for (;count > 0; count-=8)
+	for (; count > 0; count-=8)
 	{
 		*dest++ = *source++ * *mod++ * gain;
 		*dest++ = *source++ * *mod++ * gain;
@@ -529,7 +529,7 @@ bristolVoice *voice, register float *startbuf)
 		 * about 400 times.
 		 *
 		 * Frequency of OSC-3 without keyboard control is under management of
-		 * midi continuous controller 1.
+		 * MIDI continuous controller 1.
 		 */
 		for (i = 0; i < samplecount; i+=8)
 		{

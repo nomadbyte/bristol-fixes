@@ -102,7 +102,7 @@ static int B1display[5];
  *
  * All parameter changes go into these layers and can be used as a quick compare
  * to the last loaded memories. If the settings are parked they become semi
- * permanant (as they have not actually been written to disk yet). We should
+ * permanent (as they have not actually been written to disk yet). We should
  * have a double click on Park to save both memories to disk as well.
  *
  * We need 5 scratchpads, one for each layer, a backup for each layer, and
@@ -157,7 +157,7 @@ static int dc;
 
 /*
  * We really need to define parameter types and ranges here to make the
- * interface complete. For example, the midi channels only go from 1 to 16 and
+ * interface complete. For example, the MIDI channels only go from 1 to 16 and
  * when selected as the input then the pot should configure this range.
  *
  * Similarly, if this is a button it should be 0 for the first half and 1 for
@@ -1913,9 +1913,9 @@ printf("chord %i + %i at %i\n", note, transpose, (int) seq->c_count);
 }
 
 /*
- * We really want to just use one midi channel and let the midi library decide
+ * We really want to just use one MIDI channel and let the MIDI library decide
  * that we have multiple synths on the channel with their own split points.
- * The lower layer should define the midi channel, split point and transpose 
+ * The lower layer should define the MIDI channel, split point and transpose 
  * of upper layer.
  */
 static int
@@ -1966,7 +1966,7 @@ bitoneKeyCallback(brightonWindow *win, int panel, int index, float value)
 		/*
 		 * Want to send a note event, on or off, for this index + transpose only
 		 * on the lower layer midichannel. This actually suffices for all cases
-		 * where we use a single midi channel hence the logic.
+		 * where we use a single MIDI channel hence the logic.
 		 */
 		if (value)
 			bristolMidiSendMsg(global.controlfd, synth->midichannel,
@@ -2102,7 +2102,7 @@ bitoneMemoryShim(guiSynth *synth, int from)
 
 		/*
 		 * Check for the DC flag, then check the bitoneRange flags for whether
-		 * this parameter should be put into effect, should be inherrited from
+		 * this parameter should be put into effect, should be inherited from
 		 * the lower layer, etc.
 		 *
 		 * The inherit flags need to be reviewed since they depend on the
@@ -2163,7 +2163,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 	guiSynth *synth = findSynth(global.synths, win);
 
 	if (b1debug(synth, 3))
-		printf("midi callback: %x, %i\n", controller, value);
+		printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
@@ -2171,14 +2171,14 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			if (synth->mem.param[71] != 0)
 			{
 				if (b1debug(synth, 0))
-					printf("midi program change not active\n");
+					printf("MIDI program change not active\n");
 				return(0);
 			}
 			/*
 			 * We should accept 0..74 as lower layer and above that as dual
 			 * loading requests.
 			 */
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, SYNTH_NAME, 0,
 				synth->bank * 100 + synth->location,
@@ -2189,10 +2189,10 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			if (synth->mem.param[71] != 0)
 			{
 				if (b1debug(synth, 0))
-					printf("midi program change not active\n");
+					printf("MIDI program change not active\n");
 				return(0);
 			}
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->location %= 100;
 			synth->bank = value;
 			loadMemory(synth, SYNTH_NAME, 0,
@@ -2255,7 +2255,7 @@ bitoneUpdateDisplay(guiSynth *synth, int fd, int chan, int c, int o, int v)
 }
 
 /*
- * Double/Split has certain logical requirements. Two two buttons are mutally
+ * Double/Split has certain logical requirements. Two two buttons are mutually
  * exclusive, so when one goes on we have to disable the other.
  */
 static int
@@ -2749,8 +2749,9 @@ bitoneExtendedEntry(guiSynth *synth, int fd, int chan, int c, int o, int v) {
 		if (b1debug(synth, 1))
 			printf("ExtendedEntry(%i, %i = %1.0f)\n", index, v, decimal);
 
-	if (b1debug(synth, 5))
-		printf("Extended 3 index/decimal %i: %f (%i)\n", index, decimal, mode);
+		if (b1debug(synth, 5))
+			printf("Extended 3 index/decimal %i: %f (%i)\n", index, decimal, mode);
+
 		if (mode == MODE_SINGLE)
 		{
 			if ((synth->mem.param[EXTENDED_BUTTON] = v) != 0.0)
@@ -3072,7 +3073,7 @@ static void
 bitoneSaveMemory(guiSynth *synth)
 {
 	guiSynth *layer = synth;
-	int loc, oloc = 0; /* This does not need to be initted but GCC complains */
+	int loc, oloc = 0; /* This does not need to be init'ed but GCC complains */
 	float dbg;
 
 	if (entryPoint == ENTER_UPPER)
@@ -3357,7 +3358,7 @@ bitoneMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	newchan = v;
 
 	/*
-	 * Logically we want to take the lower layer midi channel in all cases
+	 * Logically we want to take the lower layer MIDI channel in all cases
 	 * except when on upper layer with DE 120 set
 	 */
 	if ((entryPoint == ENTER_UPPER) && (synth->mem.param[120] == 0))
@@ -3377,7 +3378,7 @@ bitoneMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		layer->midichannel = newchan;
 
 		if (b1debug(synth, 2))
-			printf("Midi channel request not active in OMNI: %i\n", newchan);
+			printf("MIDI channel request not active in OMNI: %i\n", newchan);
 		return;
 	}
 
@@ -3876,7 +3877,7 @@ bitoneHarmonics(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			value =  1.0;
 
 			/* Remove all but the first harmonic */
-			for (i = 0;i < 4; i++)
+			for (i = 0; i < 4; i++)
 			{
 				if (layer->mem.param[oscIndex + i] != 0)
 				{
@@ -3938,7 +3939,7 @@ bitoneHarmonics(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 		value = 0.0;
 
-		for (i = 0;i < 4; i++)
+		for (i = 0; i < 4; i++)
 		{
 			if ((oscIndex + i) == c)
 				continue;
@@ -4045,11 +4046,11 @@ bitoneTranspose(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	/*
 	 * We are going to request transpose to the engine. At the moment this
 	 * would cause issues with memory loading or transpose changes. The former
-	 * is avoided due to allNotesOff() when the midi channel is changed when
+	 * is avoided due to allNotesOff() when the MIDI channel is changed when
 	 * memories are loaded however alterations to transpose when holding notes
 	 * will need to be addressed. Resolved.
 	 *
-	 * We need to look at separate split points, this pends on the DE 121 flag.
+	 * We need to look at separate split points, this depends on the DE 121 flag.
 	 *
 	 * We either transpose just the upper layer unless we have DE 121 and we
 	 * are setting the lower layer transpose.
@@ -4560,7 +4561,7 @@ static void
 bitoneRelease(guiSynth *synth, int fd, int chan, int c, int o, int v)
 {
 	if (b1debug(synth, 1))
-		printf("Midi Panic (%i)\n", v);
+		printf("MIDI Panic (%i)\n", v);
 
 	if (v == 0)
 		return;
@@ -4895,7 +4896,7 @@ bitoneInit(brightonWindow *win)
 	 *
 	 * There are lots of defaults we need to set for the bit-1: stereo on, MIDI
 	 * channel, we need to build a method to enable disable OMNI and some of the
-	 * midi controllers such as wheel, etc.
+	 * MIDI controllers such as wheel, etc.
 	 */
 	bitoneDualSend(synth, global.controlfd, 0, 7, 4, 16000);
 	/* Set noise gain - reasonably low as it is going to be used for S/H also */

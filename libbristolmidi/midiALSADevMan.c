@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -20,7 +20,7 @@
  */
 
 /*
- * This code should open the midi device (working with ALSA raw midi only for
+ * This code should open the MIDI device (working with ALSA raw MIDI only for
  * the moment (9/11/01)), and read data from it. Not sure how it will be read,
  * either buffers, events, or perhaps just raw data. At some point in the 
  * development this will become a separate thread in the synth code.
@@ -74,9 +74,9 @@ int (*callback)(), void *param, int dev, int handle)
 		/*|SND_SEQ_PORT_TYPE_SPECIFIC); */
 
 	if (snd_seq_create_port (bmidi.dev[dev].driver.seq.handle, port_info))
-	      printf ("error creating alsa port\n");
+	      printf ("error creating ALSA port\n");
 	else if (bmidi.flags & BRISTOL_BMIDI_DEBUG)
-	      printf ("created alsa port\n");
+	      printf ("created ALSA port\n");
 
 	/*
 	 * We need to get a file descriptor for this interface, since we are going
@@ -141,7 +141,7 @@ bristolMidiALSAClose(int handle)
  * handles it will decide if the message also needs redistributing.
  *
  * The decision to redistribute should only be taken if the message came from
- * a midi device that is not a TCP connection. The destination will be selected
+ * a MIDI device that is not a TCP connection. The destination will be selected
  * if it the device is a TCP connection.
  */
 void
@@ -155,7 +155,8 @@ checkcallbacks(bristolMidiMsg *msg)
 
 	for (i = 0; i < BRISTOL_MIDI_HANDLES; i++)
 	{
-		if ((bmidi.dev[bmidi.handle[i].dev].flags & BRISTOL_ACCEPT_SOCKET)
+		if (bmidi.handle[i].dev < 0
+			|| (bmidi.dev[bmidi.handle[i].dev].flags & BRISTOL_ACCEPT_SOCKET)
 			|| (bmidi.dev[i].flags & BRISTOL_CONN_JACK)
 			|| (bmidi.handle[i].state < 0))
 			continue;
@@ -233,7 +234,7 @@ checkcallbacks(bristolMidiMsg *msg)
 				unsigned char hold = msg->params.bristol.from;
 
 				if (bmidi.flags & BRISTOL_BMIDI_DEBUG)
-					printf("callback non sysex: %i %x\n",
+					printf("callback non SysEx: %i %x\n",
 						i, bmidi.handle[i].flags);
 
 				if (((~bmidi.flags & BRISTOL_MIDI_GO)
@@ -261,10 +262,10 @@ bristolMidiALSARead(int dev, bristolMidiMsg *msg)
 		printf("bristolMidiALSARead(%i)\n", dev);
 
 	/*
-	 * See if we can read more data from the midi device. We need to make sure
+	 * See if we can read more data from the MIDI device. We need to make sure
 	 * we have buffer capacity, and if so attempt to read as many bytes as we
 	 * have space for. We need to treat the buffer as endless, ie, rotary. It
-	 * does make it pretty ugly if we come to large sysex messages.
+	 * does make it pretty ugly if we come to large SysEx messages.
 	 */
 	if ((space = BRISTOL_MIDI_BUFSIZE - bmidi.dev[dev].bufcount) > 0)
 	{
@@ -343,7 +344,7 @@ bristolMidiALSARead(int dev, bristolMidiMsg *msg)
 
 					return(BRISTOL_MIDI_DEV);
 
-					printf("Midi read retry (%i)\n", getpid());
+					printf("MIDI read retry (%i)\n", getpid());
 				}
 #else
 				count = read(bmidi.dev[dev].fd,
@@ -365,7 +366,7 @@ bristolMidiALSARead(int dev, bristolMidiMsg *msg)
 				/*
 				 * MARK
 				 */
-				printf("no data in alsa buffer for %i (close)\n", dev);
+				printf("no data in ALSA buffer for %i (close)\n", dev);
 				msg->command = -1;
 				/*
 				 * We should consider closing whatever synth was listening

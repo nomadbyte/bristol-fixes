@@ -47,7 +47,7 @@ extern void brightonGetCLIcodes(int);
 //static int width = 0, height = 0;
 
 /*
- * kbdmap now burried in the brightonWindow structure.
+ * kbdmap now buried in the brightonWindow structure.
  *
  * This is an array of MIDI note numbers indexed by ASCII keyboard key number
  * and works for top row of qwerty only: azerty, qwertz, dvorak keyboards, etc,
@@ -60,7 +60,7 @@ extern void brightonGetCLIcodes(int);
 #define KM_CHAN 1
 
 /*
- * This is for note on/off events, it keeps a map to supress keyrepeat events.
+ * This is for note on/off events, it keeps a map to suppress keyrepeat events.
  *
  * It does not always work since the events are on/off sequentially so it has
  * been extended such that window enter/leave call XAutoRepeatOff/On().
@@ -147,7 +147,7 @@ int channel, char *param)
 
 	if ((param = index(param, ' ')) == NULL)
 	{
-		if ((param = index(param, 9)) == NULL)
+		if (param == NULL || (param = index(param, 9)) == NULL)
 		{
 /*			printf("failed to get target\n"); */
 			return;
@@ -356,7 +356,7 @@ int channel, char *param)
  * Parse configuration file. Read the panel and index numbers for the devices
  * and find the actual device configure code for the controllers.
  *
- * This will also read the midi controller value mapping file.
+ * This will also read the MIDI controller value mapping file.
  */
 void
 brightonReadConfiguration(brightonWindow *bwin, brightonApp *app,
@@ -587,7 +587,7 @@ char *filename)
 
 		sprintf(path, "%s/memory/profiles/%s", getenv("BRISTOL"), synth);
 		/*
-		 * We are unlikey to have write permissions on the factory set, however
+		 * We are unlikely to have write permissions on the factory set, however
 		 * with no alternative we will have a go
 		 */
 		if ((fd = open(path, O_WRONLY|O_TRUNC|O_CREAT, 0644)) < 0)
@@ -825,7 +825,7 @@ brightonControlKeyInput(brightonWindow *cid, int asckey, int on)
 	 * ^?: help
 	 *
 	 * ^W: show warranty
-	 * ^C: show GLP copying conditions
+	 * ^C: show GPL copying conditions
 	 *
 	 * plus: BME Axxe B3 Juno Odyssey Poly6 monopoly Pro10 Pro52 Pro5 RR Solina
 	 *	voxM2
@@ -947,7 +947,7 @@ brightonControlKeyInput(brightonWindow *cid, int asckey, int on)
  * one per synth and probably also in the same controller mappings file.
  *
  * Due to the may X11 does the key mapping then we will get multiple key events
- * for presses - the key repeat is interpretted as KeyOff/KeyOn, and they KBD
+ * for presses - the key repeat is interpreted as KeyOff/KeyOn, and they KBD
  * will be monophonic as a newly pressed key will replace the previously held
  * one. For best results we would need to disable key repeat on entering the
  * window. FFS.
@@ -976,7 +976,7 @@ brightonKeyInput(brightonWindow *cid, int asckey, int on)
 	 * it in here.
 	 *
 	 * We need some generic call back to the synth (the right synth) with the
-	 * key number and midi channel. Hm, that would work but still would not
+	 * key number and MIDI channel. Hm, that would work but still would not
 	 * change the graphics as that needs a call to the GUI.
 	 */
 	if (on) {
@@ -987,12 +987,12 @@ brightonKeyInput(brightonWindow *cid, int asckey, int on)
 			/*
 			 * We have some logic required here. Firstly, if the keypanel is
 			 * denoted as -1 then there isn't one (hammond module, ARP2600, 
-			 * synthi) so use native MIDI events. If the midi channel is
+			 * synthi) so use native MIDI events. If the MIDI channel is
 			 * zero this is the first keypanel. Otherwise the second.
 			 *
 			 * This is all slightly damaged (0.20.3) since calls directly to
-			 * the midi interface did not use transpose and those to the GUI
-			 * did. That will be changed, tranpose will be an actual call to
+			 * the MIDI interface did not use transpose and those to the GUI
+			 * did. That will be changed, transpose will be an actual call to
 			 * bristol, dropped here, but will have to change most of the
 			 * profile files that give me the qwerty mappings. I want to change
 			 * those anyway to mimic some other well known qwerty mappings.
@@ -1063,7 +1063,7 @@ brightonMidiNoteEvent(guimain *global, bristolMidiMsg *msg)
 	/*
 	 * This tracking can only work for the first synth on the list. That is
 	 * currently not an issue since the list is probably only one entry. That
-	 * will have to change when we integrate GUI menuing to start more
+	 * will have to change when we integrate GUI menu'ing to start more
 	 * emulations.
 	 *
 	 * Anyway, NO_KEYTRACK can stay as a global parameter, after that we will
@@ -1207,9 +1207,9 @@ brightonMidiInput(bristolMidiMsg *msg, guimain *global)
 		int memHold = global->synths->cmem;
 
 		if (global->synths->flags & REQ_MIDI_DEBUG)
-			printf("brightonMidiInput sysex\n");
+			printf("brightonMidiInput SysEx\n");
 		/*
-		printf("brightonMidiInput sysex: %i %i, %i\n",
+		printf("brightonMidiInput SysEx: %i %i, %i\n",
 			msg->command,
 			msg->channel,
 			global->synths->midichannel);
@@ -1223,7 +1223,7 @@ brightonMidiInput(bristolMidiMsg *msg, guimain *global)
 					 * The brighton load/save routines do not really handle
 					 * alternative locations, they all rotate around the cache.
 					 *
-					 * To support Jack here, and LADI later, then just save the
+					 * To support JACK here, and LADI later, then just save the
 					 * LADI memory file and copy it to wherever it was asked
 					 * to be put.
 					 */
@@ -1288,7 +1288,7 @@ brightonMidiInput(bristolMidiMsg *msg, guimain *global)
 		return;
 
 	if (global->synths->flags & REQ_DEBUG_3)
-		printf("not sysex: %x\n", msg->command);
+		printf("not SysEx: %x\n", msg->command);
 
 	/*
 	 * We should consider what to do with channel changes, but we are not
@@ -1351,7 +1351,7 @@ brightonMidiInput(bristolMidiMsg *msg, guimain *global)
 	if (msg->channel != synth->midichannel)
 		return;
 
-/*printf("Midi Ctrl: %i\n", msg->GM2.c_id); */
+/*printf("MIDI Ctrl: %i\n", msg->GM2.c_id); */
 
 	if ((msg->params.controller.c_id ==  MIDI_GM_DATAENTRY_F)
 		&& (synth->flags & REQ_MIDI_DEBUG))

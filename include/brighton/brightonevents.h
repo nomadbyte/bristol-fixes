@@ -71,7 +71,7 @@ typedef struct BrightonSize {
 #define BRIGHTON_MOD_CONTROL 4
 
 /*
- * This is an oversimplified conversion of the XEvent strcture for brighton use
+ * This is an oversimplified conversion of the XEvent structure for brighton use
  */
 typedef struct BrightonEvent {
 	unsigned int flags;

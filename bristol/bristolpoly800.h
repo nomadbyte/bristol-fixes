@@ -23,7 +23,7 @@
 
 #define P800_PWM		0x0001
 #define HAVE_STARTED	0x0002
-#define HAVE_FINNISHED	0x0004
+#define HAVE_FINISHED	0x0004
 
 #define P800_M_VCO		0x0010
 #define P800_M_VCA		0x0020

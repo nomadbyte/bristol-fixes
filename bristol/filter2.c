@@ -10,11 +10,11 @@
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; withuot even the implied warranty of
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU General Public License for more details.
  *
- *   You shuold have received a copy of the GNU General Public License
+ *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -41,17 +41,17 @@
  * will be an output buffer written to the next operator.
  */
 /*
- * This is an overhaul of filter.c with a sperated set of algorithms:
+ * This is an overhaul of filter.c with a separated set of algorithms:
  *
- * 	0 Chamberlain 24dB LPF/HPF - lwf support and need HPF for now
+ * 	0 Chamberlin 24dB LPF/HPF - lwf support and need HPF for now
  *
  * 	1 Huovilainen 12dB LPF oversampling
  * 	2 Huovilainen 24dB LPF oversampling and OBx remixing
  * 	3 Huovilainen 24dB LPF oversampling and OBx remixing 2
  *
- * 	4 Huovilainen 24dB LPF oversampling (4 is for interfuctioning with filter.c)
+ * 	4 Huovilainen 24dB LPF oversampling (4 is for interfunctioning with filter.c)
  *
- * 	Others will implement Huovilainen withuot oversampling, the oversampling
+ * 	Others will implement Huovilainen without oversampling, the oversampling
  * 	will be integrated into the engine.
  */
 #include <math.h>
@@ -72,7 +72,7 @@
 #define FILTER_MOD_IND 1
 #define FILTER_OUT_IND 2
 
-/* This is ugly, we shuold correctly pull it out of the operator template */
+/* This is ugly, we should correctly pull it out of the operator template */
 static float srate;
 
 #define _f_lim_r (20000 / (sr * 2)) /* Upper limit with resampling */
@@ -82,9 +82,9 @@ static float srate;
 
 /*
  * This is defined for the case that we find a more efficient polynomial
- * expansion. It is more likely that the tanhf() get factored out thuogh.
+ * expansion. It is more likely that the tanhf() get factored out though.
 #define TANH tanhf
- * We should put the nonlinear sqrt estimation versys tanhf under compilation
+ * We should put the non-linear sqrt estimation versus tanhf under compilation
  * control
  */
 #define TANH(v) btanhf(mode, v)
@@ -99,7 +99,7 @@ btanhf(int mode, float v)
 {
 	/*
 	 * This should be 4 modes as we have two bit flags. Mode 1 are the real
-	 * lightweight chamberlain. That is more work on flag checking.
+	 * lightweight chamberlin. That is more work on flag checking.
 	 */
 	switch (mode) {
 		case 0: return(v);
@@ -114,7 +114,7 @@ btanhfeed(int mode, float v)
 {
 	/*
 	 * This should be 4 modes as we have two bit flags. Mode 1 are the real
-	 * lightweight chamberlain. That is more work on flag checking.
+	 * lightweight chamberlin. That is more work on flag checking.
 	 */
 	switch (mode) {
 		default:
@@ -139,7 +139,7 @@ static int destroy(bristolOP *operator)
 	bristolfree(operator->specs);
 
 	/*
-	 * Free any local memory. We shuold also free ourselves, since we did the
+	 * Free any local memory. We should also free ourselves, since we did the
 	 * initial allocation.
 	 */
 	cleanup(operator);
@@ -147,7 +147,6 @@ static int destroy(bristolOP *operator)
 }
 
 #define ROOT2 1.4142135623730950488
-double pidsr;
 
 /*
  * Reset any local memory information.
@@ -250,7 +249,7 @@ param(bristolOP *operator, bristolOPParams *param,
 				float floatvalue =
 					((float) param->param[0].int_val) / CONTROLLER_RANGE;
 
-				printf("Selected chamberlain filter\n");
+				printf("Selected chamberlin filter\n");
 				param->param[index].int_val = 0;
 				param->param[0].float_val = floatvalue / 3;
 
@@ -272,16 +271,16 @@ param(bristolOP *operator, bristolOPParams *param,
 }
 
 /*
- * This shuold perhaps be re-implemented. The HPF and BPF components really do
+ * This should perhaps be re-implemented. The HPF and BPF components really do
  * not seem to respond that well and better versions are required for some of
  * the emulators.
  */
 static int
-chamberlain(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFILTERlocal *local, bristolVoice *voice, int count)
+chamberlin(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFILTERlocal *local, bristolVoice *voice, int count)
 {
 	register float Mod, gain, cutoff;
 
-	/* The chamberlain */
+	/* The chamberlin */
 	register float freqcut, highpass, qres,
 		delay1 = local->delay1,
 		delay2 = local->delay2, 
@@ -405,19 +404,19 @@ huovilainen24(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFI
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -433,7 +432,7 @@ huovilainen24(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFI
 	{
 		/*
 		 * We should really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim)
 			kfc = _f_lim;
@@ -522,19 +521,19 @@ huovilainen24R(float *ib, float *mb, float *ob, bristolOPParams *param, bristolF
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -549,8 +548,8 @@ huovilainen24R(float *ib, float *mb, float *ob, bristolOPParams *param, bristolF
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -631,7 +630,7 @@ huovilainen12R(float *ib, float *mb, float *ob, bristolOPParams *param, bristolF
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float az1 = local->az1;
@@ -661,19 +660,19 @@ huovilainen12R(float *ib, float *mb, float *ob, bristolOPParams *param, bristolF
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -688,8 +687,8 @@ huovilainen12R(float *ib, float *mb, float *ob, bristolOPParams *param, bristolF
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -755,7 +754,7 @@ huovilainen12(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFI
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float az1 = local->az1;
@@ -785,19 +784,19 @@ huovilainen12(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFI
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -812,8 +811,8 @@ huovilainen12(float *ib, float *mb, float *ob, bristolOPParams *param, bristolFI
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -865,7 +864,7 @@ huovilainen24ROB(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float dng = param->param[8].float_val * scale;
@@ -895,19 +894,19 @@ huovilainen24ROB(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -922,8 +921,8 @@ huovilainen24ROB(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -1000,7 +999,7 @@ huovilainen24OB(float *ib, float *mb, float *ob, bristolOPParams *param, bristol
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float dng = param->param[8].float_val * scale;
@@ -1030,19 +1029,19 @@ huovilainen24OB(float *ib, float *mb, float *ob, bristolOPParams *param, bristol
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -1057,8 +1056,8 @@ huovilainen24OB(float *ib, float *mb, float *ob, bristolOPParams *param, bristol
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -1118,7 +1117,7 @@ huovilainen24ROB2(float *ib, float *mb, float *ob, bristolOPParams *param, brist
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float dng = param->param[8].float_val * scale;
@@ -1148,19 +1147,19 @@ huovilainen24ROB2(float *ib, float *mb, float *ob, bristolOPParams *param, brist
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -1175,8 +1174,8 @@ huovilainen24ROB2(float *ib, float *mb, float *ob, bristolOPParams *param, brist
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim_r)
 			kfc = _f_lim_r;
@@ -1256,7 +1255,7 @@ huovilainen24OB2(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 	 * This is actually the same code as 24R just the 12dB and 18dB taps are
 	 * mixed back into the final output. This was an Oberheim filter mod that
 	 * did not actually go into any of their products due to the added 
-	 * complexity of an analogue implementation. It shuold be generally richer
+	 * complexity of an analogue implementation. It should be generally richer
 	 * due to more phase differences and content.
 	 */
 	float dng = param->param[8].float_val * scale;
@@ -1285,19 +1284,19 @@ huovilainen24OB2(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 
 	/*
 	 * Cutoff is a power curve for better control at lower frequencies and
-	 * the key is used for tracking purposes, it shuold be possible to make
+	 * the key is used for tracking purposes, it should be possible to make
 	 * it reasonably linear at somewhere under unity
 	 *
-	 * Cutoff goes from 0 to 1.0 = nyquist. Key tracking shuold be reviewed,
-	 * the value shuold be quite linear for the filter, 0..Nyquist
+	 * Cutoff goes from 0 to 1.0 = Nyquist. Key tracking should be reviewed,
+	 * the value should be quite linear for the filter, 0..Nyquist
 	 *
-	 * If we take midi key 0 = 8Hz and 127 = 12658.22 Hz then using
-	 * our samplerate we shuold be able to fix some tuning:
+	 * If we take MIDI key 0 = 8Hz and 127 = 12658.22 Hz then using
+	 * our samplerate we should be able to fix some tuning:
 	 *
 	 * (voice->key.key * 12650.22 + 8) / (127 * srate)
 	 *
 	 * We want to position param[3] such that it tunes at 0.5 and can then
-	 * be notched in the GUI, hence srate/4 rathern than /2.
+	 * be notched in the GUI, hence srate/4 rather than /2.
 	 *
 	 * This still needs some work.
 	if (param->param[3].float_val == 0)
@@ -1312,8 +1311,8 @@ huovilainen24OB2(float *ib, float *mb, float *ob, bristolOPParams *param, bristo
 	for (; count > 0; count--)
 	{
 		/*
-		 * We shuold really interpret coff (the configured frequency) as
-		 * a function up to about 20KHz whatever the resampling rate.
+		 * We should really interpret coff (the configured frequency) as
+		 * a function up to about 20kHz whatever the resampling rate.
 		 */
 		if ((kfc = coff + *mb++ * Mod) > _f_lim)
 			kfc = _f_lim;
@@ -1377,7 +1376,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 	/*
 	 * Every operator accesses these variables, the count, and a pointer to
-	 * each buffer. We shuold consider passing them as readymade parameters?
+	 * each buffer. We should consider passing them as ready-made parameters?
 	 */
 	specs = (bristolFILTER *) operator->specs;
 	count = specs->spec.io[FILTER_OUT_IND].samplecount;
@@ -1401,13 +1400,13 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	/*
 	 * We will eventually have another set here that will be called when the
 	 * samplerate is over 48kHz (88.2, 96, 192 kHz) when we can anticipate the
-	 * filter response to be adequate withuot resampling internally here.
+	 * filter response to be adequate without resampling internally here.
 	 */
 	switch(fselect) {
-		/* LightWeight Filters */
+		/* Lightweight Filters */
 		case 0:
 		case 16:
-			return(chamberlain(ib, mb, ob, param, local, voice, count));
+			return(chamberlin(ib, mb, ob, param, local, voice, count));
 
 		/* Huovilainen resampling */
 		case 1:
@@ -1455,7 +1454,7 @@ filter2init(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

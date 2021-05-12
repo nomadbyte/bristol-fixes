@@ -178,7 +178,7 @@ static brightonLocations locations[MOD_COUNT] = {
 	/* Volume 27 */
 	{"MasterVolume", 0, C13 - 15, R0 + 50, W3, W3, 0, 1, 0, "bitmaps/knobs/knob3.xpm", 0, 0},
 
-	/* Midi Up/Down, save */
+	/* MIDI Up/Down, save */
 	{"", 2, C15, R0, W1, 100, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", BRIGHTON_CHECKBUTTON|BRIGHTON_WITHDRAWN},
 	{"", 2, C15, R2, W1, 100, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
@@ -455,12 +455,12 @@ realisticMidiCallback(brightonWindow *win, int command, int value, float v)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", command, value);
+	printf("MIDI callback: %x, %i\n", command, value);
 
 	switch(command)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", command, value);
+			printf("MIDI program: %x, %i\n", command, value);
 			synth->location = value;
 
 			realisticMemory(synth, global.controlfd, synth->sid,
@@ -469,7 +469,7 @@ realisticMidiCallback(brightonWindow *win, int command, int value, float v)
 
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", command, value);
+			printf("MIDI banksel: %x, %i\n", command, value);
 			synth->bank = value;
 			break;
 	}

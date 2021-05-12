@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -66,6 +66,7 @@ void	clientCheckSocket();
 int
 initControlPort(host, port)
 char	*host;
+int		port;
 {
 struct	sockaddr_in	connect_socket_addr;
 char				hostname[NAME_LENGTH];

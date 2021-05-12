@@ -328,7 +328,7 @@ bristolVoice *voice, register float *startbuf)
 		((jmods *) baudio->mixlocals)->lfolocals);
 
 	/*
-	 * And amplifly it 
+	 * And amplify it 
 	 */
 	audiomain->palette[(*baudio->sound[8]).index]->specs->io[0].buf = oscabuf;
 	audiomain->palette[(*baudio->sound[8]).index]->specs->io[1].buf = adsrbuf;

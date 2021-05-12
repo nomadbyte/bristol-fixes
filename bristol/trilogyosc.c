@@ -40,8 +40,7 @@
 #include "bristolblo.h"
 #include "trilogyosc.h"
 
-float note_diff;
-int samplecount;
+static float note_diff;
 
 static void fillWave(float *, int, int);
 static void buildTrilogySound(bristolOP *, bristolOPParams *);
@@ -252,7 +251,7 @@ register int count, register float inv)
 	while (wtp < 0)
 		wtp += TRILOGY_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer, this is
@@ -308,7 +307,7 @@ register int count, register float inv)
  *	count.
  *	gain.
  *
- * This oscillator is going to have 4 continous controllers for the signal
+ * This oscillator is going to have 4 continuous controllers for the signal
  * strengths of the different harmonics, 32/16/8/4. It will have different
  * gain levels for the tri and ramp waves. Finally the phase shifting pulse
  * wave will function probably on the lowest selected harmonic at first since
@@ -346,7 +345,7 @@ static int operate(bristolOP *operator,
 	 * different harmonics. Quite CPU intensive. The sweeps should be factored
 	 * by detune as well however that is not available from the voice.....
 	 *
-	 * Reparameterize the operator for
+	 * Reparametrise the operator for
 	 * 	controllable detune
 	 *	controllable spread
 	 *	controllable distorts
@@ -430,7 +429,7 @@ trilogyoscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -615,7 +614,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * TRILOGY_WAVE_GAIN;
 
@@ -679,9 +678,9 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
-					mem[i] = bloramp[i];
-					return;
+				for (i = 0; i < count; i++)
+					mem[i] = blo.ramp[i];
+				return;
 			}
 			fillPDwave(mem, count, 20.0);
 			return;
@@ -695,14 +694,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blosquare[i];
-					return;
+				for (i = 0; i < count; i++)
+					mem[i] = blo.square[i];
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -712,14 +711,14 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
-						mem[i] = blotriangle[i];
-						return;
+					for (i = 0; i < count; i++)
+						mem[i] = blo.triangle[i];
+					return;
 				}
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -TRILOGY_WAVE_GAIN
 						+ ((float) i / (count / 2)) * TRILOGY_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = TRILOGY_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* TRILOGY_WAVE_GAIN;
@@ -751,10 +750,10 @@ register float reach)
 	newcount = reach * count;
 	reach = 2.0 / (float) newcount;
 
-	for (i = 0;i < newcount; i++)
+	for (i = 0; i < newcount; i++)
 		mem[i] = cosf(M_PI * (increment += reach)) * TRILOGY_WAVE_GAIN;
 
-	for (;i < count; i++)
+	for (; i < count; i++)
 		mem[i] = TRILOGY_WAVE_GAIN;
 }
 
@@ -768,7 +767,7 @@ fillPDcos(float *mem, int count, float compress)
 		comp = 1;
 
 	/*
-	 * Resample the sine wave as per casio phase distortion algorithms.
+	 * Resample the sine wave as per Casio phase distortion algorithms.
 	 *
 	 * We have to get to M_PI/2 in compress steps, hence
 	 *
@@ -781,7 +780,7 @@ fillPDcos(float *mem, int count, float compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) comp));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * comp));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = cosf(j) * TRILOGY_WAVE_GAIN;
 
@@ -793,7 +792,7 @@ fillPDcos(float *mem, int count, float compress)
 }
 
 /*
- * Resample the sine wave as per casio phase distortion algorithms.
+ * Resample the sine wave as per Casio phase distortion algorithms.
  *
  * We have to get to M_PI/2 in compress steps, hence
  *
@@ -813,7 +812,7 @@ fillPDsine(float *mem, int count, float compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) comp));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * comp));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * TRILOGY_WAVE_GAIN;
 

@@ -40,8 +40,7 @@
 #include "bristolblo.h"
 #include "vox.h"
 
-float note_diff;
-int samplecount;
+static float note_diff;
 
 static void fillWave(float *, int, int);
 static void buildVoxSound(bristolOP *, bristolOPParams *, unsigned char);
@@ -59,8 +58,8 @@ static void fillVoxM2Wave(bristolOP *, bristolOPParams *);
  */
 static int *wavelevel;
 
-float *wave1;
-float *wave2;
+static float *wave1;
+static float *wave2;
 
 /*
  * This can be a single list, it is used to generate the different pipes.
@@ -297,7 +296,7 @@ voxdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -392,10 +391,10 @@ register double reach)
 {
 	register int i;
 
-	if (bloflags & BRISTOL_BLO)
+	if (blo.flags & BRISTOL_BLO)
 	{
-		for (i = 0;i < count; i++)
-			mem[i] = blotriangle[i];
+		for (i = 0; i < count; i++)
+			mem[i] = blo.triangle[i];
 		return;
 	}
 }
@@ -411,7 +410,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * VOX_WAVE_GAIN;
 
@@ -562,7 +561,7 @@ fillVoxWave(bristolOP *operator, int form)
 			source = specs->wave[0];
 			gain = ((float) (wavelevel[i] * wavelevel[4])) / 64.0;
 		} else {
-			source = blotriangle;
+			source = blo.triangle;
 			gain = ((float) (wavelevel[i] * wavelevel[4])) / 3.0;
 		}
 
@@ -625,7 +624,7 @@ fillVoxWave(bristolOP *operator, int form)
 			source = specs->wave[0];
 			gain = ((float) (wavelevel[3] * wavelevel[4])) / 64.0;
 		} else {
-			source = blotriangle;
+			source = blo.triangle;
 			gain = ((float) (wavelevel[3] * wavelevel[4])) / 3.0;
 		}
 
@@ -780,7 +779,7 @@ fillVoxM2Wave(bristolOP *operator, bristolOPParams *params)
 
 	/*
 	 * Do Draw-II for the flute, or sine waves. This is 5-1/3 and 1-3/5
-	 * which are indeces 3 and 7. There is an optional percussive.
+	 * which are indexes 3 and 7. There is an optional percussive.
 	 */
 	gain = ((float) (wavelevel[6] * wavelevel[4])) / 64.0;
 	if (gain != 0)
@@ -822,7 +821,7 @@ fillVoxM2Wave(bristolOP *operator, bristolOPParams *params)
 	{
 		oscindex = 0;
 		/*
-		 * Take the rempwave and the destination wave.
+		 * Take the rampwave and the destination wave.
 		 */
 		source = specs->wave[7];
 		dest = wave1;

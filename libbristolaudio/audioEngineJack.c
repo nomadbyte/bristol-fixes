@@ -95,7 +95,7 @@ jack_shutdown(void *jackdev)
 #ifdef _BRISTOL_JACK_SESSION
 /*
  * This is polled by the GUI to see if any session events need handling. It is
- * called fromm the idle loop of the engine parent thread.
+ * called from the idle loop of the engine parent thread.
  */
 int
 bristolJackSessionCheck(audioMain *audiomain)
@@ -120,11 +120,11 @@ bristolJackSessionCheck(audioMain *audiomain)
 	if (audiomain->debuglevel > 1)
 	{
 		if (jackdev.audiomain->jackUUID[0] != '\0')
-			printf("jack session callback: %s %s\n",
+			printf("JACK session callback: %s %s\n",
 				jackdev.sEvent->client_uuid,
 				jackdev.audiomain->jackUUID);
 		else
-			printf("jack session callback: %s\n", jackdev.sEvent->client_uuid);
+			printf("JACK session callback: %s\n", jackdev.sEvent->client_uuid);
 
 		printf("session file is %s\n", audiomain->sessionfile);
 
@@ -135,7 +135,7 @@ bristolJackSessionCheck(audioMain *audiomain)
 
 	jack_session_reply(jackdev.handle, jackdev.sEvent);
 
-	/* This was not malloc'ed do does not belong to jack session manager */
+	/* This was not malloc'ed do does not belong to JACK session manager */
 	jack_session_event_free(jackdev.sEvent);
 	jackdev.sEvent = NULL;
 
@@ -151,7 +151,7 @@ jack_session_callback(jack_session_event_t *event, void *arg)
 	if (jackdev.sEvent != NULL)
 		jack_session_event_free(jackdev.sEvent);
 
-	/* This is not a very good signaling method, it has race conditions */
+	/* This is not a very good signalling method, it has race conditions */
 	jackdev.sEvent = event;
 }
 #endif
@@ -191,7 +191,7 @@ audioShim(jack_nframes_t nframes, void *jd)
 #endif
 
 	/*
-	 * We may need to consider jack changing its nframes on the fly. Whilst
+	 * We may need to consider JACK changing its nframes on the fly. Whilst
 	 * decreasing frames is not an issue, increasing them could be painful.
 	 *
 	 * I think I would prefer to reap all synths rather than code such an
@@ -265,12 +265,12 @@ audioShim(jack_nframes_t nframes, void *jd)
 	 *
 	 * This doAudioOps is the same one used for the last few years by bristol
 	 * as its own dispatch routine. However, there are additional features
-	 * possible with Jack such that each synth could requisition its own 
+	 * possible with JACK such that each synth could requisition its own 
 	 * ports dynamically, one or two depending on the synth stereo status.
 	 *
 	 * That should be an option, probably, but either way, if it were done
 	 * then we would need to rework this dispatcher. That is not a bad thing
-	 * since we could have the audioEngine write directly to the jack buffer
+	 * since we could have the audioEngine write directly to the JACK buffer
 	 * rather than use the stereo interleaved outbuf.
 	 * 
 	 * The reworked dispatcher should be placed in here, it is currently in
@@ -299,7 +299,7 @@ audioShim(jack_nframes_t nframes, void *jd)
 		jack_port_get_buffer(jackdev->jack_out[BRISTOL_JACK_STDOUTR], nframes);
 
 	/*
-	 * Deinterleave our output through to the jack buffers.
+	 * Deinterleave our output through to the JACK buffers.
 	 */
 	toutbuf = outbuf;
 	for (i = nframes; i > 0; i--)
@@ -396,7 +396,7 @@ bristolJackClose(jackDev *jackdev)
 #else
 	if (--closedown == 0)
 #endif
-		printf("unregistering jack interface: %p->%p\n",
+		printf("unregistering JACK interface: %p->%p\n",
 			jackdev, jackdev->handle);
 	else {
 		printf("interface unregistered\n");
@@ -476,16 +476,16 @@ JackProcessCallback shim)
 #ifdef _BRISTOL_JACK_SESSION
 	if (audiomain->jackUUID[0] == '\0')
 	{
-		printf("registering jack interface: %s\n", regname);
+		printf("registering JACK interface: %s\n", regname);
 		jackdev->handle = jack_client_open(regname, JackNullOption, NULL);
 	} else {
-		printf("reregistering jack interface: %s, UUDI %s\n",
+		printf("reregistering JACK interface: %s, UUDI %s\n",
 			regname, &audiomain->jackUUID[0]);
 		jackdev->handle = jack_client_open(regname, JackSessionID, NULL,
 			&audiomain->jackUUID[0]);
 	}
 #else
-	printf("registering jack interface: %s\n", regname);
+	printf("registering JACK interface: %s\n", regname);
 	jackdev->handle = jack_client_open(regname, JackNullOption, NULL);
 #endif
 
@@ -535,7 +535,7 @@ JackProcessCallback shim)
 
 	/* Samplerate mismatches should be reported however they are not critical */
 	if (audiomain->samplerate != (sr = jack_get_sample_rate(jackdev->handle)))
-		printf("\nJack SAMPLERATE MISMATCH: startBristol -jack -rate %i\n", sr);
+		printf("\nJACK SAMPLERATE MISMATCH: startBristol -jack -rate %i\n", sr);
 
 	/*
 	 * This value can change, and we should register a callback for such an
@@ -545,7 +545,7 @@ JackProcessCallback shim)
 	 */
 	if (audiomain->samplecount != (sr = jack_get_buffer_size(jackdev->handle)))
 	{
-		printf("\nJack PERIOD COUNT MISMATCH: `startBristol -jack -count %i`\n",
+		printf("\nJACK PERIOD COUNT MISMATCH: `startBristol -jack -count %i`\n",
 			sr);
 		printf("\nYou need to ensure that bristol uses the same period size\n");
 
@@ -590,14 +590,14 @@ JackProcessCallback shim)
 	if ((jackdev->jack_out[BRISTOL_JACK_STDOUTL] = jack_port_register(jackdev->handle,
 		"out_left", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0)) == NULL)
 	{
-		printf("Cannot register jack port\n");
+		printf("Cannot register JACK port\n");
 		audiomain->atStatus = BRISTOL_REQSTOP;
 		return(-1);
 	}
 	if ((jackdev->jack_out[BRISTOL_JACK_STDOUTR] = jack_port_register(jackdev->handle,
 		"out_right", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0)) == NULL)
 	{
-		printf("Cannot register jack port\n");
+		printf("Cannot register JACK port\n");
 		audiomain->atStatus = BRISTOL_REQSTOP;
 		return(-1);
 	}
@@ -611,14 +611,14 @@ JackProcessCallback shim)
 	if ((jackdev->jack_in[BRISTOL_JACK_STDINL] = jack_port_register(jackdev->handle,
 		"in_left", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0)) == NULL)
 	{
-		printf("Cannot register jack port\n");
+		printf("Cannot register JACK port\n");
 		audiomain->atStatus = BRISTOL_REQSTOP;
 		return(-1);
 	}
 	if ((jackdev->jack_in[BRISTOL_JACK_STDINR] = jack_port_register(jackdev->handle,
 		"in_right", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0)) == NULL)
 	{
-		printf("Cannot register jack port\n");
+		printf("Cannot register JACK port\n");
 		audiomain->atStatus = BRISTOL_REQSTOP;
 		return(-1);
 	}
@@ -628,7 +628,7 @@ JackProcessCallback shim)
 	 * we are going to be running. It is wiser not to request callbacks until
 	 * at least the first synth is active. If the priorities are correct this
 	 * should not be an issue, but 'dropping' a synth costs a few cycles in 
-	 * the midi thread.
+	 * the MIDI thread.
 	 */
 	while (audiomain->flags & BRISTOL_AUDIOWAIT)
 	{
@@ -645,7 +645,7 @@ JackProcessCallback shim)
 
 	if (jack_activate(jackdev->handle) != 0)
 	{
-		printf("Cannot activate jack\n");
+		printf("Cannot activate JACK\n");
 		audiomain->atStatus = BRISTOL_REQSTOP;
 		return(-1);
 	}
@@ -697,7 +697,7 @@ JackProcessCallback shim)
 			}
 		} else for (jport = 0; jackdev->ports[jport] != NULL; jport++) {
 			/*
-			 * I don't like this code but I cannot find a way to ask jack if
+			 * I don't like this code but I cannot find a way to ask JACK if
 			 * this port is audio or midi. Without this scan then it is possible
 			 * that the engine will default a connection from audio to midi.
 			 *
@@ -708,7 +708,7 @@ JackProcessCallback shim)
 			 */
 			if (strstr(jackdev->ports[jport], "midi") != 0)
 			{
-				printf("Skipping Jack Conn: %s\n", jackdev->ports[jport]);
+				printf("Skipping JACK Conn: %s\n", jackdev->ports[jport]);
 				continue;
 			}
 
@@ -729,7 +729,7 @@ JackProcessCallback shim)
 			{
 				if (strstr(jackdev->ports[jport], "midi") != 0)
 				{
-					printf("Skipping Jack Conn: %s\n", jackdev->ports[jport]);
+					printf("Skipping JACK Conn: %s\n", jackdev->ports[jport]);
 					continue;
 				}
 
@@ -795,7 +795,7 @@ JackProcessCallback shim)
 		{
 			if (strstr(jackdev->ports[jport], "midi") != 0)
 			{
-				printf("Skipping Jack Conn: %s\n", jackdev->ports[jport]);
+				printf("Skipping JACK Conn: %s\n", jackdev->ports[jport]);
 				continue;
 			}
 
@@ -831,7 +831,7 @@ JackProcessCallback shim)
 			if ((jackdev->jack_out[i] = jack_port_register(jackdev->handle,
 				pn, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0)) == NULL)
 			{
-				printf("Cannot register jack port\n");
+				printf("Cannot register JACK port\n");
 				audiomain->atStatus = BRISTOL_REQSTOP;
 				return(-1);
 			}
@@ -839,7 +839,7 @@ JackProcessCallback shim)
 			if ((jackdev->jack_in[i] = jack_port_register(jackdev->handle,
 				pn, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0)) == NULL)
 			{
-				printf("Cannot register jack port\n");
+				printf("Cannot register JACK port\n");
 				audiomain->atStatus = BRISTOL_REQSTOP;
 				return(-1);
 			}
@@ -895,7 +895,7 @@ bristolJackInterface(audioMain *audiomain)
 {
 	/*
 	 * This was added into 0.40.3 to prevent subgraph timeouts on exit. The
-	 * call is made from the midi thread once the audio thread has done the 
+	 * call is made from the MIDI thread once the audio thread has done the 
 	 * necessary cleanup work.
 	 */
 	if ((audiomain == NULL) || (audiomain->audiolist == 0))

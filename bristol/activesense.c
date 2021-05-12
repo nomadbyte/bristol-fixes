@@ -23,7 +23,7 @@
 #include "bristolactivesense.h"
 
 /*
- * This code is called from midihandlers.c when ACTIVE_SENSE is recieved from
+ * This code is called from midihandlers.c when ACTIVE_SENSE is received from
  * the GUI. Once they have been seen then every 'once in a while' this check
  * is done to ensure it is still being received.
  *

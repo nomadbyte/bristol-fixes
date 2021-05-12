@@ -39,7 +39,8 @@
 #include "bristolblo.h"
 #include "arpdco.h"
 
-float note_diff, *zbuf;
+static float note_diff;
+static float *zbuf;
 
 #define BRISTOL_SQR 4
 
@@ -191,7 +192,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -278,7 +279,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 12 notes.
 				 */
-				for (i = 0; i < 12;i++)
+				for (i = 0; i < 12; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -418,13 +419,13 @@ static int operate(bristolOP *operator,
 	 * Go jumping through the wavetable, with each jump defined by the value
 	 * given on our input line, making sure we fill one output buffer.
 	 */
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer. This 
 		 * should also be scaled by gain parameter.
 		 *
-		 * We can seperate this into subroutine calls, or we can take our
+		 * We can separate this into subroutine calls, or we can take our
 		 * values and take each wave?
 		 */
 		gdelta = wtp - ((float) ((int) wtp));
@@ -547,7 +548,7 @@ arpdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -737,7 +738,7 @@ fillPDsine(float *mem, int count, int compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) compress));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * compress));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * BRISTOL_VPO;
 
@@ -770,7 +771,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 		case 1:
@@ -782,14 +783,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blosquare[i];
-					return;
+				for (i = 0; i < count; i++)
+					mem[i] = blo.square[i];
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -BRISTOL_SQR;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -797,9 +798,9 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a pulse wave - the arp dco does pwm.
 			 */
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			return;
 		case 3:
@@ -812,7 +813,7 @@ fillWave(float *mem, int count, int type)
 			for (; i < count; i++)
 				mem[i] = ((float) i / count) * BRISTOL_VPO * 2.0 -
 					BRISTOL_VPO * 2;
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_VPO * 2.0;
 			mem[0] = 0;
 			mem[count - 1] = mem[1]
@@ -820,9 +821,9 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = bloramp[i];
-					return;
+				for (i = 0; i < count; i++)
+					mem[i] = blo.ramp[i];
+				return;
 			}
 			fillPDsine(mem, count, 5);
 			return;
@@ -833,14 +834,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blotriangle[i];
-					return;
+				for (i = 0; i < count; i++)
+					mem[i] = blo.triangle[i];
+				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = -BRISTOL_VPO
 					+ ((float) i / (count / 2)) * BRISTOL_VPO * 2;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = BRISTOL_VPO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_VPO;
 			return;
@@ -869,11 +870,11 @@ fillWave(float *mem, int count, int type)
 			return;
 		case 6:
 			/*
-			 * Tangiential wave. We limit some of the values, since they do get
+			 * Tangential wave. We limit some of the values, since they do get
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 			{
 				if ((mem[i] =
 					tan(M_PI * ((double) i) / count) * BRISTOL_VPO / 16)
@@ -887,7 +888,7 @@ fillWave(float *mem, int count, int type)
 			/*
 			 * Sine wave - added as a part of the OBX extensions.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 	}

@@ -41,7 +41,7 @@
 #include "bristol.h"
 #include "sdco.h"
 
-float note_diff;
+static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.
@@ -183,7 +183,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -255,7 +255,7 @@ register int layer)
 	/*
 	 * Incorporate layer
 	 */
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * This is for the sampler and needs to be resample.
@@ -346,7 +346,7 @@ sdcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -437,7 +437,7 @@ fillWave(sampleData mem[], int type)
 			 *
 			 * At the moment (12/6/02) we only load a single sample.
 			 * We need to put a shim in here to link through to libsndutil or
-			 * similar library, and allow that to do our convertion work for us.
+			 * similar library, and allow that to do our conversion work for us.
 			 * Preferably the library should recognise some of the common 
 			 * sampler formats such as AKAI, Ensoniq, etc, where a soundfile
 			 * has a compound of multiple notes and layers.

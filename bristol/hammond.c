@@ -45,8 +45,7 @@ int clickset[128];
 #include "bristol.h"
 #include "hammond.h"
 
-float note_diff;
-int samplecount;
+static float note_diff;
 
 static void fillWave(float *, int, int);
 static void buildHammondSound(bristolOP *, unsigned char);
@@ -70,8 +69,8 @@ static int *wavelevel;
 static int *waveindex;
 static int *percussion;
 
-float *wave1;
-float *wave2;
+static float *wave1;
+static float *wave2;
 
 /*
  * This can be a single list, it is used to generate the different pipes.
@@ -294,7 +293,7 @@ static int operate(bristolOP *operator,
 	 * Make sure we fill one output buffer.
 	 *
 	 * The '-36' may look odd, but the tonewheel generator does not use MIDI
-	 * note indeces and this puts the key.key back into the gearing numbers.
+	 * note indexes and this puts the key.key back into the gearing numbers.
 	 */
 	if (param->param[7].int_val) {
 		preach(ob, pb, voice->key.key - 36, param->param[2].mem,
@@ -305,7 +304,7 @@ static int operate(bristolOP *operator,
 		/*
 		 * Click may be in multiple stages - each click array is 2k samples,
 		 * so if our sample block size is less than this we need to hit
-		 * multiple consequetive blocks.
+		 * multiple consecutive blocks.
 		 *
 		 * We should consider randomising the use of several different key
 		 * clicks - this is however only done in the preacher.
@@ -388,7 +387,7 @@ hammondinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -526,7 +525,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * HAMMOND_WAVE_GAIN;
 
@@ -650,7 +649,7 @@ fillHammondWave(bristolOP *operator)
 
 	/*
 	 * We now have a volume array - 16 levels, of which we should only use 9.
-	 * Each represents a base requency in terms of pipe length:
+	 * Each represents a base frequency in terms of pipe length:
 	 *	16, 8, 5 1/3, 4, 2 2/3, 2, 1 3/5, 1 1/3, 1
 	 * These are frequencies:
 

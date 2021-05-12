@@ -435,7 +435,7 @@ sid2Controller(Baudio *baudio, u_char operator, u_char controller, float value)
 			 * sample and hold on the noise that comes out of the MOD_SID
 			 * analogue IO
 			 *
-			 * The GUI is responsable for ensuring the square wave is correctly
+			 * The GUI is responsible for ensuring the square wave is correctly
 			 * selected.
 			 */
 			sid2flag(smods, MOD_SID, B_SID_V3_CONTROL, B_SID_V_SQUARE, ivalue);
@@ -490,7 +490,7 @@ sid2Controller(Baudio *baudio, u_char operator, u_char controller, float value)
 		/* LFO mod rate and level */
 		case 77:
 			/*
-			 * Need to generate phase incrementor for 0.1 to 10 Hz, note here
+			 * Need to generate phase incrementer for 0.1 to 10 Hz, note here
 			 * that the resolution at these low frequencies is not great.
 			 *
 			 * Phase for 0.1Hz is 0.1 * B_SID_FREQ_MULT = 1.6777216
@@ -762,8 +762,8 @@ sid2AssignVoice(sid2mods *smods, int voice, int flags)
  * If we have less than 3 voices assigned just look for the next free voice.
  * If not look for the middle note.
  *
- *	flag voice as occupying this midi note, 
- *	flag the midi note as known,
+ *	flag voice as occupying this MIDI note, 
+ *	flag the MIDI note as known,
  */
 static void
 sid2Poly1NoteLogic(Baudio *baudio, sid2mods *smods)
@@ -800,7 +800,7 @@ sid2Poly1NoteLogic(Baudio *baudio, sid2mods *smods)
 	/*
 	 * This will be poly. We cannot use the KEYON flags since we are in 
 	 * mono mode but probably also want to actually see other notes being
-	 * pressed, our monophonic note logic supresses events for notes outsid2e
+	 * pressed, our monophonic note logic suppresses events for notes outside
 	 * of the preference however they are still kept in the note mapping
 	 * table, we need to look at that.
 	 *
@@ -884,13 +884,13 @@ sid2Poly1NoteLogic(Baudio *baudio, sid2mods *smods)
 				smods->ccount = 0;
 
 			/*
-			 * We should also consid2er what could be done if ccount was three
+			 * We should also consider what could be done if ccount was three
 			 * and falls such that we could reassign a key back to another note
 			 * that was pre-empted. We can only really do this in Poly-1 where
 			 * all the voices have the same sounds. What we want to do is try
 			 * to ensure that if we have keys pressed that we attempt to use
 			 * the voices and for now we will do that irrespective of the mode
-			 * since three voices is pretty spartan.
+			 * since three voices is pretty Spartan.
 			 */
 			if (fv >= B_SID_VOICE_1)
 				for (j = 128; j > 0; j--)
@@ -916,7 +916,7 @@ sid2Poly1NoteLogic(Baudio *baudio, sid2mods *smods)
 
 /*
  * Take a fixed split point, below this point stuff the arpeggiation table, 
- * above this point use duophonic note preference - we should consid2er always
+ * above this point use duophonic note preference - we should consider always
  * having the voices active if there is a note pressed, acting as a monophonic
  * with two voices where there is only one note.
  */
@@ -1013,7 +1013,7 @@ sid2Poly3NoteLogic(Baudio *baudio, sid2mods *smods)
 
 /*
  * Take a fixed split point, below this point stuff the arpeggiation table, 
- * above this point use duophonic note preference - we should consid2er always
+ * above this point use duophonic note preference - we should consider always
  * having the voices active if there is a note pressed, acting as a monophonic
  * with two voices where there is only one note.
  */
@@ -1178,16 +1178,16 @@ sid2CheckModTrigger(sid2mods *smods)
 /*
  * We have monophonic voice assignment, ie, this should only be called once
  * although that can be overridden with options. We are not too concerned with
- * the midi note logic giving us its idea of which note we should be playing,
- * we have 'n' voices, 3 to start with, and some note assignement logic:
+ * the MIDI note logic giving us its idea of which note we should be playing,
+ * we have 'n' voices, 3 to start with, and some note assignment logic:
  *
  * 	Mono: assign all voices to the suggested key
  * 	Poly-1: all voices will have the same sound, 3 voices. GUI to enforce this.
  * 	Poly-2: each voice can have its own sound, 3 voices.
  * 	Poly-3: two lead voices, rest of notes have rapid arpeggiation
  *
- * We need to keep a mapping of midi note to voice allocation and also of voice
- * to midi note for tuning so there will be a few numbers hanging around in
+ * We need to keep a mapping of MIDI note to voice allocation and also of voice
+ * to MIDI note for tuning so there will be a few numbers hanging around in
  * different tables. If a voice gets a new frequency then it should also be 
  * given a GATE off/on to trigger the env. Poly note logic in 3 voice mode
  * should not take the extreme notes, it should take middle ones.
@@ -1195,7 +1195,7 @@ sid2CheckModTrigger(sid2mods *smods)
  * The code should be written with multiple SID in mind. The first release had
  * two SID: one for 3 audio voices and another for mods. It would be quite 
  * easy to have generalised this to 5 voices with one for mod and the two 
- * filter under commmon control. This should be consid2ered for the poly modes,
+ * filter under common control. This should be considered for the poly modes,
  * mono is probably already enough with 3 voices and up to 9 oscillators.
  */
 int

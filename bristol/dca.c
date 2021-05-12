@@ -128,7 +128,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 printf("%x, %x, %x\n", ib, mb, ob);
 	 * Go through each sample and amplify it, correcting gain back to zero.
 	 */
-	for (;count > 0; count-=16)
+	for (; count > 0; count-=16)
 	{
 		*ob++ += *ib++ * *mb++;
 		*ob++ += *ib++ * *mb++;
@@ -168,7 +168,7 @@ dcainit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

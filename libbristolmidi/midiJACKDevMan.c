@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -92,8 +92,8 @@ jackMidiRoutine(jack_nframes_t nframes, void *arg)
 		 * dispatched. We could probably call a quite early routine since we
 		 * appear to have reasonably raw midi.
 		 *
-		 * Jack always gives me a status byte. We need to parse this then parse
-		 * the actual midi message.
+		 * JACK always gives me a status byte. We need to parse this then parse
+		 * the actual MIDI message.
 		 */
 		bristolMidiRawToMsg(in_event.buffer, in_event.size, 0, deviceIndex,
 			&msg);
@@ -106,7 +106,7 @@ jackMidiRoutine(jack_nframes_t nframes, void *arg)
 
 			checkcallbacks(&msg);
 		} else if (bmidi.flags & BRISTOL_BMIDI_DEBUG)
-			printf("unknown jack midi event\n");
+			printf("unknown JACK MIDI event\n");
 	}
 
 	/*
@@ -155,10 +155,10 @@ int (*callback)(), void *param, int dev, int handle)
 	{
 		if ((client = jack_client_open(devname, 0, NULL)) == 0)
 		{
-			fprintf(stderr, "jack server not running?\n");
+			fprintf(stderr, "JACK server not running?\n");
 			return 1;
 		}
-		printf("registered jack midi name %s\n", devname);
+		printf("registered JACK MIDI name %s\n", devname);
 	
 		jack_set_process_callback(client, jackMidiRoutine, (void *) dev);
 
@@ -175,7 +175,7 @@ int (*callback)(), void *param, int dev, int handle)
 	} else {
 		input_port = jack_port_register(client, "midi_in",
 			JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-		printf("reused jack registration\n");
+		printf("reused JACK registration\n");
 	}
 
 	return(handle);
@@ -195,20 +195,20 @@ bristolMidiJackClose(int handle)
 }
 #else /* _BRISTOL_JACK */
 /*
- * No jack so if we got here we need a couple of error messages to say so.
+ * No JACK so if we got here we need a couple of error messages to say so.
  */
 int
 bristolMidiJackOpen(char *devname, int flags, int chan, int messages,
 int (*callback)(), void *param, int dev, int handle)
 {
-	printf("Jack MIDI requested but not linked into the library\n");
+	printf("JACK MIDI requested but not linked into the library\n");
 	return(BRISTOL_MIDI_DRIVER);
 }
 
 int
 bristolMidiJackClose(int handle)
 {
-	printf("Jack MIDI close not linked into the library\n");
+	printf("JACK MIDI close not linked into the library\n");
 	return(BRISTOL_MIDI_DRIVER);
 }
 #endif

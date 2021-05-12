@@ -40,7 +40,7 @@ extern guimain global;
 
 /* 36 controllers, 4 idle, 35 patches, 5 idle, then memory. */
 #define DEVICE_COUNT 98
-#define ACTIVE_DEVS 79 /* 35 of 40 jack connectors active. */
+#define ACTIVE_DEVS 79 /* 35 of 40 JACK connectors active. */
 #define MEM_START (ACTIVE_DEVS + 1)
 #define MS20_OUTPUTS 20
 #define MS20_INPUTS 20
@@ -400,7 +400,7 @@ brightonApp ms20App = {
 	"ms20",
 	0,
 	"bitmaps/textures/metal7.xpm",
-	BRIGHTON_STRETCH|BRIGHTON_REVERSE, /* default is tesselate */
+	BRIGHTON_STRETCH|BRIGHTON_REVERSE, /* default is tessellate */
 	ms20Init,
 	ms20Configure, /* 3 callbacks, unused? */
 	0,
@@ -762,7 +762,7 @@ ms20IOSelect(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	 * can be removed.
 	 *
 	 * The structure we need should have an input and output list, this should
-	 * give the true co-ords for the start and endpoint since it will be used
+	 * give the true coords for the start and endpoint since it will be used
 	 * to evaluate the transforms for the patch source to the on-screen dest
 	 * bitmaps.
 	 *
@@ -967,7 +967,7 @@ ms20Init(brightonWindow *win)
 	dispatch[MEM_START + 16].routine = dispatch[MEM_START + 17].routine =
 		(synthRoutine) ms20Memory;
 
-	/* midi */
+	/* MIDI */
 	dispatch[MEM_START + 12].controller = 2;
 	dispatch[MEM_START + 13].controller = 1;
 	dispatch[MEM_START + 12].routine = dispatch[MEM_START + 13].routine =

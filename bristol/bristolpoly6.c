@@ -219,7 +219,7 @@ bristolVoice *voice, register float *startbuf)
 		((p6mods *) baudio->mixlocals)->lfolocals);
 
 	/*
-	 * And amplifly it for the delay.
+	 * And amplify it for the delay.
 	 */
 	audiomain->palette[(*baudio->sound[9]).index]->specs->io[0].buf = lfobuf;
 	audiomain->palette[(*baudio->sound[9]).index]->specs->io[1].buf = adsrbuf;

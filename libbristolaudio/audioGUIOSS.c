@@ -26,7 +26,7 @@
  * applications.
  *
  * The operations for audio control are rather ugly. The application sets up
- * a number of values in the controlBuffer, and the engine intermittanly looks
+ * a number of values in the controlBuffer, and the engine intermittently looks
  * to see if these values are initialised. If so, it acts on the values, and
  * then clears them. The reason we have to use this indirection is that the
  * front end applications do not own the audio device, this is under control
@@ -80,7 +80,7 @@ short left, right;
 }
 
 /*
- * Binned since alsa support was implemented.
+ * Binned since ALSA support was implemented.
  *
  * This is a device specific routine. We take the fd, parameter, and left
  * right values, and configure the device. These routines should be used by the
@@ -92,6 +92,7 @@ short left, right;
 static int
 setAudioOSS(fd, audioDev, param, valueL, valueR)
 duplexDev *audioDev;
+int fd, param, valueL, valueR;
 {
 #if (BRISTOL_HAS_OSS == 1)
 	int value, command;
@@ -259,6 +260,7 @@ char *name;
 int
 getOSSCapability(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 	if ((audioDev->stereoCaps | audioDev->monoCaps) & (1 << controller))
 		return controller;
@@ -268,6 +270,7 @@ duplexDev *audioDev;
 int
 getOSSRecordability(audioDev, cont)
 duplexDev *audioDev;
+int cont;
 {
 	if (audioDev->cflags & SLAB_AUDIODBG)
 		printf("getOSSRecordability(%i, %i)\n", audioDev->devID, cont);

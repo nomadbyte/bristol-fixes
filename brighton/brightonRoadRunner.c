@@ -167,8 +167,8 @@ static brightonLocations options[OPTS_COUNT] = {
 	{"TouchSense", 2, oC6, 100, 27, 600, 0, 1, 0, "bitmaps/buttons/rockersmoothBW.xpm",
 		"bitmaps/buttons/rockersmoothBWd.xpm", 0},
 
-	/* Tremelo */
-	{"Tremelo", 0, oC16, oR1, oW1, oL1, 0, 1, 0, 0, 0, 0},
+	/* Tremolo */
+	{"Tremolo", 0, oC16, oR1, oW1, oL1, 0, 1, 0, 0, 0, 0},
 
 	/* Chorus */
 	{"Choris Wet", 0, oC7, oR1, oW1, oL1, 0, 1, 0, 0, 0, 0},
@@ -240,7 +240,7 @@ brightonLocations mem[MEM_COUNT] = {
 	{"", 1, 0, 0, 50, 50, 0, 1, 0, "bitmaps/knobs/sliderpointL.xpm", 0,
 		BRIGHTON_VERTICAL|BRIGHTON_REVERSE|BRIGHTON_WITHDRAWN},
 
-	/* mem U/D, midi U/D, Load + Save */
+	/* mem U/D, MIDI U/D, Load + Save */
 	{"", 2, mC0 + 35, mR3, S4, S6, 0, 1, 0, "bitmaps/buttons/pressoffg.xpm", 
 		"bitmaps/buttons/pressong.xpm", BRIGHTON_CHECKBUTTON|BRIGHTON_NOSHADOW},
 	{"", 2, mC0 + 35, mR2, S4, S6, 0, 1, 0, "bitmaps/buttons/pressoffg.xpm", 
@@ -255,7 +255,7 @@ int singleclick = 0;
 
 /*
  * Should try and make this one as generic as possible, and try to use it as
- * a general memory routine. has Midi u/d, mem u/d, load/save and a display.
+ * a general memory routine. has MIDI u/d, mem u/d, load/save and a display.
  */
 static int
 memCallback(brightonWindow* win, int panel, int index, float value)
@@ -370,7 +370,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 		switch(index) {
 			case 10:
 				/*
-				 * Midi Down
+				 * MIDI Down
 				 */
 				if ((newchan = synth->midichannel - 1) < 0)
 				{
@@ -380,7 +380,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 
 				if (global.libtest)
 				{
-					printf("midi chan %i\n", newchan);
+					printf("MIDI chan %i\n", newchan);
 					synth->midichannel = newchan;
 					return(0);
 				}
@@ -392,7 +392,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 				break;
 			case 11:
 				/*
-				 * Midi Up
+				 * MIDI Up
 				 */
 				if ((newchan = synth->midichannel + 1) > 15)
 				{
@@ -402,7 +402,7 @@ memCallback(brightonWindow* win, int panel, int index, float value)
 
 				if (global.libtest)
 				{
-					printf("midi chan %i\n", newchan);
+					printf("MIDI chan %i\n", newchan);
 					synth->midichannel = newchan;
 					return(0);
 				}
@@ -532,18 +532,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, synth->resources->name, 0,
 				synth->bank + synth->location, synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -903,7 +903,7 @@ roadrunnerInit(brightonWindow* win)
 	synth->dispatch[OPTS_START + 11].controller = 3;
 	synth->dispatch[OPTS_START + 11].operator = 5;
 
-	synth->dispatch[OPTS_START + 12].controller = 126; /* Tremelo */
+	synth->dispatch[OPTS_START + 12].controller = 126; /* Tremolo */
 	synth->dispatch[OPTS_START + 12].operator = 8;
 
 /* Almost done effects - a couple may have to be compound parameters */

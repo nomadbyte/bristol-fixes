@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -44,7 +44,7 @@ static struct timeval waittime;
 extern bristolMidiMain bmidi;
 
 /*
- * This needs to go into a separate midi management interface.
+ * This needs to go into a separate MIDI management interface.
  */
 int
 midiCheck()
@@ -119,7 +119,7 @@ midiCheck()
 							 * synth active on this link it will hang around.
 							 * Unfortunately we can't really do this since
 							 * there could be multiple registrations for the
-							 * given channel. Definately for future study. If
+							 * given channel. Definitely for future study. If
 							 * in doubt, use the '-T' flag to bristol to have
 							 * it terminate on last close.
 							bmidi.dev[i].msg.command = MIDI_SYSTEM;

@@ -84,7 +84,7 @@ extern int pulseDevWrite();
 #define SLAB_8_BIT_IN		0x0040 /* For general convergence options */
 #define SLAB_8_BIT_OUT		0x0080 /* For general convergence options */
 #ifdef SUBFRAGMENT
-#define SLAB_SUBFRAGMENT	0x0100 /* decouple blockSampleSize from fragemnts */
+#define SLAB_SUBFRAGMENT	0x0100 /* decouple blockSampleSize from fragments */
 #define SLAB_SUBF_IOCTL		0x2000 /* Allow subfragment to use old ioctl()s */
 #endif
 #ifdef IOCTL_DBG
@@ -221,7 +221,7 @@ typedef struct DuplexDev {
 #endif
 	int preLoad;
 #ifdef FLOAT_PROC
-	int masterFloatAlgoLeft[MAX_DEVICES]; /* MAXDEVS is incorrent, there is */
+	int masterFloatAlgoLeft[MAX_DEVICES]; /* MAXDEVS is incorrect, there is */
 	int masterFloatAlgoRight[MAX_DEVICES];/* relationship, it is just a count */
 #endif
 #ifdef DELTA_ACC /* For delta accumulation with microAdjust code */

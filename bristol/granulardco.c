@@ -38,8 +38,8 @@
 #include "bristol.h"
 #include "granulardco.h"
 
-float note_diff;
-float samplerate;
+static float note_diff;
+/* static int init_samplerate; */
 
 #define BRISTOL_SQR 4
 
@@ -172,7 +172,7 @@ static int reset(bristolOP *operator, bristolOPParams *param)
  * depth and variance: gain, frequency, duration.
  * These are applied to each grain as it is generated, one parameter defines
  * the width of the value - its maximum, and the second one defines the variance
- * from that value. With no variance we only take the connfigured value, and as
+ * from that value. With no variance we only take the configured value, and as
  * variance is raised we introduce more randomness into the reproduction.
  */
 static int param(bristolOP *operator, bristolOPParams *param,
@@ -273,7 +273,7 @@ printf("threads %i\n", param->param[index].int_val);
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -368,6 +368,8 @@ regrain(bristolGRANULARDCOlocal *local, bristolGRANULARDCO *specs,
 bristolOPParams *param, int count, int channel)
 {
 	unsigned int cri = local->runtime[channel].cri, i, wave;
+	int samplerate = specs->spec.io[DCO_IN_FREQ].samplerate;
+	/* int samplerate = init_samplerate; */
 
 	/*
 	 * When we have implemented the wavetables this is going to be either a
@@ -599,7 +601,7 @@ static int operate(bristolOP *operator,
 
 			/*
 			 * The next two paragraphs are the sympathetic grain generation
-			 * sections. The sympathy is a function of parameterisation, when
+			 * sections. The sympathy is a function of parametrisation, when
 			 * the parameters are wide there is little concordance, when the
 			 * values are slight there is stereo separation.
 			 */
@@ -666,7 +668,7 @@ quantuminit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	*operator = bristolOPinit(operator, index, samplecount);
 
-	samplerate = samplerate;
+	/* init_samplerate = samplerate; */ /* saving here for use in regrain */
 
 #ifdef BRISTOL_DBG
 	printf("quantuminit(%x(%x), %i, %i, %i)\n",
@@ -677,7 +679,7 @@ quantuminit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -882,7 +884,7 @@ fillPDsine(float *mem, int count, int compress)
 	inc1 = ((float) M_PI) / (((float) 2) * ((float) compress));
 	inc2 = ((float) M_PI) / ((float) (count - 2 * compress));
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		*mem++ = sinf(j) * BRISTOL_VPO;
 
@@ -915,7 +917,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 		case 1:
@@ -925,10 +927,10 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a square wave, with decaying plateaus.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -BRISTOL_SQR;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -936,9 +938,9 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a pulse wave - the granular dco does pwm.
 			 */
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			return;
 		case 3:
@@ -951,7 +953,7 @@ fillWave(float *mem, int count, int type)
 			for (; i < count; i++)
 				mem[i] = ((float) i / count) * BRISTOL_VPO * 2.0 -
 					BRISTOL_VPO * 2;
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_VPO * 2.0;
 			mem[0] = 0;
 			mem[count - 1] = mem[1]
@@ -964,10 +966,10 @@ fillWave(float *mem, int count, int type)
 			 * Triangular wave. From MIN point, ramp up at twice the rate of
 			 * the ramp wave, then ramp down at same rate.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = -BRISTOL_VPO
 					+ ((float) i / (count / 2)) * BRISTOL_VPO * 2;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = BRISTOL_VPO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_VPO;
 			return;
@@ -999,7 +1001,7 @@ fillWave(float *mem, int count, int type)
 			/*
 			 * Sine wave - added as a part of the OBX extensions.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 	}

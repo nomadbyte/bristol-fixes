@@ -49,6 +49,7 @@ int
 ossAudioInit(audioDev, devID, fragSize)
 duplexDev *audioDev;
 int devID;
+int fragSize;
 {
 #if (BRISTOL_HAS_OSS == 1)
 	int results, data = 0, mode;
@@ -246,7 +247,7 @@ int devID;
 }
 
 /*
- * Needs to be ALSAfied - ie, binned if we have alsa - this is GUI stuff.
+ * Needs to be ALSAfied - ie, binned if we have ALSA - this is GUI stuff.
  */
 static void
 checkAudioCaps2(audioDev, devID, fd)

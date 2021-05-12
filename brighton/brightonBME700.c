@@ -294,7 +294,7 @@ brightonLocations bme700mods[MODS_COUNT] = {
 		"bitmaps/buttons/touchnlR.xpm", BRIGHTON_CHECKBUTTON},
 
 	/*
-	 * UP/DOWN was memory but could be midi channel. Withdrawn for now since I want to keep
+	 * UP/DOWN was memory but could be MIDI channel. Withdrawn for now since I want to keep
 	 * this panel uncluttered
 	 */
 	{"", 2, 590, 700, 100, 100, 0, 1, 0, "bitmaps/buttons/touchnlg.xpm",
@@ -467,9 +467,9 @@ brightonApp bme700App = {
 };
 
 /*
- * We really want to just use one midi channel and let the midi library decide
+ * We really want to just use one MIDI channel and let the MIDI library decide
  * that we have multiple synths on the channel with their own split points.
- * The lower layer should define the midi channel, split point and transpose 
+ * The lower layer should define the MIDI channel, split point and transpose 
  * of upper layer.
  */
 static int
@@ -555,14 +555,14 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			 * We should accept 0..74 as lower layer and above that as dual
 			 * loading requests.
 			 */
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, SYNTH_NAME, 0, synth->bank + synth->location,
 				OPTS_START, 0, BRISTOL_FORCE);
 			optsShim(synth);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			synth->location = value;
 			loadMemory(synth, SYNTH_NAME, 0, synth->bank + synth->location,
@@ -615,7 +615,7 @@ printf("%i %i\n", synth->bank, synth->location);
 		case 7:
 		case 8:
 			/*
-			 * Radiobutton memory selectors, doubleclick should load
+			 * Radiobutton memory selectors, double-click should load
 			 */
 			if (synth->dispatch[ACTIVE_DEVS].other1 != -1)
 			{
@@ -641,7 +641,7 @@ printf("%i %i\n", synth->bank, synth->location);
 			break;
 		case 9:
 			/*
-			 * Save on doubleclick
+			 * Save on double-click
 			 */
 			if (brightonDoubleClick(dc) != 0)
 				saveMemory(synth, SYNTH_NAME, 0, synth->bank + synth->location, 0);

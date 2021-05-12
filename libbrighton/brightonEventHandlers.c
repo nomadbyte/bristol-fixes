@@ -113,7 +113,7 @@ brightonKeyPress(brightonWindow *bwin, brightonEvent *event)
 
 	/*
 	 * Finally, as this is a key press event I want to pass it through to the
-	 * midi library. This is a rather ugly hack to have a more useful keyboard
+	 * MIDI library. This is a rather ugly hack to have a more useful keyboard
 	 * mapping. We should only really do this from the keyboard panel, but that
 	 * if for later study.
 	 */
@@ -169,7 +169,7 @@ brightonButtonPress(brightonWindow *bwin, brightonEvent *event)
 
 	/*
 	 * We need to determine which device is under the selection, and force
-	 * statefull delivery of events to that device for further motion.
+	 * stateful delivery of events to that device for further motion.
 	 */
 	bwin->activepanel = 0;
 
@@ -264,7 +264,7 @@ brightonEnterNotify(brightonWindow *bwin, brightonEvent *event)
 		if (bwin->flags & BRIGHTON_DEBUG)
 			printf("AutoZoom\n");
 
-		// Make sure we are initted 
+		// Make sure we are init'ed 
 		if ((bwin->minh == 0) || (bwin->maxh == 0))
 			brightonFillRatios(bwin);
 
@@ -338,7 +338,7 @@ brightonLeaveNotify(brightonWindow *bwin, brightonEvent *event)
 		if (bwin->flags & BRIGHTON_DEBUG)
 			printf("AutoZoom\n");
 
-		// Make sure we are initted 
+		// Make sure we are init'ed 
 		if ((bwin->minh == 0) || (bwin->maxh == 0))
 			brightonFillRatios(bwin);
 

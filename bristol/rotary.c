@@ -21,11 +21,11 @@
 
 /*
 
-b3 intertia control alterations do not reset as expected
+b3 inertia control alterations do not reset as expected
 30.3, 64bit, -no-jack-midi option
 
 observed behaviour:
-Altering the intertia control from minimum to maximum gives expected
+Altering the inertia control from minimum to maximum gives expected
 result, but when the control is returned to minimum, the interia is
 apparently not altered
 
@@ -205,7 +205,7 @@ float *obr, int count, float scan, float feedback, float delay, float reverb)
 		history[histin] = *ib;
 
 		/*
-		 * Some doppler
+		 * Some Doppler
 		 */
 		if ((histout + 1) >= HISTSIZE)
 		{
@@ -220,7 +220,7 @@ float *obr, int count, float scan, float feedback, float delay, float reverb)
 		}
 
 		/*
-		 * Some tremelo, and for now put doppler in both sides.
+		 * Some tremolo, and for now put Doppler in both sides.
 		 */
 		rev = history[revout1] * 0.8
 			+ history[revout2] * 0.36
@@ -376,7 +376,7 @@ static int operate(bristolOP *operator,
 	Delay = param->param[DELAY].int_val;
 	/*
 	 * Reverb was moved out of the rotary for being weak - it was only intended
-	 * for doppler effects so now going to fix the values.
+	 * for Doppler effects so now going to fix the values.
 	 */
 /*	Reverb = 0.7; */
 /*	Feedback = 0.4; */
@@ -627,7 +627,7 @@ leslieinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

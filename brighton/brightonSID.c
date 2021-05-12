@@ -95,7 +95,7 @@ static int dc, mbh = 0;
  * 	mono (with detune then between voices in emulator)
  * 	three voice poly-1: all play same sound
  * 	three voice poly-2: all have their own sound
- * 	two voice poly, voice 3 arpeggio - argeggiate all other held notes
+ * 	two voice poly, voice 3 arpeggio - arpeggiate all other held notes
  *
  * Arpeggiator to have rate, retrig and wavescanning, rates down to X samples.
  *
@@ -155,7 +155,7 @@ static int dc, mbh = 0;
  *	need Mod env retrig option - legato?
  *	need Aud env retrig option - legato?
  *	access to analogue parameters from GUI
- *	filter tracking keyboard - whick key?
+ *	filter tracking keyboard - which key?
  *	velocity to mod, filter, pw
  *	arpeg direction
  */
@@ -282,7 +282,7 @@ brightonLocations modwheel[5] = {
 static
 brightonLocations locations[DEVICE_COUNT] = {
 	/*
-	 * Three voices with same parameterisation, roughly
+	 * Three voices with same parametrisation, roughly
 	 * Tri/Ramp/Square/Noise Buttons
 	 * RM/SYNC/Mute/Routing(Multi global) Buttons
 	 * PW/Tune/transpose(/Glide?) - Pots
@@ -663,9 +663,9 @@ brightonApp sidApp = {
 };
 
 /*
- * We really want to just use one midi channel and let the midi library decide
+ * We really want to just use one MIDI channel and let the MIDI library decide
  * that we have multiple synths on the channel with their own split points.
- * The lower layer should define the midi channel, split point and transpose 
+ * The lower layer should define the MIDI channel, split point and transpose 
  * of upper layer.
  */
 static int
@@ -812,12 +812,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			 * We should accept 0..74 as lower layer and above that as dual
 			 * loading requests.
 			 */
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemoryMidiShim(synth, synth->location);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -1109,7 +1109,7 @@ sidMemory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			synth->flags &= ~BANK_SELECT;
 
 			/*
-			 * Doubleclick on load will toggle debugging
+			 * Double-click on load will toggle debugging
 			if (brightonDoubleClick(dc) != 0)
 				bristolMidiSendMsg(fd, synth->sid, 126, 4, 1);
 			 */

@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -136,7 +136,6 @@ static char *b_blank = "                                                        
 //	if (RESOURCES->resources[btty.p].devlocn[btty.i].to == 1.0f)
 //	if (DEVICE(btty.i).to == 1.0f)
 
-brightonEvent event;
 extern void printBrightonHelp(int);
 
 typedef int (*clicom)();
@@ -203,13 +202,13 @@ comSet debugcomm[6] = {
 		"Command Line Debuging on/off",
 		0, 0},
 	{"midi",	B_COM_FIND,
-		"debug level midi interface libraries 0..3",
+		"debug level MIDI interface libraries 0..3",
 		0, 0},
 	{"frontend",	B_COM_FIND,
 		"debug engine interface libraries on/off",
 		0, 0},
 	{"engine",	B_COM_FIND,
-		"engine debuging level 0..15 (0 = off, >9 = verbose)",
+		"engine debugging level 0..15 (0 = off, >9 = verbose)",
 		0, 0},
 	{"", B_COM_LAST, "", 0, 0},
 };
@@ -228,19 +227,19 @@ comSet bristolcom[4] = {
 comSet midicomm[24] = {
 	{"",		B_COM_NOT_USED, "", 0, 0},
 	{"channel",	B_COM_FIND,
-		"configure engine midi channel 1..16",
+		"configure engine MIDI channel 1..16",
 		0, 0},
 	{"sid",	B_COM_FIND,
 		"select internal messaging id",
 		0, 0},
 	{"debug",	B_COM_FIND,
-		"engine debuging level 0..16",
+		"engine debugging level 0..16",
 		0, 0},
 	{"lowkey",	B_COM_FIND,
-		"lower midi keyboard split point 0..127",
+		"lower MIDI keyboard split point 0..127",
 		0, 0},
 	{"highkey",	B_COM_FIND,
-		"higher midi keyboard split point 0..127",
+		"higher MIDI keyboard split point 0..127",
 		0, 0},
 	{"chanpress",	B_COM_FIND,
 		"send a channel pressure event value p=0..127",
@@ -255,7 +254,7 @@ comSet midicomm[24] = {
 		"monophonic note preference logic: hnp/lnp/nnp",
 		0, 0},
 	{"velocity",	B_COM_FIND,
-		"midi velocity curve 0..1000",
+		"MIDI velocity curve 0..1000",
 		0, 0},
 	{"detune",	B_COM_FIND,
 		"engine 'temperature sensitivity' detuning",
@@ -273,7 +272,7 @@ comSet midicomm[24] = {
 		"emulator global gain control",
 		0, 0},
 	{"pwd",	B_COM_FIND,
-		"midi pitch wheel depth semitones",
+		"MIDI pitch wheel depth semitones",
 		0, 0},
 	{"nrp", B_COM_FIND,
 		"enable user interface NRP response on/off",
@@ -282,7 +281,7 @@ comSet midicomm[24] = {
 		"enable engine NRP response on/off",
 		0, 0},
 	{"forwarding",	B_COM_FIND,
-		"enable engine midi message forwarding on/off",
+		"enable engine MIDI message forwarding on/off",
 		0, 0},
 	{"tuning",	B_COM_FIND,
 		"coarse/fine: global tuning 0..1.0",
@@ -291,7 +290,7 @@ comSet midicomm[24] = {
 		"send a value to a continuous controller value",
 		0, 0},
 	{"panic",	B_COM_FIND,
-		"midi all-notes-off, etc",
+		"MIDI all-notes-off, etc",
 		0, 0},
 	{"", B_COM_LAST, "", 0, 0},
 };
@@ -364,7 +363,7 @@ comSet setcomm[B_TTY_ACT_COUNT + 1] = {
 		"'set memory [find|read|write|import|export]",
 		execMemory, memcomm},
 	{"midi",	B_COM_MIDI,
-		"[channel|debug|help] midi control commands",
+		"[channel|debug|help] MIDI control commands",
 		execMidi, midicomm},
 	{"debug",	B_COM_DEBUG,
 		"[on|off|engine [0..15]] debug settings",
@@ -418,7 +417,7 @@ comSet commands[B_TTY_ACT_COUNT + 1] = {
 		"'set memory [find|read|write|import|export]",
 		execMemory, memcomm},
 	{"midi",	B_COM_MIDI,
-		"[channel|debug|help] midi control commands",
+		"[channel|debug|help] MIDI control commands",
 		execMidi, midicomm},
 	{"debug",	B_COM_DEBUG,
 		"[on|off|engine [0..15]] debug settings",
@@ -771,7 +770,7 @@ brightonSetCLIcode(char *input)
 		int i;
 
 		/*
-		 * Search the ommmand table, add entry to templates
+		 * Search the command table, add entry to templates
 		 */
 		for (i = 0 ;
 			(commands[i].map != B_COM_LAST) && (i < B_TTY_ACT_COUNT);
@@ -1388,14 +1387,18 @@ execBristol(guimain *global, int c, char **argv)
 		{
 			int sid;
 
-			if ((o = atoi(argv[2])) < 0) return(3); if (o > 127) return(3);
-			if ((p = atoi(argv[3])) < 0) return(3); if (p > 127) return(3);
-			if ((v = atof(argv[4])) < 0.0f) return(3); if (v > 1.0f) return(3); 
+			if ((o = atoi(argv[2])) < 0) return(3);
+			if (o > 127) return(3);
+			if ((p = atoi(argv[3])) < 0) return(3);
+			if (p > 127) return(3);
+			if ((v = atof(argv[4])) < 0.0f) return(3);
+			if (v > 1.0f) return(3); 
 
 			if (btty.ichan == 0)
 				sid = SYNTHS->sid;
 			else
 				sid = SYNTHS->sid2;
+
 			bristolMidiSendMsg(global->controlfd, btty.ichan,
 				o, p, (int) (v * C_RANGE_MIN_1));
 			return(0);
@@ -1413,25 +1416,25 @@ extern int bristolPolyPressureEvent(int, int, int, int, int);
  * access to loads of stuff that many of the GUI may not use because there was
  * no other way to control them.
  *
- * midi channel 1..16
- * midi debug 0..3
- * midi lowkey|highkey 0..127
- * midi filters lwf|nwf|wwf|hwf
- * midi notepref hnp|lnp|nnp
- * midi velocity 1..1000
- * midi chanpressure 0..127
- * midi polypressure 0..127 0..127
- * midi detune 0..500
- * midi glide 0..30
- * midi legato on/off
- * midi trig on/off
- * midi gain 1..
- * midi pwd 0..
- * midi nrp on/off
- * midi forwarding on/off
- * midi tuning fine 0..1.0
- * midi tuning coarse 0..1.0
- * midi panic
+ * MIDI channel 1..16
+ * MIDI debug 0..3
+ * MIDI lowkey|highkey 0..127
+ * MIDI filters lwf|nwf|wwf|hwf
+ * MIDI notepref hnp|lnp|nnp
+ * MIDI velocity 1..1000
+ * MIDI chanpressure 0..127
+ * MIDI polypressure 0..127 0..127
+ * MIDI detune 0..500
+ * MIDI glide 0..30
+ * MIDI legato on/off
+ * MIDI trig on/off
+ * MIDI gain 1..
+ * MIDI pwd 0..
+ * MIDI nrp on/off
+ * MIDI forwarding on/off
+ * MIDI tuning fine 0..1.0
+ * MIDI tuning coarse 0..1.0
+ * MIDI panic
  */
 static int
 execMidi(guimain *global, int c, char **v)
@@ -1489,8 +1492,10 @@ execMidi(guimain *global, int c, char **v)
 		{
 			int k, p;
 
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3); 
-			if ((p = atoi(v[3])) < 0) return(3); if (p > 127) return(3); 
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3); 
+			if ((p = atoi(v[3])) < 0) return(3);
+			if (p > 127) return(3); 
 
 			bristolPolyPressureEvent(global->controlfd, 0, SYNTHS->midichannel,
 				k, p);
@@ -1570,7 +1575,8 @@ execMidi(guimain *global, int c, char **v)
 			if (global->libtest == 0)
 				bristolMidiSendMsg(global->controlfd, SYNTHS->sid,
 		            127, 0, BRISTOL_MIDICHANNEL|SYNTHS->midichannel);
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3);
 
 			SYNTHS->highkey = btty.highkey = k;
 
@@ -1578,7 +1584,8 @@ execMidi(guimain *global, int c, char **v)
 				BRISTOL_HIGHKEY|SYNTHS->highkey);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "lowkey", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 127) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 127) return(3);
 
 			SYNTHS->lowkey = btty.lowkey = k;
 
@@ -1596,27 +1603,32 @@ execMidi(guimain *global, int c, char **v)
 				BRISTOL_NRP_LWF, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "detune", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_DETUNE, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "velocity", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_VELOCITY, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "glide", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_GLIDE, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "pwd", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				MIDI_RP_PW, k);
 			return(B_ERR_OK);
 		} else if (strncmp(v[1], "gain", strlen(v[1])) == 0) {
-			if ((k = atoi(v[2])) < 0) return(3); if (k > 16383) return(3);
+			if ((k = atoi(v[2])) < 0) return(3);
+			if (k > 16383) return(3);
 			bristolMidiSendNRP(global->controlfd, SYNTHS->midichannel,
 				BRISTOL_NRP_GAIN, k);
 			return(B_ERR_OK);
@@ -2651,7 +2663,7 @@ bttySearch(guimain *global)
 
 	/*
 	 * Search through the internal commands and the synth parameters. If only
-	 * one match then commplete it, otherwise list them.
+	 * one match then complete it, otherwise list them.
 	 */
 	if (btty.i >= SYNTHS->win->app->resources[btty.p].ndevices)
 	{
@@ -3077,7 +3089,7 @@ bttyExecute(guimain *global, int c, char **v)
 			btty.i = i;
 
 			switch (n) {
-				case 1: /* Value was set explicity */
+				case 1: /* Value was set explicitly */
 					break;
 				case 2: /* + */
 					value = PDEV(btty.i)->value + 0.01;
@@ -3235,8 +3247,8 @@ bttyInterpret(guimain *global, char *tbuf)
 
 	/*
 	 * This is to 'overlook' cooked commands that start with a colon, they
-	 * typicaly come from retyping ':' due to a damaged output stream from 
-	 * debuging output.
+	 * typically come from retyping ':' due to a damaged output stream from 
+	 * debugging output.
 	 */
 	if ((*comm == ':') && (btty.flags & B_TTY_COOKED))
 		comm++;
@@ -3464,7 +3476,7 @@ bttyCookedMode(guimain *global, char ch)
 	btty.acycle = btty.cycle;
 
 	/*
-	 * Start with escape, this will later become interpretted as it could
+	 * Start with escape, this will later become interpreted as it could
 	 * also by arrows for history functions.
 	 */
 	if (btty.flags & B_TTY_RAW_P2) {
@@ -3996,7 +4008,8 @@ brightonCLIcheck(guimain *global)
 						SYNTHS->location);
 				else
 					snprintf(pbuf, btty.len, "mem: %i\r\n", SYNTHS->location);
-					v = write(btty.fd[1], pbuf, strlen(pbuf));
+
+				v = write(btty.fd[1], pbuf, strlen(pbuf));
 				break;
 			case B_TTY_A_M_UP:
 				/* Mem up */
@@ -4009,7 +4022,8 @@ brightonCLIcheck(guimain *global)
 						SYNTHS->location);
 				else
 					snprintf(pbuf, btty.len, "mem: %i\r\n", SYNTHS->location);
-					v = write(btty.fd[1], pbuf, strlen(pbuf));
+
+				v = write(btty.fd[1], pbuf, strlen(pbuf));
 				break;
 			case B_TTY_A_LEFT:
 				if (--btty.i < 0)

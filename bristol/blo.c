@@ -31,20 +31,22 @@
 
 #include "bristolblo.h"
 
+bristolBLO blo;
+
 static int init = 1;
 
-float blosine[BRISTOL_BLO_SIZE];
-float blocosine[BRISTOL_BLO_SIZE];
-float blosquare[BRISTOL_BLO_SIZE];
-float bloramp[BRISTOL_BLO_SIZE];
-float blosaw[BRISTOL_BLO_SIZE];
-float blotriangle[BRISTOL_BLO_SIZE];
-float blopulse[BRISTOL_BLO_SIZE];
+static float blosine[BRISTOL_BLO_SIZE];
+static float blocosine[BRISTOL_BLO_SIZE];
+static float blosquare[BRISTOL_BLO_SIZE];
+static float bloramp[BRISTOL_BLO_SIZE];
+static float blosaw[BRISTOL_BLO_SIZE];
+static float blotriangle[BRISTOL_BLO_SIZE];
+static float blopulse[BRISTOL_BLO_SIZE];
 
 /*
  * Generate the waveforms to the given harmonic reference size. The code could
  * be optimised however it is really only likely to ever be called once at
- * startup or 'intermittently' whilst programmming a synth (depending on the
+ * startup or 'intermittently' whilst programming a synth (depending on the
  * oscillator implementation - most use a private cache stuffed at init time).
  */
 void
@@ -60,6 +62,14 @@ float fraction, int samplerate)
 	blo.min = min;
 	blo.samplerate = samplerate;
 	blo.fraction = fraction * 1024;
+
+	blo.sine = blosine;
+	blo.cosine = blocosine;
+	blo.square = blosquare;
+	blo.ramp = bloramp;
+	blo.saw = blosaw;
+	blo.triangle = blotriangle;
+	blo.pulse = blopulse;
 
 	printf("generate bandlimited waveforms(%i, %2.0f, %i, %1.2f, %1.2f, %i)\n",
 		harmonics, gn, cutin, cutoff, fraction, samplerate);
@@ -78,18 +88,18 @@ float fraction, int samplerate)
 
 		for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 		{
-			blosine[i] = sinf(2 * M_PI * ((float) i) / BRISTOL_BLO_SIZE) * gn;
-			blocosine[i] = cosf(2 * M_PI * ((float) i) / BRISTOL_BLO_SIZE) * gn;
+			blo.sine[i] = sinf(2 * M_PI * ((float) i) / BRISTOL_BLO_SIZE) * gn;
+			blo.cosine[i] = cosf(2 * M_PI * ((float) i) / BRISTOL_BLO_SIZE) * gn;
 		}
 	}
 
 	/*
-	memset(blosquare, 0, BRISTOL_BLO_SIZE * sizeof(float));
-	memset(bloramp, 0, BRISTOL_BLO_SIZE * sizeof(float));
-	memset(blotriangle, 0, BRISTOL_BLO_SIZE * sizeof(float));
+	memset(blo.square, 0, BRISTOL_BLO_SIZE * sizeof(float));
+	memset(blo.ramp, 0, BRISTOL_BLO_SIZE * sizeof(float));
+	memset(blo.triangle, 0, BRISTOL_BLO_SIZE * sizeof(float));
 	 */
 	for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-		blosquare[i] = bloramp[i] = blotriangle[i] = 0;
+		blo.square[i] = blo.ramp[i] = blo.triangle[i] = 0;
 
 	/*
 	 * The square wave:
@@ -104,7 +114,7 @@ float fraction, int samplerate)
 
 		for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 		{
-			blosquare[i] += blosine[k] * gain;
+			blo.square[i] += blo.sine[k] * gain;
 			if ((k += j) >= BRISTOL_BLO_SIZE)
 				k -= BRISTOL_BLO_SIZE;
 		}
@@ -118,14 +128,14 @@ float fraction, int samplerate)
 		{
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 			{
-				blopulse[i] += (blosine[k] - blosine[(k + 256) & 1023]) * gain;
+				blo.pulse[i] += (blo.sine[k] - blo.sine[(k + 256) & 1023]) * gain;
 				if ((k += j) >= BRISTOL_BLO_SIZE)
 					k -= BRISTOL_BLO_SIZE;
 			}
 		} else {
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 			{
-				blopulse[i] -= (blosine[k] + blosine[(k + 256) & 1023]) * gain;
+				blo.pulse[i] -= (blo.sine[k] + blo.sine[(k + 256) & 1023]) * gain;
 				if ((k += j) >= BRISTOL_BLO_SIZE)
 					k -= BRISTOL_BLO_SIZE;
 			}
@@ -146,14 +156,14 @@ float fraction, int samplerate)
 		{
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 			{
-				blosaw[i] += blosine[k] * gain;
+				blo.saw[i] += blo.sine[k] * gain;
 				if ((k += j) >= BRISTOL_BLO_SIZE)
 					k -= BRISTOL_BLO_SIZE;
 			}
 		} else {
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 			{
-				blosaw[i] -= blosine[k] * gain;
+				blo.saw[i] -= blo.sine[k] * gain;
 				if ((k += j) >= BRISTOL_BLO_SIZE)
 					k -= BRISTOL_BLO_SIZE;
 			}
@@ -162,7 +172,7 @@ float fraction, int samplerate)
 
 	/* Invert this for the ramp */
  	for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-		bloramp[i] = -blosaw[i];
+		blo.ramp[i] = -blo.saw[i];
 
 	/*
 	 * Tri:
@@ -170,7 +180,7 @@ float fraction, int samplerate)
 	 */
 	k = 0; gain = 1.0;
 	for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-		blotriangle[i] = blosine[i];
+		blo.triangle[i] = blo.sine[i];
 
 	for (j = 3; j <= harmonics; j+=2)
 	{
@@ -179,7 +189,7 @@ float fraction, int samplerate)
 
 		for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 		{
-			blotriangle[i] += blocosine[k] * gain;
+			blo.triangle[i] += blo.cosine[k] * gain;
 			if ((k += j) >= BRISTOL_BLO_SIZE)
 				k -= BRISTOL_BLO_SIZE;
 		}
@@ -228,7 +238,7 @@ generateBLOwaveformF(float step, float *dst, int wf)
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
 						dst[i] +=
-							(blosine[k] - blosine[(k + 256) & 1023]) * gain;
+							(blo.sine[k] - blo.sine[(k + 256) & 1023]) * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -236,7 +246,7 @@ generateBLOwaveformF(float step, float *dst, int wf)
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
 						dst[i] -=
-							(blosine[k] + blosine[(k + 256) & 1023]) * gain;
+							(blo.sine[k] + blo.sine[(k + 256) & 1023]) * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -259,7 +269,7 @@ generateBLOwaveformF(float step, float *dst, int wf)
 
 				for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 				{
-					dst[i] += blosine[k] * gain;
+					dst[i] += blo.sine[k] * gain;
 					if ((k += j) >= BRISTOL_BLO_SIZE)
 						k -= BRISTOL_BLO_SIZE;
 				}
@@ -282,14 +292,14 @@ generateBLOwaveformF(float step, float *dst, int wf)
 				{
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] += blosine[k] * gain;
+						dst[i] += blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
 				} else {
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] -= blosine[k] * gain;
+						dst[i] -= blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -306,14 +316,14 @@ generateBLOwaveformF(float step, float *dst, int wf)
 				{
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] += blosine[k] * gain;
+						dst[i] += blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
 				} else {
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] -= blosine[k] * gain;
+						dst[i] -= blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -327,7 +337,7 @@ generateBLOwaveformF(float step, float *dst, int wf)
 			 */
 			k = 0; gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] = blosine[i];
+				dst[i] = blo.sine[i];
 
 			for (j = 3; j <= harmonics; j+=2)
 			{
@@ -337,7 +347,7 @@ generateBLOwaveformF(float step, float *dst, int wf)
 
 				for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 				{
-					dst[i] += blocosine[k] * gain;
+					dst[i] += blo.cosine[k] * gain;
 					if ((k += j) >= BRISTOL_BLO_SIZE)
 						k -= BRISTOL_BLO_SIZE;
 				}
@@ -346,12 +356,12 @@ generateBLOwaveformF(float step, float *dst, int wf)
 		case  BLO_SINE:
 			gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] += blosine[i] * gain;
+				dst[i] += blo.sine[i] * gain;
 			return;
 		case  BLO_COSINE:
 			gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] += blocosine[i] * gain;
+				dst[i] += blo.cosine[i] * gain;
 			return;
 	}
 }
@@ -407,7 +417,7 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 
 				for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 				{
-					dst[i] += blosine[k] * gain;
+					dst[i] += blo.sine[k] * gain;
 					if ((k += j) >= BRISTOL_BLO_SIZE)
 						k -= BRISTOL_BLO_SIZE;
 				}
@@ -429,14 +439,14 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 				{
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] += blosine[k] * gain;
+						dst[i] += blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
 				} else {
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] -= blosine[k] * gain;
+						dst[i] -= blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -452,14 +462,14 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 				{
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] += blosine[k] * gain;
+						dst[i] += blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
 				} else {
 					for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 					{
-						dst[i] -= blosine[k] * gain;
+						dst[i] -= blo.sine[k] * gain;
 						if ((k += j) >= BRISTOL_BLO_SIZE)
 							k -= BRISTOL_BLO_SIZE;
 					}
@@ -473,7 +483,7 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 			 */
 			k = 0; gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] = blosine[i];
+				dst[i] = blo.sine[i];
 
 			for (j = 3; j <= harmonics; j+=2)
 			{
@@ -482,7 +492,7 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 
 				for (i = 0; i < BRISTOL_BLO_SIZE; i++)
 				{
-					dst[i] += blocosine[k] * gain;
+					dst[i] += blo.cosine[k] * gain;
 					if ((k += j) >= BRISTOL_BLO_SIZE)
 						k -= BRISTOL_BLO_SIZE;
 				}
@@ -491,12 +501,12 @@ generateBLOwaveformZ(int key, float *dst, float gn, int wf)
 		case  BLO_SINE:
 			gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] += blosine[i] * gain;
+				dst[i] += blo.sine[i] * gain;
 			return;
 		case  BLO_COSINE:
 			gain = 1.0;
 			for (i = 0; i < BRISTOL_BLO_SIZE; i++)
-				dst[i] += blocosine[i] * gain;
+				dst[i] += blo.cosine[i] * gain;
 			return;
 	}
 }

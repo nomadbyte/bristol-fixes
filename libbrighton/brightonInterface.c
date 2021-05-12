@@ -68,7 +68,7 @@ int gs, int x, int y)
 
 	if (aa & BRIGHTON_LIB_DEBUG)
 	{
-		printf("libbrighton debuging enabled\n");
+		printf("libbrighton debugging enabled\n");
 		display->flags |= BRIGHTON_LIB_DEBUG;
 	}
 	aa &= ~BRIGHTON_LIB_DEBUG;

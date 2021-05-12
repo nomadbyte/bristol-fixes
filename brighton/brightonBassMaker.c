@@ -28,7 +28,7 @@
  *
  *	Global transpose. Test.
  *	Mem search DONE
- *	Midi channel DONE
+ *	MIDI channel DONE
  *	Need to make sure transpose and channel selections are in the memories and
  *	recovered. Tested ctype, cc, transpose
  *
@@ -43,7 +43,7 @@
  *	Copy page
  *	Fill values
  *
- *	Midi send and recieve clock. ffs.
+ *	MIDI send and receive clock. ffs.
  */
 
 #include <fcntl.h>
@@ -74,7 +74,7 @@ static int dc;
 #define STEP_COUNT (PAGE_STEP * PAGE_COUNT)
 
 #define TOTAL_DEVS (PAGE_STEP * OP_COUNT)
-#define CONTROL_COUNT 60 /* controls less memomry selectors/entry */
+#define CONTROL_COUNT 60 /* controls less memory selectors/entry */
 #define CONTROL_ACTIVE 20
 #define COFF (TOTAL_DEVS * PAGE_COUNT)
 #define ACTIVE_DEVS (COFF + CONTROL_ACTIVE)
@@ -555,19 +555,19 @@ bmMidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->bank = value - (value % 8);
 			synth->location = value % 8;
 			loadMemory(synth, "bassmaker", 0, synth->bank * 10 + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		/*
-		 * This needs a case statement for midi clock which can then be used
+		 * This needs a case statement for MIDI clock which can then be used
 		 * to drive the fast timers.
 		 */
 	}
@@ -582,7 +582,7 @@ brightonApp bmApp = {
 	"bassmaker",
 	0,
 	"bitmaps/textures/metal2.xpm",
-	BRIGHTON_STRETCH|BRIGHTON_REVERSE, /* default is tesselate */
+	BRIGHTON_STRETCH|BRIGHTON_REVERSE, /* default is tessellate */
 	bmInit,
 	bmConfigure, /* 3 callbacks, unused? */
 	bmMidiCallback,
@@ -1119,7 +1119,7 @@ bmSendControl(guiSynth *synth, bmMem *bm, int c, int o)
 			int note, chan, velocity;
 
 			/*
-			 * Convert the setting into 12 steps, take cc to be midi channel
+			 * Convert the setting into 12 steps, take cc to be MIDI channel
 			 * Channel is the 'cc' setting here.
 			 */
 			if ((chan = bm->control.cc) > 15)
@@ -1283,7 +1283,7 @@ bmCallLed(guiSynth *synth, int fd, int chan, int c, int o, int v)
 					BRISTOL_EVENT_KEYOFF, note, velocity);
 			break;
 		case 1:
-			/* Dont' send note off */
+			/* Don't send note off */
 			if (v)
 				{
 					bmSendControl(synth, bm, c, o);
@@ -1292,7 +1292,7 @@ bmCallLed(guiSynth *synth, int fd, int chan, int c, int o, int v)
 				}
 			break;
 		case 2:
-			/* Dont' send note on, only off */
+			/* Don't send note on, only off */
 			bristolMidiSendKeyMsg(global.controlfd, synth->midichannel,
 				BRISTOL_EVENT_KEYOFF, note, velocity);
 			return;

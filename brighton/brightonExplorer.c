@@ -277,7 +277,7 @@ brightonApp explorerApp = {
 	"explorer",
 	0, /* no blueprint on wood background. */
 	"bitmaps/textures/wood2.xpm",
-	0, /* or BRIGHTON_STRETCH, default is tesselate */
+	0, /* or BRIGHTON_STRETCH, default is tessellate */
 	explorerInit,
 	explorerConfigure, /* 3 callbacks, unused? */
 	midiCallback,
@@ -368,12 +368,12 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value + synth->bank * 10;
 			if (loadMemory(synth, "explorer", 0, synth->location,
 				synth->mem.active, FIRST_DEV, BRISTOL_STAT) < 0)
@@ -382,7 +382,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 				displayText(synth, "PRG", synth->location, DISPLAY1);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			synth->location = (synth->location % 10) + value * 10;
 			if (loadMemory(synth, "explorer", 0, synth->location,
@@ -681,14 +681,14 @@ explorerFilterMode(guiSynth *synth, int fd, int chan, int o, int c, int v)
 	if (v == 0) {
 		/*
 		printf("LPF/LPF\n");
-		 * FIlter 1 must change to type 4, Houvilainen LPF.
+		 * Filter 1 must change to type 4, Huovilainen LPF.
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid, 4, 4, 4);
 		bristolMidiSendMsg(global.controlfd, synth->sid, 4, 6, 0);
 	} else {
 		/*
 		printf("HPF/LPF\n");
-		 * FIlter 1 must change to type 0, Chamberlain and HPF
+		 * Filter 1 must change to type 0, Chamberlin and HPF
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid, 4, 4, 0);
 		bristolMidiSendMsg(global.controlfd, synth->sid, 4, 6, 2);
@@ -724,7 +724,7 @@ explorerFilter(guiSynth *synth, int fd, int chan, int o, int c, int v)
 	/*
 	 * We have mod and res that just goes to each filter.
 	 *
-	 * Cutoff and spare are a function of the eachother.
+	 * Cutoff and spare are a function of the each other.
 	 */
 	bristolMidiSendMsg(global.controlfd, synth->sid, 9, 0,
 		(int) (synth->mem.param[34] * C_RANGE_MIN_1));
@@ -914,7 +914,7 @@ explorerInit(brightonWindow *win)
 	dispatch[37].controller = 4;
 	dispatch[37].operator = 3;
 
-	/* Filter spacing is now in the emulater, not the filter. We also need a */
+	/* Filter spacing is now in the emulator, not the filter. We also need a */
 	/* filter param dispatcher to configure the two filters together. */
 	/* Dispatcher */
 	dispatch[34].routine =
@@ -1007,7 +1007,7 @@ explorerInit(brightonWindow *win)
 	dispatch[MEM_START + 16].routine = dispatch[MEM_START + 17].routine =
 		(synthRoutine) explorerMemory;
 
-	/* midi */
+	/* MIDI */
 	dispatch[MEM_START + 12].controller = 2;
 	dispatch[MEM_START + 13].controller = 1;
 	dispatch[MEM_START + 12].routine = dispatch[MEM_START + 13].routine =

@@ -20,7 +20,7 @@
  */
 
 /*
- * This code should open the midi device (working with ALSA raw midi only for
+ * This code should open the MIDI device (working with ALSA raw MIDI only for
  * the moment (9/11/01)), and read data from it. Not sure how it will be read,
  * either buffers, events, or perhaps just raw data. At some point in the 
  * development this will become a separate thread in the synth code.
@@ -35,7 +35,7 @@ bufmerge(register float *src, register float gain1, register float *dst,
 {
 	float *buf3 = dst;
 
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*dst++ = *buf3++ * gain2 + *src++ * gain1;
 		*dst++ = *buf3++ * gain2 + *src++ * gain1;
@@ -64,7 +64,7 @@ bufmerge(register float *src, register float gain1, register float *dst,
 void
 bufadd(register float *buf1, register float add, register int size)
 {
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*buf1++ += add;
 		*buf1++ += add;
@@ -88,7 +88,7 @@ bufadd(register float *buf1, register float add, register int size)
 void
 bufset(register float *buf1, register float set, register int size)
 {
-	for (;size > 0; size-=16)
+	for (; size > 0; size-=16)
 	{
 		*buf1++ = set;
 		*buf1++ = set;

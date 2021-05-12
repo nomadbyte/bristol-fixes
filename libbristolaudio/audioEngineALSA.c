@@ -109,7 +109,7 @@ printf("	alsaDevClose(%08x): %08x, %08x\n",
 		if (alsaDev[audioDev->devID].chandle != (snd_pcm_t *) NULL)
 		{
 			if (audioDev->cflags & SLAB_AUDIODBG)
-				printf("closing alsa capture channel\n");
+				printf("closing ALSA capture channel\n");
 
 			/* snd_pcm_unlink((void *) alsaDev[audioDev->devID].chandle); */
 			snd_pcm_drop((void *) alsaDev[audioDev->devID].chandle);
@@ -123,7 +123,7 @@ printf("	alsaDevClose(%08x): %08x, %08x\n",
 	if (alsaDev[audioDev->devID].phandle != (snd_pcm_t *) NULL)
 	{
 		if (audioDev->cflags & SLAB_AUDIODBG)
-			printf("closing alsa playback channel\n");
+			printf("closing ALSA playback channel\n");
 		snd_pcm_drain((void *) alsaDev[audioDev->devID].phandle);
 		snd_pcm_hw_free((void *) alsaDev[audioDev->devID].phandle);
 		snd_pcm_close((void *) alsaDev[audioDev->devID].phandle);
@@ -220,7 +220,7 @@ alsaChannelConfigure(duplexDev *audioDev, snd_pcm_t **handle,
 	 *
 	 * The following only works for 16bit stereo samples.
 	 *
-	 * Can this warning, we are going to use Jack for multichannel stuff
+	 * Can this warning, we are going to use JACK for multichannel stuff
 #warning Not compatible with alternative sample sizes or channel counts
 	 */
 	count = audioDev->fragSize >> 2;

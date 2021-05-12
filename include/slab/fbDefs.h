@@ -21,7 +21,7 @@
 
 
 /*
- * This is the sementic representation of the bussed algorithms, including
+ * This is the semantic representation of the bussed algorithms, including
  * algorithm names, parameters and value.
  *
  * I would prefer for this to be parsed into the frontend, simply for ease of

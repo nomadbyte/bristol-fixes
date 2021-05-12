@@ -39,7 +39,7 @@
 #define BLO_COSINE	6
 #define BLO_PULSE	7
 
-struct {
+typedef struct BristolBLO {
 	int flags;
 	int harmonics;
 	int cutin;
@@ -47,14 +47,16 @@ struct {
 	int min;
 	float fraction;
 	float samplerate;
-} blo;
+	float *sine;
+	float *cosine;
+	float *square;
+	float *ramp;
+	float *saw;
+	float *triangle;
+	float *pulse;
+} bristolBLO;
 
-extern float blosine[BRISTOL_BLO_SIZE];
-extern float blosquare[BRISTOL_BLO_SIZE];
-extern float bloramp[BRISTOL_BLO_SIZE];
-extern float blosaw[BRISTOL_BLO_SIZE];
-extern float blotriangle[BRISTOL_BLO_SIZE];
-extern float blopulse[BRISTOL_BLO_SIZE];
+extern bristolBLO blo;
 
 extern void generateBLOwaveforms(int, float, int, float, int, float, int);
 extern void generateBLOwaveform(int, float *, float, int);

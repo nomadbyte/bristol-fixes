@@ -39,7 +39,7 @@
 #include "bristolblo.h"
 #include "junodco.h"
 
-float note_diff;
+static float note_diff;
 
 #define BRISTOL_SQR 8
 
@@ -183,7 +183,7 @@ static int param(bristolOP *operator, bristolOPParams *param,
 				/*
 				 * Up or down 7 notes.
 				 */
-				for (i = 0; i < 7;i++)
+				for (i = 0; i < 7; i++)
 				{
 					if (tune > 0)
 						notes *= note_diff;
@@ -400,7 +400,7 @@ junodcoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -551,7 +551,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_VPO;
 			return;
 		case 1:
@@ -563,14 +563,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blosquare[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.square[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value *= 0.98);
 			value = -BRISTOL_SQR;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value *= 0.98);
 			return;
 		}
@@ -578,9 +578,9 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a pulse wave - the juno dco does pwm separately.
 			 */
-			for (i = 0;i < count / 5; i++)
+			for (i = 0; i < count / 5; i++)
 				mem[i] = BRISTOL_VPO * 2 / 3;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_VPO * 2 / 3;
 			return;
 		case 3:
@@ -588,13 +588,13 @@ fillWave(float *mem, int count, int type)
 			 * This is a ramp wave. We scale the index from -.5 to .5, and
 			 * multiply by the range. We go from rear to front to table to make
 			 * the ramp wave have a positive leading edge.
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_VPO * 2.0;
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = bloramp[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.ramp[i];
 				return;
 			}
 			for (i = 0; i < count / 2; i++)
@@ -610,14 +610,14 @@ fillWave(float *mem, int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blotriangle[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.triangle[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = -BRISTOL_VPO
 					+ ((float) i * 2 / (count / 2)) * BRISTOL_VPO; 
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = BRISTOL_VPO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_VPO;
 			return;
@@ -630,12 +630,12 @@ fillWave(float *mem, int count, int type)
 			{
 				int k = 0;
 
-				for (i = 0;i < count; i++)
-					mem[i] = blotriangle[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.triangle[i];
 
-				for (i = 0;i < count; i++)
+				for (i = 0; i < count; i++)
 				{
-					mem[i] += blotriangle[k];
+					mem[i] += blo.triangle[k];
 					if ((k += 2) >= BRISTOL_BLO_SIZE)
 						k -= BRISTOL_BLO_SIZE;
 				}

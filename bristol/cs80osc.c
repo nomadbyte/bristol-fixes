@@ -41,8 +41,7 @@
 #include "cs80osc.h"
 #include "bristolcs80.h"
 
-float note_diff;
-int samplecount;
+static float note_diff;
 
 static void fillWave(float *, int, int);
 static void buildCs80Sound(bristolOP *, bristolOPParams *);
@@ -172,9 +171,9 @@ printf("cs80oscparam(%i, %f) %i\n", index, value, ival);
 		 * but the ramp is on/off from GUI (with extended option). PWM will be
 		 * generated on the fly with a small detune.
 		 *
-		 * There will be two levels of brilliance for two consequetive octaves
+		 * There will be two levels of brilliance for two consecutive octaves
 		 * each with configurable level then affected by brilliance which is
-		 * inherrited from the emulation code in bristolcs80.c
+		 * inherited from the emulation code in bristolcs80.c
 		 *
 		 * Transpose will include sweeps of 16, 8, 5 1/3, 4, 2 2/3 and 2 octave
 		 * which are multipliers 1, 2, 3, 4, 6, 8.
@@ -243,7 +242,7 @@ register int count, register int width)
 	while (wtp < 0)
 		wtp += CS80_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		gdelta = wtp - ((float) ((int) wtp));
 		/*
@@ -313,7 +312,7 @@ register int count)
 	while (wtp < 0)
 		wtp += CS80_WAVE_SZE;
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		if (((int) wtp) == CS80_WAVE_SZE_M) {
 			ob[obp] += (wt1[0] * (wtp - ((float) ((int) wtp)))
@@ -349,7 +348,7 @@ register int count)
  *	count.
  *	gain.
  *
- * This oscillator is going to have 4 continous controllers for the signal
+ * This oscillator is going to have 4 continuous controllers for the signal
  * strengths of the different harmonics, 32/16/8/4. It will have different
  * gain levels for the tri and ramp waves. Finally the phase shifting pulse
  * wave will function probably on the lowest selected harmonic at first since
@@ -476,7 +475,7 @@ cs80oscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -623,7 +622,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * CS80_WAVE_GAIN;
 
@@ -681,8 +680,8 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
-					mem[i] = blosine[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.sine[i];
 				return;
 			}
 			fillPDwave(mem, count, 1.0);
@@ -695,8 +694,8 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
-					mem[i] = bloramp[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.ramp[i];
 				return;
 			}
 			fillPDwave(mem, count, 20.0);
@@ -711,14 +710,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blosquare[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.square[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -728,15 +727,15 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
-						mem[i] = blotriangle[i];
+					for (i = 0; i < count; i++)
+						mem[i] = blo.triangle[i];
 					return;
 				}
 
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -CS80_WAVE_GAIN
 						+ ((float) i / (count / 2)) * CS80_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = CS80_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* CS80_WAVE_GAIN;

@@ -259,7 +259,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/knobs/alpharotary.xpm", 0},
 	{"Reset", 2, C3 + BO, R2a, S2, S3, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", 0},
-	/* This is the Tremelo modifier */
+	/* This is the Tremolo modifier */
 	{"LFO-Mod-VCA", 2, C7 + B2, R4, S2, S3, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", 0},
 	{"Balance", 0, C3, R1 - 100, S1, S1, 0, 1, 0, "bitmaps/knobs/knob5.xpm", 
@@ -549,6 +549,7 @@ int loc, int o, int x, int y)
 	int fd, i, pSel;
 	brightonEvent event;
 	float pw[4];
+	const char * const memtag = (name ? name : synth->resources->name);
 
 	/*
 	 * Memory loading should be a few phases. Firstly see which layer is visible
@@ -588,24 +589,20 @@ int loc, int o, int x, int y)
 	/*
 	 * Now we need to consider the second layer.
 	 */
-	if ((name != 0) && (name[0] == '/'))
+	if (memtag[0] == '/')
 	{
-		sprintf(synth->mem.algo, "%s", name);
-		sprintf(path, "%s", name);
+		sprintf(path, "%s", memtag);
 	} else {
 		sprintf(path, "%s/memory/%s/%s%i.mem",
-			getBristolCache("midicontrollermap"), name, name, loc);
-		sprintf(synth->mem.algo, "%s", name);
-		if (name == NULL)
-			sprintf(synth->mem.name, "no name");
-		else
-			sprintf(synth->mem.name, "%s", name);
+			getBristolCache("midicontrollermap"), memtag, memtag, loc);
 	}
+	sprintf(synth->mem.algo, "%s", memtag);
+	sprintf(synth->mem.name, "%s", memtag);
 
 	if ((fd = open(path, O_RDONLY, 0770)) < 0)
 	{
 		sprintf(path, "%s/memory/%s/%s%i.mem",
-			global.home, name, name, loc);
+			global.home, memtag, memtag, loc);
 
 		if ((fd = open(path, O_RDONLY, 0770)) < 0)
 		{
@@ -697,7 +694,7 @@ printf("Load %f %f %f %f\n", pw[0], pw[1], pw[2], pw[3]);
 	/*
 	 * Finally load and push the sequence information for this memory.
 	 */
-	loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+	loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 	fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 }
 
@@ -706,18 +703,18 @@ obxaMidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
-			obxaLoadMemory(synth, "obxa", 0, synth->bank * 10 + synth->location,
+			obxaLoadMemory(synth, synth->resources->name, 0, synth->bank * 10 + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -761,7 +758,7 @@ printf("setting split point: %i\n", index);
 	 * each channel. If split then check the key we have selected, and if
 	 * poly send to each voice in turn.
 	 *
-	 * Take the tranpose out of here.
+	 * Take the transpose out of here.
 	 */
 	if (value)
 		bristolMidiSendMsg(global.controlfd, synth->midichannel,
@@ -993,7 +990,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 						126, 29, 0);
 			}
 			break;
-		case 9: /* Ammount - Wide Narrow mods */
+		case 9: /* Amount - Wide Narrow mods */
 			/* Nothing to do - just a flag that affects swing of wheels. */
 			/* That is not wise, it should really go to the engine */
 			break;
@@ -1004,7 +1001,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 			 * already sufficient transpose in the oscillators.
 			 */
 			if (value == 0) {
-				if (synth->mem.param[MOD_START + 11] == 0)
+				if (synth->mem.param[MOD_START + 11] == 0) {
 					/*
 					 * Default transpose
 					synth->transpose = 36;
@@ -1013,6 +1010,7 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 						BRISTOL_TRANSPOSE);
 					bristolMidiSendMsg(global.controlfd, synth->sid2, 127, 0,
 						BRISTOL_TRANSPOSE);
+				}
 			} else {
 				if (synth->mem.param[MOD_START + 11] != 0)
 				{
@@ -1030,12 +1028,13 @@ obxaModCallback(brightonWindow *cid, int panel, int index, float value)
 			break;
 		case 11: /* Transpose up - Radio buttons */
 			if (value == 0) {
-				if (synth->mem.param[MOD_START + 10] == 0)
+				if (synth->mem.param[MOD_START + 10] == 0) {
 					/* Default transpose */
 					bristolMidiSendMsg(global.controlfd, synth->sid, 127, 0,
 						BRISTOL_TRANSPOSE);
 					bristolMidiSendMsg(global.controlfd, synth->sid2, 127, 0,
 						BRISTOL_TRANSPOSE);
+				}
 			} else {
 				if (synth->mem.param[MOD_START + 10] != 0)
 				{
@@ -1221,7 +1220,7 @@ obxaWaveform(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	{
 		/*
 		 * If the sqr is being selected, then PW will modify this oscillator,
-		 * and if going off then it will cotrol the other
+		 * and if going off then it will control the other
 		 */
 		if (v != 0)
 			pwSelect = c;
@@ -1425,7 +1424,7 @@ synth->mem.param[MOD_START + OB_MODCOUNT + 4]);
 	/*
 	 * Just save a single sequencer, not one per memory. Can that, save lots
 	 */
-	saveSequence(synth, "obxa", loc, 0);
+	saveSequence(synth, synth->resources->name, loc, 0);
 
 	/*
 	 * Now we need to consider the second layer.
@@ -1472,7 +1471,7 @@ obxaSequence(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	printf("obxaSequence\n");
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1668,7 +1667,7 @@ printf("obxaArpeggiate: %i %i\n", c, v);
 	}
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1734,7 +1733,7 @@ obxaChord(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	printf("Chord request: %i\n", v);
 
 	if (synth->seq1.param == NULL) {
-		loadSequence(&synth->seq1, "obxa", synth->bank*10 + synth->location, 0);
+		loadSequence(&synth->seq1, synth->resources->name, synth->bank*10 + synth->location, 0);
 		fillSequencer(synth, (arpeggiatorMemory *) synth->seq1.param, 0);
 	}
 
@@ -1800,12 +1799,12 @@ obxaMemory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	switch (c) {
 		case 16:
 			/* Load */
-			obxaLoadMemory(synth, "obxa", 0, synth->bank * 10 + synth->location,
+			obxaLoadMemory(synth, synth->resources->name, 0, synth->bank * 10 + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case 17:
 			/* Save */
-			obxaSaveMemory(synth, "obxa", 0,
+			obxaSaveMemory(synth, synth->resources->name, 0,
 				synth->bank * 10 + synth->location, 0);
 			break;
 		case 0:
@@ -1885,12 +1884,12 @@ obxaMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 	/*
 	 * For this synth we are going to try and put everything on a single 
-	 * midi channel - split poly is all voices, split will tell the engine
+	 * MIDI channel - split poly is all voices, split will tell the engine
 	 * which ranges apply to which voices on this synth, layer will apply 
 	 * two notes on the channel, and unison all of them. Unison should really
 	 * be an engine feature to setup every voice for a given baudio structure.
 	 *
-	 * This works badly for the Prophet10 though, so may go for two midi 
+	 * This works badly for the Prophet10 though, so may go for two MIDI 
 	 * channels and decide how to intepret them.
 	 */
 	if (c == 2) {
@@ -2235,7 +2234,7 @@ obxaInit(brightonWindow *win)
 	dispatch[FIRST_DEV + 41].controller = 41;
 	dispatch[FIRST_DEV + 41].operator = 0;
 	dispatch[FIRST_DEV + 41].routine = (synthRoutine) obxaDecay;
-	/* Mod to tremelo */
+	/* Mod to tremolo */
 	dispatch[FIRST_DEV + 42].controller = 126;
 	dispatch[FIRST_DEV + 42].operator = 18;
 	/* Balance. Should work as a dispatcher along with master volume? */
@@ -2438,7 +2437,7 @@ obxaConfigure(brightonWindow *win)
 	 * For the OBXa, most of the following has to be moved into the memory
 	 * load routines. It is a new paradigm - one panel, two synths.
 	 */
-	obxaLoadMemory(synth, "obxa", 0, initmem,
+	obxaLoadMemory(synth, synth->resources->name, 0, initmem,
 		synth->mem.active, FIRST_DEV, 0);
 
 	synth->mem.param[LAYER_SWITCH] = 0;

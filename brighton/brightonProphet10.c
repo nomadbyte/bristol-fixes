@@ -296,7 +296,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 /*
  * This is for the lower mod panel. It will control the MIDI operational mode
  * for poly/split/layer stuff and mod routing. It is not totally according to
- * the original that used the panel for argeggio. This may also control some
+ * the original that used the panel for arpeggio. This may also control some
  * of the mod routing for each layer. It will not be saved in the memories.
  */
 #define P10_MOD_COUNT 15
@@ -482,18 +482,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %i, %i\n", controller, value);
+	printf("MIDI callback: %i, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "prophet", 0, synth->bank + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -545,13 +545,13 @@ pro10DLP(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			/*
 			 * Dual keyboard:
 			 *
-			 * 	Separate the midi channels
+			 * 	Separate the MIDI channels
 			 * 	Half the key count for primary layer
 			 * 	Max out the split for second layer
 			 */
 			keymode = MODE_DUAL;
 
-			/* Separate the midi channels */
+			/* Separate the MIDI channels */
 			if (synth->midichannel == 15) {
 				synth->midichannel--;
 				bristolMidiSendMsg(global.controlfd, synth->sid,
@@ -576,13 +576,13 @@ pro10DLP(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			/*
 			 * Layered keyboards
 			 *
-			 * 	Join up the midi channels
+			 * 	Join up the MIDI channels
 			 * 	Half the key count for primary layer
 			 * 	Max out the split for second layer
 			 */
 			keymode = MODE_LAYER;
 
-			/* Join the midi channel */
+			/* Join the MIDI channel */
 			bristolMidiSendMsg(global.controlfd, synth->sid2,
 				127, 0, (BRISTOL_MIDICHANNEL|synth->midichannel));
 			/* Halve the voicecount */
@@ -598,13 +598,13 @@ pro10DLP(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			/*
 			 * 10 Note Poly keyboards
 			 *
-			 * 	Join up the midi channels
+			 * 	Join up the MIDI channels
 			 * 	Double the key count for primary layer
 			 * 	Zero out the split for second layer
 			 */
 			keymode = MODE_POLY;
 
-			/* Join the midi channel although this is superfluous */
+			/* Join the MIDI channel although this is superfluous */
 			bristolMidiSendMsg(global.controlfd, synth->sid2,
 				127, 0, (BRISTOL_MIDICHANNEL|synth->midichannel));
 			/* Whole the voicecount */
@@ -705,7 +705,7 @@ midiRelease(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	if (!global.libtest)
 	{
 		/*
-		 * Midi release is ALL notes, ALL synths. If this behaviour (in the
+		 * MIDI release is ALL notes, ALL synths. If this behaviour (in the
 		 * engine) changes we may need to put in an all_notes_off on the
 		 * second manual as well.
 		 */
@@ -722,7 +722,7 @@ ummodCallback(brightonWindow *win, int panel, int index, float value)
 	synth->mem.param[UM_MOD_INDEX + index] = value;
 
 	/*
-	 * Selector buttonn debugs.
+	 * Selector button debugs.
 	printf("ummodCallback(%i, %i, %f) [%f %f %f %f]\n", panel, index, value,
 		synth->mem.param[UM_MOD_INDEX + 2],
 		synth->mem.param[UM_MOD_INDEX + 3],
@@ -979,7 +979,7 @@ printf("	Learning on second layer\n");
 /*
  * This used to send key events on one or two channels depending on the config.
  * Nothing really wrong with that however it would be better to actually tell
- * the emmulator what midi channels to use so that other master keyboards work
+ * the emulator what MIDI channels to use so that other master keyboards work
  * as expected.
  *
  * For 10 vs 5 layered voices (layer versus poly) we also need to add some
@@ -1698,7 +1698,7 @@ pro10Init(brightonWindow *win)
 		/*
 		 * This looks a bit evil now but whatever happens it gets fixed later
 		 * when the dual/split/layer is configured - that will 'retweak' the
-		 * midi channels.
+		 * MIDI channels.
 		 */
 		if (++synth->midichannel > 15)
 			synth->midichannel = 15;

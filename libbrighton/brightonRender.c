@@ -87,7 +87,7 @@ brightonWorldChanged(brightonWindow *bwin, int width, int height)
 	 * them.
 	 *
 	 * 110908 - FR 2243291 - Add an option to override the checks for aspect
-	 * ratio. Required by some window managers to prevent permanant redrawing 
+	 * ratio. Required by some window managers to prevent permanent redrawing 
 	 * of the window however it results in some pretty gruesome images if the
 	 * ratio is not a reasonable approximation of the original.
 	 *
@@ -742,7 +742,7 @@ register int x, register int y, register int width, register int height)
 			 *
 			 * Adding another layer initially for patch cabling. We should
 			 * consider adding the top layer last and allow it to act as a 
-			 * transparancy, but that is non trivial since we are not dealing
+			 * transparency, but that is non trivial since we are not dealing
 			 * with colors, but with pixel identifiers. FFS. Done.
 			 *
 			 * FS: We should paint in the pixel as if the transparency were
@@ -754,7 +754,7 @@ register int x, register int y, register int width, register int height)
 			 * implemented a trivial LR/TB antialiasing. Will extend it to use
 			 * a sandwiched bitmap since otherwise there are issues with how
 			 * devices are rendered - they are not antialiased as they appear
-			 * in a separate layer. The results are actualy quite nice, the
+			 * in a separate layer. The results are actually quite nice, the
 			 * textures and blueprints get smoothed and the devices stand out
 			 * as more than real. Optional total smoothing is also possible.
 			 */
@@ -851,7 +851,7 @@ register int x, register int y, register int width, register int height)
 }
 
 /*
- * A tesselation algorithm, takes a bitmap and tiles it onto the specified area.
+ * A tessellation algorithm, takes a bitmap and tiles it onto the specified area.
  */
 int
 brightonTesselate(register brightonWindow *bwin, register brightonBitmap *src,
@@ -956,7 +956,7 @@ brightonround(float x)
 }
 
 /*
- * This is a scaling render algorithm. Takes a bitmap and speads it across
+ * This is a scaling render algorithm. Takes a bitmap and spreads it across
  * the brightonWindow canvas area with interpolative antialiasing. It is only
  * really intended for blueprints as they are the only ones that are not easily
  * interpolated.
@@ -991,7 +991,7 @@ src->width, src->height, primary);
 		return;
 
 	/*
-	 * Scratch should be allocated and only reallocated if it inceases in size
+	 * Scratch should be allocated and only reallocated if it increases in size
 	 * which is a fairly easy enhancement.
 	 */
 	scratch = (int *) brightonmalloc(sizeof(int) * dest->width * dest->height);
@@ -1032,7 +1032,7 @@ src->width, src->height, primary);
 			 * Set pixel. Since we are using brightonBitmaps we do not have to
 			 * go around using X library calls to set the pixel states.
 			 *
-			 * We may want to put in here isblue then destpixel;continue;
+			 * We may want to put in here isblue then destpixel; continue;
 			 */
 			if (isblue(ix + iy * src->width, palette, pixels))
 				c = scratch[(int) (i + j * dest->width)];
@@ -1169,7 +1169,7 @@ printf("%f %f: %f %i, %f %i\n",  px, py, fx, ix, fy, iy);
 }
 
 /*
- * This is a scaling render algorithm. Takes a bitmap and speads it across
+ * This is a scaling render algorithm. Takes a bitmap and spreads it across
  * the brightonWindow canvas area. We should do some bounds checking first.
  */
 void

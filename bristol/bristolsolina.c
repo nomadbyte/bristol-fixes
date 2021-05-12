@@ -112,7 +112,7 @@ baudio->effect[0]->param->param[5].float_val);
 			((solinamods *) baudio->mixlocals)->vibrato = value / 128;
 			break;
 		case 8:
-			((solinamods *) baudio->mixlocals)->tremelo = value / 8;
+			((solinamods *) baudio->mixlocals)->tremolo = value / 8;
 			break;
 		case 10:
 			if (value == 0)
@@ -313,7 +313,7 @@ bristolVoice *voice, register float *startbuf)
 	audiomain->palette[(*baudio->sound[4]).index]->specs->io[2].buf
 		= baudio->leftbuf;
 
-	bufmerge(lfobuf, mods->tremelo, freqbuf, 1.0, samplecount);
+	bufmerge(lfobuf, mods->tremolo, freqbuf, 1.0, samplecount);
 
 	(*baudio->sound[4]).operate(
 		(audiomain->palette)[2],

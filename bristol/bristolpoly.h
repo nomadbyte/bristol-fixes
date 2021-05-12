@@ -50,7 +50,7 @@
 
 /*
  * Have to watch out here, mixflags are also used globally in the range
- * 0xffff0000.00000000 for midi ops, we can use the rest in the algo though.
+ * 0xffff0000.00000000 for MIDI ops, we can use the rest in the algo though.
  *
  * These need to go into some local structure for multiple instances
  * of the poly - malloc()ed into the baudio->mixlocals.

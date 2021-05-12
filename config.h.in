@@ -33,7 +33,7 @@
 /* Define to 1 if you have the <X11/extensions/XShm.h> header file. */
 #undef HAVE_X11_EXTENSIONS_XSHM_H
 
-/* Define to enable jack session support */
+/* Define to enable JACK session support */
 #undef JACK_SESSION
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.

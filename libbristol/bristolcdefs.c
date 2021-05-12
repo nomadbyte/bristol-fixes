@@ -25,6 +25,7 @@
 
 void *
 bristolmalloc(size)
+size_t size;
 {
 	char *mem;
 
@@ -39,6 +40,7 @@ bristolmalloc(size)
 
 void *
 bristolmalloc0(size)
+size_t size;
 {
 	char *mem;
 

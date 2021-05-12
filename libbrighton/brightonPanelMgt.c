@@ -119,7 +119,7 @@ configurePanel(brightonWindow *bwin, brightonIResource *panel,
 //printf("	REQ UNEXPOSE %x %x\n", (size_t) event, (size_t) panel);
 				panel->flags |= BRIGHTON_WITHDRAWN;
 				/*
-				 * On unexpose events we dont do any redraws? Conceptually we
+				 * On unexpose events we don't do any redraws? Conceptually we
 				 * only have overlapping panels, and EXPOSE/UNEXPOSE go in
 				 * pairs - the next event on another panel will draw over the
 				 * top of me.
@@ -216,7 +216,7 @@ configurePanel(brightonWindow *bwin, brightonIResource *panel,
 			bvgRenderInt(bwin, rindex(panel->image->name, '/'), panel->canvas);
 
 		/*
-		 * And then render it onto the window cavas area
+		 * And then render it onto the window canvas area
 		 */
 		brightonStretch(bwin, panel->canvas, bwin->canvas, panel->sx, panel->sy,
 			panel->sw, panel->sh, BRIGHTON_ANTIALIAS);
@@ -542,7 +542,7 @@ brightonCreateInterface(brightonWindow *bwin, brightonApp *app)
 		bwin->app->resources[i].surface = brightonReadImage(bwin, res->surface);
 
 		/*
-		 * We need to calculate our size, and then create a backgorund canvas
+		 * We need to calculate our size, and then create a background canvas
 		 * for panel rendering. This will only happen when the first configure
 		 * notify arrives.
 		 */

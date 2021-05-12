@@ -369,7 +369,7 @@ configure(brightonDevice *dev, brightonEvent *event)
 		/*
 		 * If this was not a space bar which we use to activate and de-activate
 		 * any arbitrary button then it could be that we pressed some key that
-		 * can otherwise be interpretted.
+		 * can otherwise be interpreted.
 		 * This is awkward since here we are in a single button and I would 
 		 * like to use keypress to emulate a piano keyboard from the computer.
 		 * These events would have to be delivered to the parent, not to the

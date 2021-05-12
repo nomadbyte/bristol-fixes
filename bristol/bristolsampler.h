@@ -21,6 +21,6 @@
 
 #define J_LFO_MAN		0x0001
 #define HAVE_STARTED	0x0002
-#define HAVE_FINNISHED	0x0004
+#define HAVE_FINISHED	0x0004
 #define J_LFO_AUTO		0x0008
 

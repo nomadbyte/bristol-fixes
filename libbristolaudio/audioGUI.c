@@ -26,7 +26,7 @@
  * applications.
  *
  * The operations for audio control are rather ugly. The application sets up
- * a number of values in the controlBuffer, and the engine intermittanly looks
+ * a number of values in the controlBuffer, and the engine intermittently looks
  * to see if these values are initialised. If so, it acts on the values, and
  * then clears them. The reason we have to use this indirection is that the
  * front end applications do not own the audio device, this is under control
@@ -161,6 +161,7 @@ duplexDev *audioDev;
 char *
 getControllerName(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -173,6 +174,8 @@ duplexDev *audioDev;
 int
 setRecordSource(audioDev, controller, position)
 duplexDev *audioDev;
+int controller;
+int position;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -185,6 +188,7 @@ duplexDev *audioDev;
 int
 getRecordability(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -197,6 +201,7 @@ duplexDev *audioDev;
 int
 getMutability(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -211,6 +216,7 @@ duplexDev *audioDev;
 int
 getStereoStatus(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -222,6 +228,8 @@ duplexDev *audioDev;
 int
 getValue(audioDev, controller, side)
 duplexDev *audioDev;
+int controller;
+int side;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)
@@ -233,6 +241,9 @@ duplexDev *audioDev;
 int
 setAudioValue(audioDev, controller, side, value)
 duplexDev *audioDev;
+int controller;
+int side;
+int value;
 {
 	if (audioDev->cflags & SLAB_AUDIODBG)
 		printf("setAudioValue(%p, %i, %i, %i)\n", audioDev, controller, side, value); 
@@ -251,6 +262,8 @@ duplexDev *audioDev;
 int
 setAudioMute(audioDev, controller, value)
 duplexDev *audioDev;
+int controller;
+int value;
 {
 	if (audioDev->cflags & SLAB_AUDIODBG)
 		printf("setAudioMute()\n");
@@ -280,6 +293,7 @@ char *name;
 int
 getAudioCapability(audioDev, controller)
 duplexDev *audioDev;
+int controller;
 {
 	if (audioDev->cflags & SLAB_AUDIODBG)
 		printf("getAudioCapability(%s, %i)\n", audioDev->devName, controller);
@@ -296,6 +310,7 @@ duplexDev *audioDev;
 int
 validDev(audioDev, index)
 duplexDev *audioDev;
+int index;
 {
 #if (BRISTOL_HAS_ALSA == 1)
 	if ((audioDev->flags & AUDIO_ALSA) != 0)

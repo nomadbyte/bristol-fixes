@@ -220,7 +220,7 @@ static brightonLocations locations[C_COUNT] = {
 
 	/*
 	 * 28 - Dummies. May one day extend the bass drawbar configuration as per
-	 * some other emulations. It is extremely easy to do, just not convinved it
+	 * some other emulations. It is extremely easy to do, just not convinced it
 	 * really make sense.
 	 */
 	{"", BRIGHTON_HAMMOND, Cm2, R1, W1, L1, 0, 8, 0,
@@ -249,7 +249,7 @@ static brightonLocations leslie[2] = {
 		"bitmaps/buttons/sw5.xpm", BRIGHTON_VERTICAL|BRIGHTON_NOSHADOW},
 	{"", 2, 100, 100, 800, 200, 0, 1, 0,
 	/*
-	 * Use a slighly older rocker than the plastic white, looks mildly more
+	 * Use a slightly older rocker than the plastic white, looks mildly more
 	 * authentic.
 		"bitmaps/buttons/rockerwhite.xpm", 0, 0}
 	 */
@@ -303,7 +303,7 @@ static brightonLocations mem[MEM_COUNT] = {
 	{"", 2, mC4, mR4, S4, S5, 0, 1, 0,
 		"bitmaps/buttons/pressoffg.xpm", 
 		"bitmaps/buttons/pressong.xpm", 0},
-	/* midi U, D, Load, Save */
+	/* MIDI U, D, Load, Save */
 	{"", 2, mC1, mR2, S4, S5, 0, 1, 0,
 		"bitmaps/buttons/pressoff.xpm", 
 		"bitmaps/buttons/presson.xpm", BRIGHTON_CHECKBUTTON},
@@ -960,7 +960,7 @@ hammondB3Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		}
 	} else {
 		/*
-		 * On the upper side we need to reserve two midi channels
+		 * On the upper side we need to reserve two MIDI channels
 		 */
 		if ((newchan = synth->midichannel + 1) >= 15)
 		{
@@ -970,7 +970,7 @@ hammondB3Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	}
 
 	/*
-	 * Lower manual midi channel selection first
+	 * Lower manual MIDI channel selection first
 	 */
 	bristolMidiSendMsg(manual.controlfd, synth->sid2,
 		127, 0, (BRISTOL_MIDICHANNEL|newchan) + 1);
@@ -1746,7 +1746,7 @@ hammondB3Init(brightonWindow *win)
 
 	dispatch[VOL_START].routine = (synthRoutine) doVolume;
 
-	/* Memory/Midi buttons */
+	/* Memory/MIDI buttons */
 	dispatch[MEM_START + 10].controller = 12;
 	dispatch[MEM_START + 10].operator = 0;
 
@@ -1784,7 +1784,7 @@ hammondB3Init(brightonWindow *win)
 		dispatch[MEM_START + 14].routine = (synthRoutine) hammondB3Memory;
 
 	/*
-	 * Midi up/down
+	 * MIDI up/down
 	 */
 	dispatch[MEM_START + 10].controller = 2;
 	dispatch[MEM_START + 11].controller = 1;
@@ -1832,18 +1832,18 @@ hammondB3MidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "hammondB3", 0, synth->bank + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}

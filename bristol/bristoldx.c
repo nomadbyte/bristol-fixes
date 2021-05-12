@@ -100,7 +100,7 @@ u_char operator, float value)
 
 	/*
 	 * We have an algorithm parameter which configures the order of IO for the
-	 * fm operators, and a set of flags for key tracking per operator.
+	 * FM operators, and a set of flags for key tracking per operator.
 	 */
 	op = operator / 10;
 	index = operator - (op * 10);
@@ -123,7 +123,7 @@ u_char operator, float value)
 			break;
 		case 3:
 			/*
-			 * Configure cont controller 1 to adust IGAIN.
+			 * Configure cont controller 1 to adjust IGAIN.
 			 */
 			if (value == 0)
 				mix[op].flags &= ~DX_IGC;
@@ -439,7 +439,7 @@ DXalgoN(audioMain *am, register Baudio *ba, bristolVoice *voice, float *kb)
 			break;
 		case 8:
 			/*
-			 * Op0 and op1 feed op2, and ops 3 to 6 feed eachother.
+			 * Op0 and op1 feed op2, and ops 3 to 6 feed each other.
 			 */
 			dxOpOne(0, kb, op0buf, op1buf, sc, mix, am, ba, voice);
 			dxOpOne(1, kb, op1buf, op0buf, sc, mix, am, ba, voice);

@@ -263,7 +263,7 @@ bristolVoice *voice, register float *startbuf)
 	bristolbzero(scratch, audiomain->segmentsize);
 	/*
 	 * There are a lot of mods in this synth, each operator will produce its
-	 * output buffer, and then they will modulate eachother.
+	 * output buffer, and then they will modulate each other.
 	 *
 	 * Noise is done, run the LFO and ADSR.
 	 */

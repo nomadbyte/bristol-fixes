@@ -62,7 +62,7 @@ extern void bristolMidiPrintGM2();
 #define BRISTOL_CONN_MIDI		0x00000040
 #define BRISTOL_CONN_OSSMIDI	0x00000080 /* As opposed to ALSA */
 #define BRISTOL_CONN_SEQ		0x00000100 /* ALSA Sequencer interface */
-#define BRISTOL_CONN_JACK		0x00000200 /* Jack Midi interface */
+#define BRISTOL_CONN_JACK		0x00000200 /* JACK MIDI interface */
 
 #define BRISTOL_CONN_PASSIVE	0x00001000 /* listen socket. */
 #define BRISTOL_CONN_FORCE		0x00002000
@@ -83,7 +83,7 @@ extern void bristolMidiPrintGM2();
 #define _BRISTOL_MIDI_DEBUG		0x20000000
 
 /*
- * Midi command codes
+ * MIDI command codes
  */
 #define BRISTOL_MIDI_CHANNELS 16
 #define BRISTOL_NOTE_ON (1 << (MIDI_NOTE_ON >> 4))
@@ -158,7 +158,7 @@ extern void bristolMidiPrintGM2();
 #define BRISTOL_REQ_SYSEX	0x080
 
 #define BRISTOL_REQ_ALL		0x0ff
-#define BRISTOL_REQ_NSX		0x07f /* not sysex messages....... */
+#define BRISTOL_REQ_NSX		0x07f /* not SysEx messages....... */
 
 #define MIDI_GM_DATAENTRY	6
 #define MIDI_GM_NRP			99

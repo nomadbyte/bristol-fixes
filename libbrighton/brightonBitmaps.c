@@ -150,7 +150,7 @@ brightonFreeBitmap(brightonWindow *bwin, brightonBitmap *bitmap)
 					bwin->bitmaps = bitmaplist->next;
 
 				if (bitmaplist->colormap)
-					for (i = 0; i < bitmaplist->ncolors;i++)
+					for (i = 0; i < bitmaplist->ncolors; i++)
 					{
 						brightonFreeGC(bwin, bitmaplist->colormap[i]);
 					}

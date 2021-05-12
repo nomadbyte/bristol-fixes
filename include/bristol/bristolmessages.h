@@ -32,7 +32,7 @@
 #define MSG_TYPE_SESSION 8 // Type-2 messages
 
 /*
- * These will be wrapped in s MIDI sysex, and sent down the control link.
+ * These will be wrapped in MIDI SysEx, and sent down the control link.
  * We will either require ALL codes are 7 bits only, or will put in an 
  * encoder.
  */

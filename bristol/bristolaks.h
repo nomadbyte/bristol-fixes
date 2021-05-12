@@ -28,7 +28,7 @@
 #define A_AR_ON				0x0010
 
 /*
- * These are the output indeces.
+ * These are the output indexes.
  */
 #define AKS_O_CH1		0
 #define AKS_O_CH2		1
