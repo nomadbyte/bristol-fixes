@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -135,10 +135,10 @@ bristolMidiPrint(bristolMidiMsg *msg)
  * and fine, others denote semitone and cents, etc, some are integer rather
  * than floats. It might be better to call this later if parsing is required.
  *
- * We also need to have a midi controller mapping system. If a controller is
+ * We also need to have a MIDI controller mapping system. If a controller is
  * remapped then we should consider it to be coarse only?
  *
- * The engine has a version of this code with different parameterisation. It 
+ * The engine has a version of this code with different parametrisation. It 
  * is in midihandlers and we should pull it out into the library.
  */
 void
@@ -361,7 +361,7 @@ parseCommand(unsigned char comm, int dev)
 #endif
 
 	/*
-	 * We have a new command, save any interesting device state infomation.
+	 * We have a new command, save any interesting device state information.
 	 */
 	bmidi.dev[dev].lastchan = comm & MIDI_CHAN_MASK;
 	bmidi.dev[dev].lastcommand = comm & MIDI_COMMAND_MASK;
@@ -375,7 +375,7 @@ parseCommand(unsigned char comm, int dev)
 			{
 				/*
 				if (bmidi.dev[dev].sysex.count != sizeof(bristolMsg))
-					printf("Was bad sysex message (wrong length)\n");
+					printf("Was bad SysEx message (wrong length)\n");
 				else
 					printf("Was right length message: %x\n",
 						bmidi.dev[dev].sysex.count);
@@ -433,7 +433,7 @@ bristolMidiRawToMsg(unsigned char *buff, int count, int index, int dev,
 	/*
 	 * Although we know that we have buffered data, we do not know if we are
 	 * being given complete messages by the raw interface - it could be byte by
-	 * byte, or chunks of a large sysex. Parse the data byte by byte, and see
+	 * byte, or chunks of a large SysEx. Parse the data byte by byte, and see
 	 * if we can put together complete messages.
 	 *
 	 * Check out our current command in operation on this device:
@@ -442,7 +442,7 @@ bristolMidiRawToMsg(unsigned char *buff, int count, int index, int dev,
 	while (parsed < count)
 	{
 		/*
-		 * If this is a status byte, find out what we cn do with it. Otherwise
+		 * If this is a status byte, find out what we can do with it. Otherwise
 		 * look for data commands.
 		if ((bmidi.dev[dev].lastcommand != MIDI_SYSTEM) &&
 			(buff[index] & MIDI_STATUS_MASK))
@@ -478,7 +478,7 @@ bristolMidiRawToMsg(unsigned char *buff, int count, int index, int dev,
 					 * Otherwise, go get the command, checking for buffer wrap.
 					 * We also need to make sure that the next spare byte is not
 					 * a status byte - ie, that we have not binned a byte in the
-					 * midi cable.
+					 * MIDI cable.
 					 */
 					if ((index + 1) == BRISTOL_MIDI_BUFSIZE)
 					{
@@ -511,7 +511,8 @@ bristolMidiRawToMsg(unsigned char *buff, int count, int index, int dev,
 					if (bmidi.dev[dev].sysex.count < 12)
 						((char *) &msg->params.bristol)
 							[bmidi.dev[dev].sysex.count] = buff[index];
-						bmidi.dev[dev].sysex.count++;
+
+					bmidi.dev[dev].sysex.count++;
 
 					if (bmidi.dev[dev].sysex.count == 4)
 					{

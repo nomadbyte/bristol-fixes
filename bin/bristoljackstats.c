@@ -60,8 +60,8 @@ bristolJackTest()
 }
 
 /*
- * This should go out as the first release with Jack. After that the interface
- * will change - at the moment Jack subsumes Bristol, and this is the wrong
+ * This should go out as the first release with JACK. After that the interface
+ * will change - at the moment JACK subsumes Bristol, and this is the wrong
  * way around. The audiomain structure is buried inside the jack structure,
  * but I would prefer the contrary. In addition, with it the contrary then
  * it would be easier to integrate alternative distribution drivers (DSSI).
@@ -77,7 +77,7 @@ main(int argc, char *argv[])
 //	printf("%s: connect to jackd to find samplerate and period size\n",
 //		argv[0]);
 
-	/* I don't want all the output from jack, redirect it */
+	/* I don't want all the output from JACK, redirect it */
 	outfd = dup(STDOUT_FILENO);
 	nullfd = open("/dev/null", O_WRONLY);
 	dup2(nullfd, STDOUT_FILENO);
@@ -92,7 +92,7 @@ main(int argc, char *argv[])
 
 	return(0);
 #else
-	printf("This should connect to jack but it does not appear to be compiled\n");
+	printf("This should connect to JACK but it does not appear to be compiled\n");
 	return(-2);
 #endif /* _BRISTOL_JACK */
 

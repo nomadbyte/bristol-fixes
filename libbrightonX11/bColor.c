@@ -221,7 +221,7 @@ BInitColorMap(brightonDisplay *display)
 					bd->depth, DirectColor, &bd->dvi))
 				{
 					/*
-					 * No Psuedos or Directs. We could consider greyscale....
+					 * No Pseudos or Directs. We could consider greyscale....
 					 * This is probably superfluous these days.
 					 */
 					printf("Prefer not to have greyscale graphics.\n");

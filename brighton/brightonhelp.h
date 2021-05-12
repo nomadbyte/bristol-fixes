@@ -28,48 +28,48 @@ char *helptext = "\nA synthesiser emulation package.\n\
 \n\
     Emulation:\n\
 \n\
-        -mini              - moog mini\n\
-        -explorer          - moog voyager\n\
-        -voyager           - moog voyager electric blue\n\
-        -memory            - moog memory\n\
-        -sonic6            - moog sonic 6\n\
-        -mg1               - moog/realistic mg-1 concertmate\n\
-        -hammond           - hammond module (deprecated, use -b3)\n\
-        -b3                - hammond B3 (default)\n\
-        -prophet           - sequential circuits prophet-5\n\
-        -pro52             - sequential circuits prophet-5/fx\n\
-        -pro10             - sequential circuits prophet-10\n\
-        -pro1              - sequential circuits pro-one\n\
-        -rhodes            - fender rhodes mark-I stage 73\n\
-        -rhodesbass        - fender rhodes bass piano\n\
-        -roadrunner        - crumar roadrunner electric piano\n\
-        -bitone            - crumar bit 01\n\
-        -bit99             - crumar bit 99\n\
-        -bit100            - crumar bit + mods\n\
-        -stratus           - crumar stratus synth/organ combo\n\
-        -trilogy           - crumar trilogy synth/organ/string combo\n\
-        -obx               - oberheim OB-X\n\
-        -obxa              - oberheim OB-Xa\n\
-        -axxe              - arp axxe\n\
-        -odyssey           - arp odyssey\n\
-        -arp2600           - arp 2600\n\
-        -solina            - arp/solina string ensemble\n\
-        -polysix           - korg polysix\n\
-        -poly800           - korg poly-800\n\
-        -monopoly          - korg mono/poly\n\
-        -ms20              - korg ms20 (unfinished: -libtest only)\n\
-        -vox               - vox continental\n\
-        -voxM2             - vox continental super/300/II\n\
-        -juno              - roland juno-60\n\
-        -jupiter           - roland jupiter-8\n\
-        -bme700            - baumann bme-700\n\
-        -bm                - bristol bassmaker sequencer\n\
-        -dx                - yamaha dx-7\n\
-        -cs80              - yamaha cs-80 (unfinished)\n\
-        -sidney            - commodore-64 SID chip synth\n\
-        -melbourne         - commodore-64 SID polyphonic synth (unfinished)\n\
-        -granular          - granular synthesiser (unfinished)\n\
-        -aks               - ems synthi-a (unfinished)\n\
+        -mini              - Moog Mini\n\
+        -explorer          - Moog Voyager\n\
+        -voyager           - Moog Voyager Electric Blue\n\
+        -memory            - Moog Memory\n\
+        -sonic6            - Moog Sonic 6\n\
+        -mg1               - Moog/Realistic MG-1 Concertmate\n\
+        -hammond           - Hammond module (deprecated, use -b3)\n\
+        -b3                - Hammond B3 (default)\n\
+        -prophet           - Sequential Circuits Prophet-5\n\
+        -pro52             - Sequential Circuits Prophet-5/FX\n\
+        -pro10             - Sequential Circuits Prophet-10\n\
+        -pro1              - Sequential Circuits pro-one\n\
+        -rhodes            - Fender Rhodes Mark-I Stage 73\n\
+        -rhodesbass        - Fender Rhodes Piano Bass\n\
+        -roadrunner        - Crumar Roadrunner electric piano\n\
+        -bitone            - Crumar bit 01\n\
+        -bit99             - Crumar bit 99\n\
+        -bit100            - Crumar bit + mods\n\
+        -stratus           - Crumar Stratus synth/organ combo\n\
+        -trilogy           - Crumar Trilogy synth/organ/string combo\n\
+        -obx               - Oberheim OB-X\n\
+        -obxa              - Oberheim OB-Xa\n\
+        -axxe              - ARP Axxe\n\
+        -odyssey           - ARP Odyssey\n\
+        -arp2600           - ARP 2600\n\
+        -solina            - ARP/Solina String Ensemble\n\
+        -polysix           - Korg Polysix\n\
+        -poly800           - Korg Poly-800\n\
+        -monopoly          - Korg Mono/Poly\n\
+        -ms20              - Korg MS-20 (unfinished: -libtest only)\n\
+        -vox               - Vox Continental\n\
+        -voxM2             - Vox Continental Super/300/II\n\
+        -juno              - Roland Juno-60\n\
+        -jupiter           - Roland Jupiter-8\n\
+        -bme700            - Baumann BME-700\n\
+        -bm                - Bristol bassmaker sequencer\n\
+        -dx                - Yamaha DX7\n\
+        -cs80              - Yamaha CS-80 (unfinished)\n\
+        -sidney            - Commodore-64 SID chip synth\n\
+        -melbourne         - Commodore-64 SID polyphonic synth (unfinished)\n\
+        -granular          - Granular synthesiser (unfinished)\n\
+        -aks               - EMS Synthi A (unfinished)\n\
         -mixer             - 16 track mixer (unfinished: -libtest only)\n\
 \n\
     Synthesiser:\n\
@@ -81,7 +81,7 @@ char *helptext = "\nA synthesiser emulation package.\n\
         -nnp               - no/last note preference (-mono)\n\
         -retrig            - monophonic note logic legato trigger (-mono)\n\
         -lvel              - monophonic note logic legato velocity (-mono)\n\
-        -channel <c>       - initial midi channel selected to 'c' (default 1)\n\
+        -channel <c>       - initial MIDI channel selected to 'c' (default 1)\n\
         -lowkey <n>        - minimum MIDI note response (0)\n\
         -highkey <n>       - maximum MIDI note response (127)\n\
         -detune <%>        - 'temperature sensitivity' of emulation (0)\n\
@@ -90,13 +90,13 @@ char *helptext = "\nA synthesiser emulation package.\n\
         -velocity <v>      - MIDI velocity mapping curve (510) (-mvc)\n\
         -glide <s>         - MIDI glide duration (5)\n\
         -emulate <name>    - search for the named synth or exit\n\
-        -register <name>   - name used for jack and alsa device regisration\n\
+        -register <name>   - name used for JACK and ALSA device registration\n\
         -lwf               - emulator lightweight filters\n\
         -nwf               - emulator default filters\n\
         -wwf               - emulator welterweight filters\n\
         -hwf               - emulator heavyweight filters\n\
         -blo <h>           - maximum # band limited harmonics (31)\n\
-        -blofraction <f>   - band limiting nyquist fraction (0.8)\n\
+        -blofraction <f>   - band limiting Nyquist fraction (0.8)\n\
         -scala <file>      - read the scala .scl tonal mapping table\n\
 \n\
     User Interface:\n\
@@ -122,14 +122,14 @@ char *helptext = "\nA synthesiser emulation package.\n\
         -mbi <m>           - master bank index (0)\n\
         -activesense <m>   - active sense rate (2000 ms)\n\
         -ast <m>           - active sense timeout (15000 ms)\n\
-        -mct <m>           - midi cycle timeout (50 ms)\n\
+        -mct <m>           - MIDI cycle timeout (50 ms)\n\
         -ar|-aspect        - ignore emulator requested aspect ratio\n\
         -iconify           - start with iconified window\n\
-        -window            - toggle switch to enable X11 window interfacen\n\
+        -window            - toggle switch to enable X11 window interface\n\
         -cli               - enable command line interface\n\
         -libtest           - gui test option, engine not invoked\n\
 \n\
-        Gui keyboard shortcuts:\n\
+        GUI keyboard shortcuts:\n\
 \n\
             <Ctrl> 's'     - save settings to current memory\n\
             <Ctrl> 'l'     - (re)load current memory\n\
@@ -160,8 +160,8 @@ char *helptext = "\nA synthesiser emulation package.\n\
 \n\
             -engine        - don't start engine (connect to existing engine)\n\
             -gui           - don't start gui (only start engine)\n\
-            -server        - run engine as a permanant server\n\
-            -daemon        - run engine as a detached permanant server\n\
+            -server        - run engine as a permanent server\n\
+            -daemon        - run engine as a detached permanent server\n\
             -watchdog <s>  - audio thread initialisation timeout (30s)\n\
             -log           - redirect diagnostic to $HOME/.bristol/log\n\
             -syslog        - redirect diagnostic to syslog\n\
@@ -172,7 +172,7 @@ char *helptext = "\nA synthesiser emulation package.\n\
             -kill <-emu>   - terminate all bristol processes emulating -emu\n\
             -cache <path>  - memory and profile cache location (~/.bristol)\n\
             -memdump <path>- copy full set of memories to <path>, with -emulate\n\
-            -debug <1-16>  - debuging level (0)\n\
+            -debug <1-16>  - debugging level (0)\n\
             -readme [-<e>] - show readme [for emulator <e>] to console\n\
             -glwf          - global lightweight filters - no overrides\n\
             -host <h>      - connect to engine on host 'h' (localhost)\n\
@@ -181,14 +181,14 @@ char *helptext = "\nA synthesiser emulation package.\n\
             -gmc           - open a MIDI connection to the brighton GUI\n\
             -oss           - use OSS defaults for audio and MIDI\n\
             -alsa          - use ALSA defaults for audio and MIDI (default)\n\
-            -jack          - use Jack defaults for audio and MIDI\n\
+            -jack          - use JACK defaults for audio and MIDI\n\
             -jackstats     - avoid use of bristoljackstats\n\
-            -jsmuuid <UUID>- jack session unique identifier\n\
-            -jsmfile <path>- jack session setting path\n\
-            -jsmd <ms>     - jack session file load delay (5000)\n\
+            -jsmuuid <UUID>- JACK session unique identifier\n\
+            -jsmfile <path>- JACK session setting path\n\
+            -jsmd <ms>     - JACK session file load delay (5000)\n\
             -sleep <n>     - delay init for 'n' seconds (jsm patch)\n\
             -session       - disable session management\n\
-            -jdo           - use separate Jack clients for audio and MIDI\n\
+            -jdo           - use separate JACK clients for audio and MIDI\n\
             -osc           - use OSC for control interface (unfinished)\n\
             -forward       - disable MIDI event forwarding globally\n\
             -localforward  - disable emulator gui->engine event forwarding\n\
@@ -209,19 +209,19 @@ char *helptext = "\nA synthesiser emulation package.\n\
             -preload <periods>     - configure preload buffer count (default 4)\n\
             -rate <hz>             - sample rate (44100)\n\
             -priority <p>          - audio RT priority, 0=no realtime (75)\n\
-            -autoconn              - attempt jack port auto-connect\n\
+            -autoconn              - attempt JACK port auto-connect\n\
             -multi <c>             - register 'c' IO channels (jack only)\n\
             -migc <f>              - multi IO input gain scaling (jack only)\n\
             -mogc <f>              - multi IO output gain scaling (jack only)\n\
 \n\
-        Midi driver:\n\
+        MIDI driver:\n\
 \n\
-            -midi [oss|[raw]alsa|jack] - midi driver selection (alsa)\n\
-            -mididev <dev>             - midi device selection\n\
+            -midi [oss|[raw]alsa|jack] - MIDI driver selection (alsa)\n\
+            -mididev <dev>             - MIDI device selection\n\
             -seq                       - use the ALSA SEQ interface (default)\n\
-            -mididbg                   - midi debug-1 enable\n\
-            -mididbg2                  - midi debug-2 enable\n\
-            -sysid                     - MIDI SYSEX system identifier\n\
+            -mididbg                   - MIDI debug-1 enable\n\
+            -mididbg2                  - MIDI debug-2 enable\n\
+            -sysid                     - MIDI SysEx system identifier\n\
 \n\
         LADI driver (level 1 compliant):\n\
 \n\
@@ -229,7 +229,7 @@ char *helptext = "\nA synthesiser emulation package.\n\
             -ladi bristol              - only execute LADI in engine\n\
             -ladi <memory>             - LADI state memory index (1024)\n\
 \n\
-    Audio drivers are PCM/PCM_plug or Jack. Midi drivers are either OSS/ALSA\n\
+    Audio drivers are PCM/PCM_plug or JACK. MIDI drivers are either OSS/ALSA\n\
     rawmidi interface, or ALSA SEQ. Multiple GUIs can connect to the single\n\
     audio engine which then operates multitimbrally.\n\
 \n\
@@ -250,36 +250,36 @@ char *helptext = "\nA synthesiser emulation package.\n\
 \n\
     startBristol -mini\n\
 \n\
-        Run a minimoog using ALSA interface for audio and midi seq. This is\n\
+        Run a Minimoog using ALSA interface for audio and MIDI seq. This is\n\
         equivalent to all the following options:\n\
         -mini -alsa -audiodev plughw:0,0 -midi seq -count 256 -preload 8 \n\
         -port 5028 -voices 32 -channel 1 -rate 44100 -gain 4 -ingain 4\n\
 \n\
     startBristol -alsa -mini\n\
 \n\
-        Run a minimoog using ALSA interface for audio and midi. This is\n\
+        Run a Minimoog using ALSA interface for audio and MIDI. This is\n\
         equivalent to all the following options:\n\
         -mini -audio alsa -audiodev plughw:0,0 -midi alsa -mididev hw:0\n\
         -count 256 -preload 8 -port 5028 -voices 32 -channel 1 -rate 44100\n\
 \n\
     startBristol -explorer -voices 1 -oss\n\
 \n\
-        Run a moog explorer as a monophonic instrument, using OSS interface for\n\
-        audio and midi.\n\
+        Run a Moog Explorer as a monophonic instrument, using OSS interface for\n\
+        audio and MIDI.\n\
 \n\
     startBristol -prophet -channel 3\n\
 \n\
-        Run a prophet-5 using ALSA for audio and midi on channel 3.\n\
+        Run a Prophet-5 using ALSA for audio and MIDI on channel 3.\n\
 \n\
     startBristol -b3 -count 512 -preload 2\n\
 \n\
-        Run a hammond b3 with a buffer size of 512 samples, and preload two \n\
+        Run a Hammond B3 with a buffer size of 512 samples, and preload two \n\
         such buffers before going active. Some Live! cards need this larger\n\
         buffer size with ALSA drivers.\n\
 \n\
     startBristol -oss -audiodev /dev/dsp1 -vox -voices 8\n\
 \n\
-        Run a vox continental using OSS device 1, and default midi device\n\
+        Run a Vox Continental using OSS device 1, and default MIDI device\n\
         /dev/midi0. Operate with just 8 voices.\n\
 \n\
     startBristol -b3 -audio alsa -audiodev plughw:0,0 -seq -mididev 128.0\n\
@@ -290,16 +290,16 @@ char *helptext = "\nA synthesiser emulation package.\n\
     startBristol -juno &\n\
     startBristol -prophet -channel 2 -engine\n\
 \n\
-        Start two synthesisers, a juno and a prophet. Both synthesisers will\n\
+        Start two synthesisers, a Juno and a Prophet. Both synthesisers \n\
         will be executed on one engine (multitimbral) with 32 voices between \n\
-        them. The juno will be on default midi channel (1), and the prophet on\n\
+        them. The Juno will be on default MIDI channel (1), and the Prophet on\n\
         channel 2. Output over the same default ALSA audio device.\n\
 \n\
     startBristol -juno &\n\
     startBristol -port 5029 -audio oss -audiodev /dev/dsp1 -mididev /dev/midi1\n\
 \n\
-        Start two synthesisers, a juno on the first ALSA soundcard, and a\n\
-        mini on the second OSS soundcard. Each synth is totally independent\n\
+        Start two synthesisers, a Juno on the first ALSA soundcard, and a\n\
+        Minimoog on the second OSS soundcard. Each synth is totally independent\n\
         and runs with 32 voice polyphony (looks nice, not been tested).\n\
 \n\
 The location of the bristol binaries can be specified in the BRISTOL\n\
@@ -498,4 +498,3 @@ bm \
 dx \
 sidney \
 ";
-

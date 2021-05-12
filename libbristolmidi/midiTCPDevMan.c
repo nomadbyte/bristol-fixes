@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -140,7 +140,7 @@ int (*callback)(), void *param, int dev, int handle)
 	} else {
 		/*
 		 * We need to open a control socket to the bristol engine. For the time
-		 * being we will only be concerned with a unix domain socket.
+		 * being we will only be concerned with a Unix domain socket.
 		 */
 		if ((bmidi.dev[dev].fd = socket(AF_LOCAL, SOCK_STREAM, 0)) < 0)
 		{
@@ -199,7 +199,7 @@ bristolMidiTCPRead(bristolMidiMsg *msg)
 	FD_ZERO(read_set);
 
 	/*
-	 * Find ports of type TCP, see if they have buffer spaace then schedule them
+	 * Find ports of type TCP, see if they have buffer space then schedule them
 	 * to be read.
 	 */
 	for (dev = 0; dev < BRISTOL_MIDI_DEVCOUNT; dev++)

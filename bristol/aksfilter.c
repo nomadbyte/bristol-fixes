@@ -35,7 +35,7 @@
  */
 /*
  * This implements three filter algorithms used by the different bristol
- * emulations. These are a butterworth used by the leslie, a chamberlain 
+ * emulations. These are a butterworth used by the leslie, a chamberlin 
  * used generally, and a rooney used for some of the filter layering and
  * eventually the mixing.
  */
@@ -93,7 +93,7 @@ static int reset(bristolOP *operator, bristolOPParams *param)
 	param->param[1].float_val = 0.5;
 	param->param[2].float_val = 0.5;
 	param->param[3].int_val = 0; /* Keyboard tracking */
-	param->param[4].int_val = 0; /* Filter algorithhm */
+	param->param[4].int_val = 0; /* Filter algorithm */
 	param->param[5].float_val = 1.0;
 	return(0);
 }
@@ -167,7 +167,7 @@ fillWave(float *mem, int count, int type)
 	 * 		(2PI * i / count) * 2048.
 	 * We fill count + 1 samples to simplify the resampling.
 	 */
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 		mem[i] = cosf(2 * M_PI * ((float) i) / count);
 }
 
@@ -187,7 +187,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 
 	/*
 	 * Every operator accesses these variables, the count, and a pointer to
-	 * each buffer. We should consider passing them as readymade parameters?
+	 * each buffer. We should consider passing them as ready-made parameters?
 	 *
 	 * The Filter now takes normalised inputs, in ranges of 12PO.
 	 */
@@ -224,7 +224,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	 * a frequency from 0 to 16kHz. It can be modified so must be calculated
 	 * on the fly from the mod buffer.
 	 */
-	for (; count > 0;count--)
+	for (; count > 0; count--)
 	{
 		if ((freq = cutoff + *mb * 0.1) < 0)
 			freq = 0.00001f;
@@ -271,7 +271,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 		 * Due to that, what we are going to do is use another filter, a low
 		 * pass filter with a different frequency to the primary filter. It
 		 * will give us a high pass envelope that will control the gain of
-		 * the resonace. As resonance goes up its gain does, but also lowers
+		 * the resonance. As resonance goes up its gain does, but also lowers
 		 * the frequency of the HPF used so that it tends to flat.
 		 *
 		 * At full on then the HPF will tend to be a flat signal, the gain will
@@ -326,7 +326,7 @@ aksfilterinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -387,7 +387,7 @@ aksfilterinit(bristolOP **operator, int index, int samplerate, int samplecount)
 	specs->spec.param[3].flags = BRISTOL_BUTTON;
 
 	specs->spec.param[4].pname = "filter type";
-	specs->spec.param[4].description = "Rooney, Butterworth, Chamberlain";
+	specs->spec.param[4].description = "Rooney, Butterworth, Chamberlin";
 	specs->spec.param[4].type = BRISTOL_TOGGLE;
 	specs->spec.param[4].low = 0;
 	specs->spec.param[4].high = 1;

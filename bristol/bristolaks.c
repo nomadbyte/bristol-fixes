@@ -29,7 +29,7 @@
  * VU Meter does not operate, but that is outside the scope of this emulator.
  *
  * Frequency range too small and biased to low end.
- * Frequency rangee of Osc-3 should be lower.
+ * Frequency range of Osc-3 should be lower.
  */
 
 /*#define DEBUG */
@@ -478,7 +478,7 @@ bristolVoice *voice, register float *startbuf)
 		AKS_I_METER, voice->index, sc);
 	/*
 	 * There are pins to go to the output mix, which are fed back into the
-	 * mix. Then they are filtered (HM, panned and actualy go to the outputs.
+	 * mix. Then they are filtered (HM, panned and actually go to the outputs.
 	 *
 	 * The signal from the patch panel is amplified with the mod buffer then
 	 * filtered, then sent back to the panel and to speakers.

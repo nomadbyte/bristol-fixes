@@ -21,7 +21,7 @@
 
 /*
  * The sermon generates the waves for all the oscillators required by a hammond.
- * Different sources put this at 91, 92, or 95 oscillators. By my reconning we
+ * Different sources put this at 91, 92, or 95 oscillators. By my reckoning we
  * need one for every key on the hammond (61), plus the range of the drawbars,
  * (5 octaves = 62). In short, the lowest drawbar goes 12 notes below the 
  * bottom key, and the highest note goes 3 octaves (36 notes) above, or rather
@@ -88,7 +88,7 @@
  *	Other key click
  *	Reorganise volumes (click too loud?)
  *
- * Finallly we need to build a set of defaults for the normal and bright tab.
+ * Finally we need to build a set of defaults for the normal and bright tab.
  */
 
 #include <math.h>
@@ -125,7 +125,7 @@ static void filltriwave(float *, int, double, int);
 
 /*
  * We count make all these arrays into a single array or structure, something
- * like the following, but we would have to rearrange all the iterpolation
+ * like the following, but we would have to rearrange all the interpolation
  * routines, so perhaps not, they are kind of nice and easy to do.
  *
  * So we keep the simple arrays. For the following I could introduce different
@@ -152,7 +152,7 @@ typedef struct Tonewheels {
 
 tonewheels gearbox[92];
 
-/* Bright should be burried in the tonewheel structure */
+/* Bright should be buried in the tonewheel structure */
 static int bright, btnote, btdelay = 0, samplerate;
 
 #ifdef TONEMATRIX
@@ -196,7 +196,7 @@ printf("Wheel %i: ct %2.2f\n", wheel, tonematrix[wheel].gain);
 */
 			source = &wheeltemplates[bright][wheel][0];
 
-			index = toneindeces[wheel];
+			index = toneindexes[wheel];
 
 			if (tonematrix[wheel].percussive != 0)
 				dest = pbuf;
@@ -247,7 +247,7 @@ printf("Wheel %i: ct %2.2f\n", wheel, tonematrix[wheel].gain);
 				if ((index += freq) > WAVE_SIZE) index -= WAVE_SIZE;
 			} while ((count -= 8) > 0);
 
-			toneindeces[wheel] = index;
+			toneindexes[wheel] = index;
 		}
 	}
 
@@ -256,8 +256,8 @@ printf("Wheel %i: ct %2.2f\n", wheel, tonematrix[wheel].gain);
 }
 
 /*
- * The ctab here is a correct equally tempered index couters to generate waves.
- * This does not really match the hammond as it was not actally ET. A separate
+ * The ctab here is a correct equally tempered index counters to generate waves.
+ * This does not really match the hammond as it was not actually ET. A separate
  * table is used by the sermon to give it the hammond generated frequencies
  */
 void
@@ -284,7 +284,7 @@ thesermon(int samplecount, int sineform)
 #ifndef TONEMATRIX
 		source = &wheeltemplates[bright][wheel][0];
 
-		index = toneindeces[wheel];
+		index = toneindexes[wheel];
 		dest = tonewheel[wheel];
 		/*
 		 * For the clutching system the diverse axles are not in sync. This
@@ -318,7 +318,7 @@ thesermon(int samplecount, int sineform)
 			if ((index += freq) > WAVE_SIZE) index -= WAVE_SIZE;
 		} while ((count -= 8) > 0);
 
-		toneindeces[wheel] = index;
+		toneindexes[wheel] = index;
 #endif
 
 		/*
@@ -859,7 +859,7 @@ strnext(char *source)
 		return(NULL);
 
 	/*
-	 * So we have two valid strings. Find next occurence of whitespace and
+	 * So we have two valid strings. Find next occurrence of whitespace and
 	 * then skip over it.
 	 */
 	if ((offset = strpbrk(source, " 	")) == NULL)
@@ -880,16 +880,16 @@ parseTaper(int comp, char *line)
 	offset = line;
 
 	/*
-	 * We now have 9 values. If they start with 'R' it is a resitor index,
+	 * We now have 9 values. If they start with 'R' it is a resistor index,
 	 * otherwise a literal value.
 	 */
-	for (;drawbar < BUS_COUNT; drawbar++)
+	for (; drawbar < BUS_COUNT; drawbar++)
 	{
 		if ((offset = strnext(offset)) == NULL)
 			return;
 
 		/*
-		 * There are 3 possiblities, a literal floating value, an R followed 
+		 * There are 3 possibilities, a literal floating value, an R followed 
 		 * by an array index, or R followed by the resistance if which we have
 		 * just a few recognised values.
 		 */
@@ -1145,7 +1145,7 @@ bristolHammondGetMap(char *file, char *match, float points[], int count)
 	char param[256];
 
 	/*
-	 * Open and read configuration. Should consider seaching
+	 * Open and read configuration. Should consider searching
 	 * $HOME/.bristol/memory and $BRISTOL_DB/memory.
 	 */
 	sprintf(path, "%s/memory/profiles/%s", getBristolCache(file), file);
@@ -1290,7 +1290,7 @@ bristolHammondGetMap(char *file, char *match, float points[], int count)
 
 /*
  * This will build a default gearbox to include compartments for crosstalk,
- * frequencies, stepping rates throught the wavetables, etc. We should put in
+ * frequencies, stepping rates through the wavetables, etc. We should put in
  * the different wheel shapes, equalisation, jitter and additionally consider
  * doing this for two gearboxes, normal and bright.
  */
@@ -1370,7 +1370,7 @@ initGearbox()
 
 		/*
 		 * Default stops are 8 linear levels, tapers are fixed but will be
-		 * overriden from somewhere?
+		 * overridden from somewhere?
 		 */
 		for (j = 0; j < BUS_COUNT; j++)
 		{
@@ -1382,7 +1382,7 @@ initGearbox()
 	 * We now have the default gearbox but have to have a rework of the 
 	 * crosstalk map for the compartments. It is not sufficient just to put
 	 * each toothwheel into an array, the gear entry needs to know which of
-	 * the wheels in the same compartment have the geater crosstalk.....
+	 * the wheels in the same compartment have the greater crosstalk.....
 	 */
 	for (b = 0; b < 2; b++)
 	{
@@ -1630,7 +1630,7 @@ finishGearings(float rate)
 		 * the complete gearbox, it works but is quite a lot of work.
 		 */
 		gearbox[i].step = ((float) 1024.0) / (rate / gearbox[i].freq);
-		toneindeces[i] = gearbox[i].phase / 360.0 * 1024.0;
+		toneindexes[i] = gearbox[i].phase / 360.0 * 1024.0;
 
 		for (j = 0; j < BUS_COUNT; j++)
 		{
@@ -1661,7 +1661,7 @@ initthesermon(int sc, int sr, int compress)
 		for (i = 0; i < OSC_LIMIT; i++)
 		{
 			tonewheel[i] = i * sc + oscillators;
-			toneindeces[i] = 0;
+			toneindexes[i] = 0;
 		}
 	}
 
@@ -1672,7 +1672,7 @@ initthesermon(int sc, int sr, int compress)
 	 * EQ profiles are not easy to interface. I want them to be a set of points
 	 * which are then interpolated to give gain levels and waveform distortions.
 	 *
-	 * bright should perhaps not re-eq the tonewheels but the busses?
+	 * bright should perhaps not re-EQ the tonewheels but the busses?
 	 */
 	for (i = 0; i < OSC_LIMIT; i++)
 		toneEQ[NORMAL][i] = toneEQ[BRIGHT][i] = 0;
@@ -1884,15 +1884,15 @@ register double reach, int compress)
 	newcount = reach * count;
 	reach = 2.0 / (float) newcount;
 
-	for (i = 0;i < newcount; i++)
+	for (i = 0; i < newcount; i++)
 		mem[i] = cosf(M_PI * (increment += reach)) * HAMMOND_WAVE_GAIN;
 
-	for (;i < count; i++)
+	for (; i < count; i++)
 		mem[i] = HAMMOND_WAVE_GAIN;
 
 	if (compress)
 	{
-		for (i = 0;i < count; i++)
+		for (i = 0; i < count; i++)
 		{
 			//mem[i] = (-mem[i] + 8.0f) * (-mem[i] + 8.0f) * (-mem[i] + 8.0f)
 			//	/ 256.0f - 8.0f;
@@ -1921,7 +1921,7 @@ register double reach, int compress)
 	float j = 0, inc = reach;
 	float l;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		if ((j > (count * 3 / 4)) && recalc2)
 		{
@@ -1944,7 +1944,7 @@ register double reach, int compress)
 
 	if (compress)
 	{
-		for (i = 0;i < count; i++)
+		for (i = 0; i < count; i++)
 		{
 			//mem[i] = (mem[i] + 8.0f) * (mem[i] + 8.0f) * (mem[i] + 8.0f)
 			//	/ 256.0f - 8.0f;

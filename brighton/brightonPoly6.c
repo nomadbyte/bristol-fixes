@@ -311,19 +311,19 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "poly", 0,
 				synth->bank + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -349,7 +349,7 @@ poly6ModCallback(brightonWindow *win, int panel, int index, float value)
 	{
 		/*
 		 * Value is between 0 and 1 latching at 0.5. Have to scale the value
-		 * and subtrace if from the mid point
+		 * and subtract if from the mid point
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->midichannel,
 			BRISTOL_EVENT_PITCH, 0,
@@ -624,7 +624,7 @@ poly6Callback(brightonWindow * win, int panel, int index, float value)
 	else
 		sendvalue = value;
 
-		synth->mem.param[index] = value;
+	synth->mem.param[index] = value;
 
 	if ((!global.libtest) || (index >= ACTIVE_DEVS))
 		synth->dispatch[index].routine(synth,
@@ -661,7 +661,7 @@ poly6Gain(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			break;
 		case 100:
 			/*
-			 * This is the attentuator switch, 1 == gate.
+			 * This is the attenuator switch, 1 == gate.
 			 */
 			if (synth->mem.param[28])
 			{
@@ -788,7 +788,7 @@ poly6Init(brightonWindow *win)
 	for (i = 0; i < DEVICE_COUNT; i++)
 		synth->dispatch[i].routine = poly6MidiSendMsg;
 
-	/* Vol tune bend - NOT FINNISHED */
+	/* Vol tune bend - NOT FINISHED */
 	dispatch[0].controller = 6;
 	dispatch[0].operator = 4;
 	dispatch[0].routine = (synthRoutine) poly6Gain;

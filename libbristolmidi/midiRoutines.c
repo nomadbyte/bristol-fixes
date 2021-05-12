@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -85,6 +85,7 @@ bristolMidiDevSanity(int dev)
 
 void
 bristolMidiPrintHandle(handle)
+int handle;
 {
 	printf("	Handle:	 %i\n", bmidi.handle[handle].handle);
 	printf("	State:   %i\n", bmidi.handle[handle].state);
@@ -103,6 +104,7 @@ bristolMidiPrintHandle(handle)
 
 int
 bristolMidiSanity(handle)
+int handle;
 {
 #ifdef DEBUG
 	printf("bristolMidiSanity(%i)\n", handle);
@@ -195,7 +197,7 @@ bristolFreeDevice(int dev)
 }
 
 /*
- * A routine to initalise any of our internal structures.
+ * A routine to initialise any of our internal structures.
  */
 void
 initMidiLib(int flags)

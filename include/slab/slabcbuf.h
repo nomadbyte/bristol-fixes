@@ -60,7 +60,7 @@ typedef struct cBuff {
 	int diskBufferSize;	/* disk buffer size */
 	int diskBufferFD;
 
-	int loadSegSize;	/* size of data to fetch per reqest */
+	int loadSegSize;	/* size of data to fetch per request */
 	int preLoadSize;	/* amount of buffer to maintain filled */
 	int preMixSize;		/* amount of output buffer to initialise before start */
 	int EndOfFile;
@@ -117,7 +117,7 @@ typedef struct cBuff {
 	int lseeked;
 
 	char * dioPRead;	/* where the engine process is mixing from */
-	char * dioPWrite;	/* where the engine is currently reocrding to */
+	char * dioPWrite;	/* where the engine is currently recording to */
 	char * dioCRead;	/* where the mixiod process is loading to = from disk */
 	char * dioCWrite;	/* where the mixiod is currently read from = to disk */
 
@@ -134,7 +134,7 @@ typedef struct cBuff {
 #ifdef FX_CHAINS
 #ifdef FLOAT_PROC
 	/* 
-	 * If we are going to use FLOATs, then we need to have indeces for each 
+	 * If we are going to use FLOATs, then we need to have indexes for each 
 	 * track, rather than for each bus.
 	 */
 	char trackStart[MAX_TRACK_COUNT]; /* index of first busParamPtr in chain */
@@ -152,7 +152,7 @@ typedef struct cBuff {
 
 	/*
 	 * Record offsets are used since we only expect to be able to record
-	 * one or two track simultaniously. To save disk write operations
+	 * one or two track simultaneously. To save disk write operations
 	 * we only write the data for the recording tracks, not all tracks.
 	 * These are specified as two offsets of recordSegSize, 3 and 4 are not
 	 * yet supported.
@@ -213,7 +213,7 @@ typedef struct cBuff {
 	trackparams trackParams[ALL_TRACKS];
 #ifdef I_NR
 	/*
-	 * For input gating and NR we need seperate algo pointers (handled in
+	 * For input gating and NR we need separate algo pointers (handled in
 	 * mixiod, rather than mixengined, and some record parameters.
 	 * This stuff should be moved to the DuplexDev structure.
 	 */
@@ -228,7 +228,7 @@ typedef struct cBuff {
 
 	int XTalk;
 	int wowFlutter;
-	int scratchLevel;	/* The volume of the scratchs */
+	int scratchLevel;	/* The volume of the scratches */
 	int scratchDensity;	/* Number of scratches applied per sampleBlockSize */
 	int scratchAlgo;	/* Stereo, mono or hybrid scratch */
 	int scratchInited;

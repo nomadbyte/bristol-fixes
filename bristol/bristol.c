@@ -154,17 +154,17 @@ buildCmdLine(audioMain *audiomain, int argc, char **argv)
 		}
 		sprintf(audiomain->cmdline, "%s %s", audiomain->cmdline, argv[i]);
 	}
-	printf("\njsm will use '%s'\n", audiomain->cmdline);
+	printf("\nJSM will use '%s'\n", audiomain->cmdline);
 }
 
 /*
  * We are going to create, initially, two threads. One will field MIDI events,
  * and translate the (for now) raw data into bristol MIDI messages. The messages
  * are queued, and then fielded by the audio thread. The audio thread reacts to
- * the midi events and starts sound generation operations. The MIDI thread will
+ * the MIDI events and starts sound generation operations. The MIDI thread will
  * remain responsible for MIDI parameter management, but not real-time messages.
  *
- * It could make sense to move the threads requests into the midi library for
+ * It could make sense to move the threads requests into the MIDI library for
  * use with other programmes?
  */
 int
@@ -185,7 +185,7 @@ main(int argc, char **argv)
 #endif
 
 	bzero(&audiomain, sizeof(audioMain));
-	audiomain.samplecount = 256; /* default this - gets overriden later */
+	audiomain.samplecount = 256; /* default this - gets overridden later */
 	audiomain.iosize = 0; /* This needs to be calculated, samplecount * float */
 	audiomain.preload = 4; /* This should be less, preferably 4 (was 8). */
 	audiomain.ingain = 0;
@@ -351,7 +351,7 @@ main(int argc, char **argv)
 				 * Note that some of these types of interface to not actually
 				 * apply to MIDI at the moment. OSS and ALSA are rawmidi specs.
 				 * SEQ is ALSA sequencer support. The others may or may not
-				 * provide midi messaging, however it is possible to have jack
+				 * provide MIDI messaging, however it is possible to have JACK
 				 * audio drivers with ALSA rawmidi interfacing, for example.
 				 */
 				if ((strcmp(argv[argCount], "none") == 0)
@@ -540,7 +540,8 @@ main(int argc, char **argv)
 			if ((audiomain.iocount = atoi(argv[argCount + 1]))
 				> BRISTOL_JACK_MULTI)
 				audiomain.iocount = BRISTOL_JACK_MULTI;
-				argCount++;
+
+			argCount++;
 		}
 
 		if (strcmp(argv[argCount], "-autoconn") == 0)
@@ -605,7 +606,7 @@ main(int argc, char **argv)
 				bristolMidiOption(0, BRISTOL_NRP_SYSID_L, sysid & 0x0000ffff);
 				audiomain.SysID = sysid;
 				if (audiomain.debuglevel)
-					printf("fixing sysex system id at 0x%x\n", audiomain.SysID);
+					printf("fixing SysEx system id at 0x%x\n", audiomain.SysID);
 			}
 		}
 
@@ -654,11 +655,11 @@ main(int argc, char **argv)
 	 * Create two threads, one for midi, then one for audio.
 	 *
 	 * We cannot create the audio thread yet, since we do not know how many 
-	 * voices to create - this is a function of the midi start requests from
+	 * voices to create - this is a function of the MIDI start requests from
 	 * some controller.
 	 */
 	if (audiomain.debuglevel)
-		printf("spawning midi thread\n");
+		printf("spawning MIDI thread\n");
 	midithread = spawnThread(midiThread,
 		audiomain.priority == 0? 0:
 			audiomain.priority > 25? audiomain.priority - 25:
@@ -674,10 +675,10 @@ main(int argc, char **argv)
 		printf("parent going into idle loop\n");
 
 	/*
-	 * To support jack we are going to use this parent thread. We will have it
+	 * To support JACK we are going to use this parent thread. We will have it
 	 * reschedule itself to something less than that requested for the audio
-	 * thread and have it handle MIDI events from the Jack interface at some
-	 * higher priority than than the midi thread. The actual MIDI thread will
+	 * thread and have it handle MIDI events from the JACK interface at some
+	 * higher priority than than the MIDI thread. The actual MIDI thread will
 	 * still accept events from the GUI but they are generally long events 
 	 * for audio reconfiguration.
 	 * 
@@ -688,27 +689,27 @@ main(int argc, char **argv)
 	{
 		if (audiomain.atReq == BRISTOL_REQSTOP)
 			/*
-			 * Midi thread init failed, exit to prevent a lockout. Might
+			 * MIDI thread init failed, exit to prevent a lockout. Might
 			 * look odd that it is in the atReq and not in some mt status
-			 * however the midi thread is rquesting the audiothread to exit.
+			 * however the MIDI thread is requesting the audiothread to exit.
 			 * Since we have not started it yet then we can kind of exit
 			 * here.
 			 */
 			exit(0);
 
 		if (audiomain.debuglevel)
-			printf("Init waiting for midi thread OK status\n");
+			printf("Init waiting for MIDI thread OK status\n");
 		usleep(100000);
 	}
 
 	if (audiomain.debuglevel)
-		printf("Got midi thread OK status\n");
+		printf("Got MIDI thread OK status\n");
 
 	while (!exitReq)
 	{
 		/*
 		 * We should wait for children here, and restart them. We should also 
-		 * monitor any bristol system sysex messages, since they will be used
+		 * monitor any bristol system SysEx messages, since they will be used
 		 * to request we start the audio thread.
 		 */
 		if (audiomain.atReq & BRISTOL_REQSTART)
@@ -732,7 +733,7 @@ main(int argc, char **argv)
 						/* 
 						 * If we don't have an audio thread then there is 
 						 * probably an issue with the audio devices so reap the
-						 * midi thread too.
+						 * MIDI thread too.
 						 */
 						pthread_cancel(midithread);
 						break;
@@ -752,8 +753,8 @@ main(int argc, char **argv)
 				}
 
 				/*
-				 * Request jack linkup to its midi sequencer. If we did not
-				 * compile with jack for whatever reason then the library will
+				 * Request JACK linkup to its MIDI sequencer. If we did not
+				 * compile with JACK for whatever reason then the library will
 				 * report it.
 				 *
 				 * This call will not reschedule the thread, we need to do that,
@@ -772,10 +773,10 @@ main(int argc, char **argv)
 						(audiomain.flags & BRISTOL_JACK_DUAL)|
 						BRISTOL_CONN_JACK|BRISTOL_DUPLEX, -1,
 						BRISTOL_REQ_NSX, midiMsgHandler, audiomain)) < 0)
-						printf("requested jack midi did not link up\n");
+						printf("requested JACK MIDI did not link up\n");
 					else {
 						if (audiomain.debuglevel)
-								printf("requested jack midi link: %i\n", jh);
+								printf("requested JACK MIDI link: %i\n", jh);
 						bristolMidiOption(0, BRISTOL_NRP_MIDI_GO, 1);
 					}
 
@@ -806,7 +807,7 @@ main(int argc, char **argv)
 			/*
 			 * If we do not get an audio thread start request within an amount
 			 * of time (should be a parameter) and we have not been given the
-			 * daemon flag then we should consider failing and stoping the
+			 * daemon flag then we should consider failing and stopping the
 			 * process.
 			 */
 			if ((watchdog -= exitdecr) <= 0) 
@@ -893,7 +894,7 @@ main(int argc, char **argv)
 					break;
 				case 4: // Presumptious load Template
 					//if (audiomain.debuglevel)
-						printf("potentially precocious jsm load request\n");
+						printf("potentially precocious JSM load request\n");
 					midiThreadLoadReq(&audiomain);
 					break;
 			}
@@ -922,7 +923,7 @@ main(int argc, char **argv)
 #endif
 	}
 
-	/* Unregister the jack interface */
+	/* Unregister the JACK interface */
 	if ((jh >= 0) && (audiomain.flags & BRISTOL_MIDI_JACK)
 		&& (audiomain.flags & BRISTOL_JACK_DUAL))
 		bristolMidiClose(jh);
@@ -988,7 +989,7 @@ pthread_t spawnThread(void * (*threadcode)(void *), int priority)
 #endif
 
 	/*
-	 * This may have to go into a subroutine as the midi thread may need to 
+	 * This may have to go into a subroutine as the MIDI thread may need to 
 	 * reuse it to ensure we do not get priority inversion. At the moment both
 	 * threads are RT FIFO though.
 	 */

@@ -26,7 +26,7 @@
  *
  * The next set of definitions are for a track array. This is assigned
  * dynamically in shmem in the main init code. This is used to control the
- * relative volumes of each track, filter definitions, algorithm indeces.
+ * relative volumes of each track, filter definitions, algorithm indexes.
  *
  * Its big, and we need MAX_TRACK_COUNT of them in the controlBuffer,
  * but it governs all of the internal digital sound processing algorithms.
@@ -88,7 +88,7 @@ typedef struct TrackParams {
 	int nrCurGain;			/* For PIPO operations */
 #endif
 	/*
-	 * Bussing parameters, with algos as indeces into the mixAlgo arrays.
+	 * Bussing parameters, with algos as indexes into the mixAlgo arrays.
 	 * Send algos - implement 2.
 	 * Filter Algo.
 	 * Pan algo.

@@ -37,7 +37,7 @@
  *
  * 	Detune
  * 	LFO Key Sync
- * 	Midi Channel selection
+ * 	MIDI Channel selection
  * 	Noise Multi
  * 	LFO Multi
  * 	Nudge
@@ -951,13 +951,13 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 	guiSynth *synth = findSynth(global.synths, win);
 
 	if (cs80Debug(synth, 1))
-		printf("midi callback: %x, %i\n", controller, value);
+		printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
 			if (cs80Debug(synth, 2))
-				printf("midi program: %x, %i\n", controller, value);
+				printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "cs80", 0, synth->bank + synth->location + mw,
 				synth->mem.active, 0, 0);
@@ -965,7 +965,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			break;
 		case MIDI_BANK_SELECT:
 			if (cs80Debug(synth, 2))
-				printf("midi banksel: %x, %i\n", controller, value);
+				printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -1203,7 +1203,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 			if (currentLayer == LOWER_BANK)
 				off = 163;
 
-			for (i = 0; i < 4;i++)
+			for (i = 0; i < 4; i++)
 			{
 				if (synth->mem.param[i + off] != 0)
 				{
@@ -1217,7 +1217,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 			else
 				off = 151;
 
-			for (i = 0; i < 10;i++)
+			for (i = 0; i < 10; i++)
 			{
 				if (synth->mem.param[i + off] != 0)
 				{
@@ -1242,7 +1242,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 				if (currentLayer == LOWER_BANK)
 					off = 163;
 
-				for (i = 0; i < 4;i++)
+				for (i = 0; i < 4; i++)
 				{
 					if (synth->mem.param[i + off] != 0)
 					{
@@ -1256,7 +1256,7 @@ printf("cs80Memory(%i, %i, %i)\n", c, o, v);
 				else
 					off = 151;
 
-				for (i = 0; i < 10;i++)
+				for (i = 0; i < 10; i++)
 				{
 					if (synth->mem.param[i + off] != 0)
 					{
@@ -1448,7 +1448,7 @@ cs80Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	} else {
 		/*
 		 * This is a little incorrect - if we are layered then we can go to
-		 * midi channel 15.
+		 * MIDI channel 15.
 		 */
 		if ((newchan = synth->midichannel + 1) >= 14)
 			newchan = synth->midichannel = 14;

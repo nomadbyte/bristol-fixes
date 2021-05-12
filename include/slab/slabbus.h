@@ -31,7 +31,7 @@ typedef struct effectControl {
 } effectcontrol;
 
 typedef struct BusParams {
-	int *pRead;	/* the memory indeces */
+	int *pRead;	/* the memory indexes */
 	int *pWrite;
 	int *cRead;
 	int *cWrite;

@@ -538,7 +538,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 		"bitmaps/buttons/jbb1o.xpm", 0},
 
 	/*
-	 * The preceeding parameters are unique per synth and need to be loaded
+	 * The preceding parameters are unique per synth and need to be loaded
 	 * from different memory files? Alternatively just load the mem and let
 	 * the last loaded parameters be active for the following ones:
 	 *
@@ -897,7 +897,7 @@ midiRelease(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	if (!global.libtest)
 	{
 		/*
-		 * Midi release is ALL notes, ALL synths. If this behaviour (in the
+		 * MIDI release is ALL notes, ALL synths. If this behaviour (in the
 		 * engine) changes we may need to put in an all_notes_off on the
 		 * second manual as well.
 		 */
@@ -927,13 +927,13 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 	guiSynth *synth = findSynth(global.synths, win);
 
 	if (jupiterDebug(synth, 1))
-		printf("midi callback: %x, %i\n", controller, value);
+		printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
 			if (jupiterDebug(synth, 2))
-				printf("midi program: %x, %i\n", controller, value);
+				printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "jupiter8", 0, synth->bank + synth->location,
 				synth->mem.active, 0, 0);
@@ -941,7 +941,7 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 			break;
 		case MIDI_BANK_SELECT:
 			if (jupiterDebug(synth, 2))
-				printf("midi banksel: %x, %i\n", controller, value);
+				printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value + 10;
 			loadMemory(synth, "jupiter8", 0, synth->bank + synth->location,
 				synth->mem.active, 0, 0);
@@ -1197,7 +1197,7 @@ jupiterFunctionKey(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			return;
 		}
 
-		/* Midi debug */
+		/* MIDI debug */
 		if (o == 6) {
 			if (v != 0)
 				v = 1;
@@ -1446,7 +1446,7 @@ jupiterMemory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 			 * emulation into mode All and potentially put it into Poly-1 if
 			 * it was in Solo.
 			 *
-			 * This code should also invistigate how to load some arpeggiator
+			 * This code should also investigate how to load some arpeggiator
 			 * information, automated if possible into the library.
 			 */
 			if (brightonDoubleClick(dc1)) {
@@ -1643,7 +1643,7 @@ synth->mem.param[PANEL_SELECT]);
 */
 
 	/*
-	 * Load will set the displays and nothing else, they will alsways point to
+	 * Load will set the displays and nothing else, they will always point to
 	 * the active patches.
 	 *
 	 * The buttons selections should come from the layer select or from being
@@ -1666,7 +1666,7 @@ jupiterMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	} else {
 		/*
 		 * This is a little incorrect - if we are layered then we can go to
-		 * midi channel 15.
+		 * MIDI channel 15.
 		 */
 		if ((newchan = synth->midichannel + 1) >= 14)
 			newchan = synth->midichannel = 14;
@@ -2445,8 +2445,8 @@ jupiterVolume(guiSynth *synth, int fd, int chan, int c, int o, int v)
 
 	/*
 	 * We have to consider layer balance and volume here, they multiply out.
-	 * These are linear controls. They may become constand power curves but
-	 * that reponse is not too great.
+	 * These are linear controls. They may become constant power curves but
+	 * that response is not too great.
 	 */
 	bristolMidiSendMsg(fd, synth->sid, 126, 3,
 		(int) (volume * (1.0 - balance) * C_RANGE_MIN_1));
@@ -2566,9 +2566,9 @@ jupiterFilter(guiSynth *synth, int fd, int chan, int c, int o, int v)
 		sid = synth->sid2;
 
 	/*
-	 * The preferred filter is the Houvilainen however as of 0.20.8 this only
+	 * The preferred filter is the Huovilainen however as of 0.20.8 this only
 	 * does LPF. For the HPF and BPF we have to revert back to the previous
-	 * chaimberlains
+	 * chamberlins
 	 */
 	switch (v) {
 		case 0: /* LP - 24 dB */
@@ -2987,7 +2987,7 @@ jupiterInit(brightonWindow *win)
 	 * Memory management
 	 *
 	 * Two sets of locations - 8 bank and 8 memory, then a load and a save
-	 * button. Save will be doubleclick requirement. the selectors will be
+	 * button. Save will be double-click requirement. the selectors will be
 	 * radio buttons.
 	 * There are also issues with the dual layering that needs to be included.
 	 * This file was copied from the Juno, but the interface is more like the
@@ -3048,7 +3048,7 @@ jupiterInit(brightonWindow *win)
 		= dispatch[MEM_MGT + 15].routine = dispatch[MEM_MGT + 16].routine
 			= (synthRoutine) jupiterButtonPanel;
 
-	/* Midi management */
+	/* MIDI management */
 	dispatch[MIDI_MGT].controller = 1;
 	dispatch[MIDI_MGT + 1].controller = 2;
 	dispatch[MIDI_MGT].routine = dispatch[MIDI_MGT + 1].routine

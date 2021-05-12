@@ -21,7 +21,7 @@
 
 /*
  * Emulator code for the C64 SID audio chip. All the register numbers and bit
- * masks are defined here, the sid.c code will accept the register addressess,
+ * masks are defined here, the sid.c code will accept the register addresses,
  * parse the register bitmaps into some internal tables and then allow IO to
  * generate all the signals. The SID chip was partly digital (OSC/Env/noise)
  * and partly analogue (filter). This is emulated as integer code and floating
@@ -136,21 +136,21 @@
 #define B_SID_SN_RATIO		0x05 /* Filter noise */
 #define B_SID_SN_LEAKAGE	0x06 /* Envelope leakage */
 #define B_SID_DC_BIAS		0x07 /* Output DC signal bias */
-#define B_SID_OBERHEIM		0x08 /* Feed forword level of filter poles */
+#define B_SID_OBERHEIM		0x08 /* Feed forward level of filter poles */
 #define B_SID_CLOCKRATE		0x09 /* Nominal chip clock MHz */
 
 /*
  * These are frequency table multipliers to convert the phase offsets to and
  * from actual frequencies. The following can be used to define the Oscillator
  * phase accumulator for a given Frequency, hence we can define at least a 
- * midi key to phase accumulation mapping table. This calculation is based on
+ * MIDI key to phase accumulation mapping table. This calculation is based on
  * the nominal 1Mhz clock from the original.
  *
  *	Fout = Fn * Fclk/16777216
  *	Fout = Fn * 0.059604645
  *	Fphase = Fout / 0.059604645
  *
- * Note: the C64 had ntsc and pal version with different CPU clock speeds. The
+ * Note: the C64 had NTSC and PAL version with different CPU clock speeds. The
  * divider function need to match the frequency tables.
  */
 #define B_SID_FREQ_DIV_PAL 0.059604645

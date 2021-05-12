@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -29,8 +29,8 @@ bristolPhysWrite(int fd, unsigned char *message, int size)
 
 	if (write(fd, message, size) != size)
 	{
-		//perror("midi write error");
-		printf("midi write error, fd %i, size %i\n", fd, size);
+		//perror("MIDI write error");
+		printf("MIDI write error, fd %i, size %i\n", fd, size);
 		return(1);
 	}
 

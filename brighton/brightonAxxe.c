@@ -579,18 +579,18 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, synth->resources->name, 0,
 				synth->location, synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value * 10;
 
 			synth->location = (synth->location % 10) + value * 10;
@@ -718,10 +718,10 @@ axxeMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 #warning if we do not check for ack then socket might hang on exit
 		 * To overcome that we should consider checking a sequence number in
 		 * the message library? That is non trivial since it requires that
-		 * our midi messges have a 'ack' flag included - we cannot check for
+		 * our MIDI messages have a 'ack' flag included - we cannot check for
 		 * ack here (actually, we could, and in the app is probably the right
 		 * place to do it rather than the lib however both would have to be
-		 * changed to suppor this - nc).
+		 * changed to support this - nc).
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid,
 			127, 0, BRISTOL_MIDICHANNEL|newchan);

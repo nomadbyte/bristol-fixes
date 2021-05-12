@@ -327,7 +327,7 @@ int skip, int flags)
 
 	/*
 	 * See if the memory actually exists. This is a bit of file system overhead
-	 * but prevents attempting to load non-existant memories
+	 * but prevents attempting to load non-existent memories
 	 */
 	op = loadMemory(synth, algo, name, location, active, skip, BRISTOL_STAT);
 
@@ -397,18 +397,18 @@ masterMidiCallback(brightonWindow *win, int command, int value, float v)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", command, value);
+	printf("MIDI callback: %x, %i\n", command, value);
 
 	switch(command)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", command, value);
+			printf("MIDI program: %x, %i\n", command, value);
 			synth->location = value;
 			masterLoadMem(synth, "master", 0, synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", command, value);
+			printf("MIDI banksel: %x, %i\n", command, value);
 			synth->bank = value;
 			break;
 	}
@@ -987,7 +987,7 @@ masterInit(brightonWindow *win)
 	dispatch[MEM_START + 15].controller = 3;
 	dispatch[MEM_START + 16].controller = 4;
 
-	/* Midi */
+	/* MIDI */
 	dispatch[MEM_START + 12].controller = 2;
 	dispatch[MEM_START + 13].controller = 1;
 	dispatch[MEM_START + 12].routine = dispatch[MEM_START + 13].routine =

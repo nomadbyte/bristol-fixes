@@ -184,7 +184,7 @@ typedef struct CAlgo {
 #define MIX_C_GO_INPUT	3	/* start pre-load from current location */
 #define MIX_C_GO_OUTPUT	4	/* start pre-load from current location */
 #define MIX_C_GO_DUPLEX	5	/* start pre-load from current location */
-#define MIX_C_GOTO		6	/* start-preload from current startOffest */
+#define MIX_C_GOTO		6	/* start-preload from current startOffset */
 #define MIX_C_STOP		7	/* stop current operations */
 #define MIX_C_CLOSE		8	/* close the current data file */
 #define MIX_C_OPEN		9	/* open new file as specified in trackName[] */
@@ -216,7 +216,7 @@ enum mixIOstatus {
 };
 
 /*
- * Compression definitions, should be in seperate file?
+ * Compression definitions, should be in separate file?
  * 8 classes available, at the moment, only 2 are implemented
  */
 #define COMP_CLASS_SIZE				3

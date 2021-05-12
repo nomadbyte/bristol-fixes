@@ -62,7 +62,7 @@ u_char operator, float value)
 				 * Need to put some logic in here for start/stop. It is easy
 				 * enough to migrate the speed to some ridiculously slow 
 				 * amount such that the leslie does not appear to rotate, but
-				 * then we also need to get it kickstarted afterwards.
+				 * then we also need to get it kick-started afterwards.
 				 */
 				baudio->effect[1]->param->param[operator].int_val
 					= 515 - value * 512;

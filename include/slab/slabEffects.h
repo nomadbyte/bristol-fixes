@@ -44,7 +44,7 @@
 #define SLAB_SAMPLE_RATE	2
 
 /*
- * The API only spports SLab_Potmeter as of the 1.0 release. Later
+ * The API only supports SLab_Potmeter as of the 1.0 release. Later
  * implementations will use the rest, and drop the enumerated type in 
  * preference for #define's.
  */

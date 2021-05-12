@@ -47,7 +47,6 @@
 #include "bit1osc.h"
 
 static float note_diff;
-int samplecount;
 
 static void fillWave(float *, int, int);
 static void buildBitoneSound(bristolOP *, bristolOPParams *);
@@ -436,7 +435,7 @@ static int operate(bristolOP *operator,
 		sweeps[4] * transp + 0.019 * voice->detune,
 		local->wtppw5, lsv, count, pw);
 
-	for (obp = 0; obp < count;obp++)
+	for (obp = 0; obp < count; obp++)
 	{
 		/*
 		 * Take a sample from the wavetable into the output buffer, this is
@@ -498,7 +497,7 @@ bit1oscinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -689,7 +688,7 @@ register double reach)
 	register int i, recalc1 = 1, recalc2 = 1;
 	register double j = 0, Count = (double) count, inc = reach;
 
-	for (i = 0;i < count; i++)
+	for (i = 0; i < count; i++)
 	{
 		mem[i] = sin(((double) (2 * M_PI * j)) / Count) * BITONE_WAVE_GAIN;
 
@@ -753,8 +752,8 @@ fillWave(register float *mem, register int count, int type)
 			{
 				int i;
 
-				for (i = 0;i < count; i++)
-					mem[i] = bloramp[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.ramp[i];
 				return;
 			}
 			fillPDwave(mem, count, 20.0);
@@ -769,14 +768,14 @@ fillWave(register float *mem, register int count, int type)
 			 */
 			if (blo.flags & BRISTOL_BLO)
 			{
-				for (i = 0;i < count; i++)
-					mem[i] = blosquare[i];
+				for (i = 0; i < count; i++)
+					mem[i] = blo.square[i];
 				return;
 			}
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = (value * S_DEC);
 			value = -8.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = (value * S_DEC);
 			return;
 		}
@@ -786,14 +785,14 @@ fillWave(register float *mem, register int count, int type)
 
 				if (blo.flags & BRISTOL_BLO)
 				{
-					for (i = 0;i < count; i++)
-						mem[i] = blotriangle[i];
+					for (i = 0; i < count; i++)
+						mem[i] = blo.triangle[i];
 					return;
 				}
-				for (i = 0;i < count / 2; i++)
+				for (i = 0; i < count / 2; i++)
 					mem[i] = -BITONE_WAVE_GAIN
 						+ ((float) i / (count / 2)) * BITONE_WAVE_GAIN * 2;
-				for (;i < count; i++)
+				for (; i < count; i++)
 					mem[i] = BITONE_WAVE_GAIN -
 						(((float) (i - count / 2) * 2) / (count / 2))
 							* BITONE_WAVE_GAIN;
@@ -827,7 +826,7 @@ buildBitoneSound(bristolOP *operator, bristolOPParams *param)
 	source = specs->wave[2];
 	for (i = 0; i < 5; i++)
 	{
-		/* We should try some semi random start indeces? */
+		/* We should try some semi random start indexes? */
 		oscindex = 0;
 
 		dest = param->param[0].mem;

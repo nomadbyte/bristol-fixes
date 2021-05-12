@@ -150,7 +150,7 @@ int
 midiMsgForwarder(bristolMidiMsg *msg)
 {
 	/*
-	 * Take bristol midi messages, write them into the forwarding path ring
+	 * Take bristol MIDI messages, write them into the forwarding path ring
 	 * buffer.
 	 */
 	if (jack_ringbuffer_write_space(audiomain.rbfp) >= sizeof(bristolMidiMsg))
@@ -222,7 +222,7 @@ midiThread(audioMain *audiomain)
 #endif
 
 #ifdef DEBUG
-	printf("starting midi thread\n");
+	printf("starting MIDI thread\n");
 #endif
 
 	audiomain->mtStatus = BRISTOL_WAIT;
@@ -245,9 +245,9 @@ midiThread(audioMain *audiomain)
 
 #ifdef BRISTOL_SEMAPHORE
 	/*
-	 * Get a couple of semaphores to separate the midi from the audio 
+	 * Get a couple of semaphores to separate the MIDI from the audio 
 	 * processing. These are destroyed in the inthandler() in bristol.c as
-	 * the midi signalling is closed down. The semaphores are shared in the
+	 * the MIDI signalling is closed down. The semaphores are shared in the
 	 * note on/off code in midinote.c and the audioEngine.c which need to 
 	 * track the same voicelists.
 	 *
@@ -313,7 +313,7 @@ midiThread(audioMain *audiomain)
 
 	if ((audiomain->flags & BRISTOL_MIDIMASK) == BRISTOL_MIDI_OSS)
 	{
-		printf("midi oss\n");
+		printf("MIDI oss\n");
 		flags = BRISTOL_CONN_OSSMIDI;
 	}
 
@@ -325,7 +325,7 @@ midiThread(audioMain *audiomain)
 			device = "bristol";
 		else
 			device = audiomain->mididev;
-		printf("midi interface: %s\n", device);
+		printf("MIDI interface: %s\n", device);
 	} else if (audiomain->mididev != (char *) NULL)
 		device = audiomain->mididev;
 
@@ -334,13 +334,13 @@ midiThread(audioMain *audiomain)
 		/*
 		 * We need to init the OSC interface here.
 		 */
-		printf("midi osc not currently implemented\n");
+		printf("MIDI osc not currently implemented\n");
 	}
 
 	if ((audiomain->flags & BRISTOL_MIDIMASK) == BRISTOL_MIDI_JACK)
 	{
 		device = bSMD;
-		printf("midi jack: %s\n",device);
+		printf("MIDI JACK: %s\n",device);
 		flags = BRISTOL_CONN_SEQ;
 	}
 
@@ -358,7 +358,7 @@ midiThread(audioMain *audiomain)
 				BRISTOL_REQ_SYSEX:BRISTOL_REQ_ALL,
 			midiMsgHandler, audiomain)) < 0)
 	{
-		printf("Error opening control device, exiting midi thread\n");
+		printf("Error opening control device, exiting MIDI thread\n");
 		audiomain->atReq = BRISTOL_REQSTOP;
 		exitReq = 1;
 		pthread_exit(&exitstatus);
@@ -373,18 +373,18 @@ midiThread(audioMain *audiomain)
 			= bristolMidiOpen(device, flags|BRISTOL_RDONLY, -1, BRISTOL_REQ_NSX,
 				midiMsgHandler, audiomain)) < 0))
 	{
-		printf("Error opening midi device %s/%i, exiting midi thread\n",
+		printf("Error opening MIDI device %s/%i, exiting MIDI thread\n",
 			device, audiomain->midiHandle);
-		printf("Bristol cannot operate without a midi interface. Terminating\n");
+		printf("Bristol cannot operate without a MIDI interface. Terminating\n");
 		audiomain->atReq = BRISTOL_REQSTOP;
 		exitReq = 1;
 		bristolMidiClose(audiomain->controlHandle);
 		pthread_exit(&exitstatus);
 	} else
-		printf("opened midi device %s\n", device);
+		printf("opened MIDI device %s\n", device);
 
 #ifdef DEBUG
-	printf("opened midi device: %i/%i\n",
+	printf("opened MIDI device: %i/%i\n",
 		audiomain->controlHandle, audiomain->midiHandle);
 #endif
 
@@ -398,9 +398,9 @@ midiThread(audioMain *audiomain)
 #endif
 
 	/*
-	 * This will become blocking midi code, now that we are threaded. In short,
+	 * This will become blocking MIDI code, now that we are threaded. In short,
 	 * midiCheck should not return. This can be an issue to ensure that the
-	 * midi device is closed.
+	 * MIDI device is closed.
 	 */
 	midiCheck();
 

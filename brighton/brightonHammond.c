@@ -168,7 +168,7 @@ static brightonLocations memories[MEM_COUNT] = {
 	{"", 2, MC1 - 50, MR2, S4, S5, 0, 1, 0, /* panel switch */
 		"bitmaps/buttons/pressoffg.xpm", 
 		"bitmaps/buttons/pressong.xpm", 0},
-	/* midi U, D, Load, Save */
+	/* MIDI U, D, Load, Save */
 	{"", 2, MC2, MR2, S4, S5, 0, 1, 0,
 		"bitmaps/buttons/pressoff.xpm", 
 		"bitmaps/buttons/presson.xpm", BRIGHTON_CHECKBUTTON},
@@ -323,7 +323,7 @@ brightonApp hammondApp = {
 	"hammond",
 	0, /* no blueprint on wood background. */
 	"bitmaps/textures/wood2.xpm",
-	0, /* or BRIGHTON_STRETCH, default is tesselate */
+	0, /* or BRIGHTON_STRETCH, default is tessellate */
 	hammondInit,
 	hammondConfigure, /* 3 callbacks, unused? */
 	0,
@@ -1100,7 +1100,7 @@ hammondInit(brightonWindow *win)
 	dispatch[OPTS_START + 26].routine = (synthRoutine) hammondOption;
 	dispatch[OPTS_START + 26].controller = OPTS_START + 26;
 
-	/* Memory/Midi buttons */
+	/* Memory/MIDI buttons */
 	dispatch[MEM_START + 10].routine = (synthRoutine) hammondPanelSwitch;
 	dispatch[MEM_START + 10].controller = MEM_COUNT;
 	dispatch[MEM_START + 10].operator = 0;
@@ -1140,7 +1140,7 @@ hammondInit(brightonWindow *win)
 		= (synthRoutine) hammondMemory;
 
 	/*
-	 * Midi up/down
+	 * MIDI up/down
 	 */
 	dispatch[MEM_START + 11].controller = 2;
 	dispatch[MEM_START + 12].controller = 1;

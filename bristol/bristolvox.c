@@ -241,7 +241,7 @@ bristolVoice *voice, register float *startbuf)
 			bufmerge(vbuf, 1.0, outbuf, 1.0, audiomain->samplecount);
 	} else {
 		/*
-		 * Ryn yhe bass oscillator. We should consider changing this to just
+		 * Run the bass oscillator. We should consider changing this to just
 		 * run in the postops, picking up the first available voice below midi
 		 * note 48, that way it would be monophonic and we could apply the
 		 * bass envelope quite easily.

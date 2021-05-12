@@ -34,7 +34,7 @@
  * into the buffer to keep ahead of the MIXD.
  *
 
-              MIXD using this for new writen data - PWrite
+              MIXD using this for new written data - PWrite
                    |           MIXD currently mixing this data - PRead
                    |             |
                    V             V
@@ -86,7 +86,7 @@
  * Reved to 1.1.3 for pre and post dyn/EQ VU meterage.
  * Reved to 1.1.4 for ADSR dynamics envelope
  * Reved to 1.1.5 for decompressionMethod
- * Reved to 1.1.7 for initial Midi Stuff
+ * Reved to 1.1.7 for initial MIDI Stuff
  * Reved to 1.2.0 for 2.0 beta1
  * Reved to 1.2.1 for removal of CSI file stuff
  * Reved to 1.3.0 for 2.0 release
@@ -344,7 +344,7 @@
 
 #if BUILD_LEVEL >= 310
 #define ADIOD_MULTI 0x4000 /* Single audio IO daemon */
-#define SESSION_TIMERS /* milli second timers for session recording */
+#define SESSION_TIMERS /* millisecond timers for session recording */
 #define SESSION_POINTERS /* Offsets for session list from TapeSLab */
 #define SMOOTH_MEMORY /* Check for alterations from baseline to current mix */
 /*

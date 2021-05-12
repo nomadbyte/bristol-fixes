@@ -216,7 +216,7 @@ obxController(Baudio *baudio, u_char operator, u_char controller, float value)
 
 		/*
 		 * If this is a data entry value then send it to the emulation so that
-		 * it can be intepreted into one of the emulated controls. We will add
+		 * it can be interpreted into one of the emulated controls. We will add
 		 * in some method such that continuous controllers can be promoted to
 		 * NRP allowing CC to drive the emulation as well.
 		 */
@@ -299,9 +299,9 @@ midiProgram(audioMain *audiomain, bristolMidiMsg *msg)
 {
 	/*
 	 * Ah, the engine receives this message, probably from rawmidi. What to do
-	 * next is not selfevident: the engine has no memories - these are
+	 * next is not self-evident: the engine has no memories - these are
 	 * all handled by the GUI. These (and other) messages should be passed
-	 * through to the GUI, or the GUI should register for a midi pipe as well
+	 * through to the GUI, or the GUI should register for a MIDI pipe as well
 	 * and do the other necessary things. I think I actually prefer the latter,
 	 * since having a passthrough here would only be one special case.
 	 *
@@ -516,11 +516,11 @@ static int midiSystem(audioMain *audiomain, bristolMidiMsg *msg)
 			return(0);
 
 		/*
-		 * Bristol Sysex messages do contain midi channel information, but 
+		 * Bristol Sysex messages do contain MIDI channel information, but 
 		 * since we are doing system operation we need to make sure we take the
 		 * single bristolAudio associated with this config interface, ie, we
 		 * need to consider where the message came from, and look for its ID.
-		 * The rest of the midi messages search for midichannel, and may get
+		 * The rest of the MIDI messages search for midichannel, and may get
 		 * several hits when we are working with multitimbral configurations.
 		 */
 		baudio = findBristolAudio(audiomain->audiolist,
@@ -618,7 +618,7 @@ buildCurrentTable(Baudio *baudio, float gtune)
  * A  220.000 57 44=110 32=55 20=27.5 8=13.75
  * A# 233.082 58
  * B  246.942 59
- * C  261.626 60 = Midi Key, Middle C 
+ * C  261.626 60 = MIDI Key, Middle C 
  * C# 277.183 61
  * D  293.665 62
  * D# 311.127 63
@@ -631,17 +631,14 @@ buildCurrentTable(Baudio *baudio, float gtune)
  * We can work on putting full calculation into here for other frequency 
  * tables. For correct operation, each semitone is
  *	previous frequency * (2^^(1/12))
- * Since A is constand whole numbers we can calcuate each octave from A.
+ * Since A is constant whole numbers we can calculate each octave from A.
  */
-float samplerate;
-
 int
-initFrequencyTable(float rate)
+initFrequencyTable(int samplerate)
 {
+	float rate = samplerate;
 	int i;
 	float gain_diff, accum = 1.0;
-
-	samplerate = rate;
 
 	/*
 	 * For any given frequency, we need given number of cycles per second, and
@@ -694,7 +691,7 @@ initFrequencyTable(float rate)
 
 	/*
 	 * We now have to build in a gain table, which will be logarithmic,
-	 * and a multipication list for attack/decay rates.
+	 * and a multiplication list for attack/decay rates.
 	 */
 	gain_diff = pow((double) 13, ((double) 1)/DEF_TAB_SIZE);
 
@@ -730,12 +727,10 @@ initFrequencyTable(float rate)
  * our internal table steps.
  */
 void
-initMicrotonalTable(float table[])
+initMicrotonalTable(float table[], int samplerate)
 {
+	float rate = samplerate;
 	int i;
-
-	if (samplerate == 0)
-		samplerate = 44100; /* If still zero set a default */
 
 	/*
 	 * For any given frequency, we need given number of cycles per second, and
@@ -746,7 +741,7 @@ initMicrotonalTable(float table[])
 		return;
 
 	for (i = 0; i < 128; i++)
-		table[i] = ((float) 1024.0) / (samplerate / table[i]);
+		table[i] = ((float) 1024.0) / (rate / table[i]);
 }
 
 #warning add in initMidiControllerFreqMap
@@ -787,11 +782,10 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 	printf("initMidiRoutines()\n");
 #endif
 
-	if (samplerate == 0)
+	if (audiomain->samplerate == 0)
 	{
+		audiomain->samplerate = 44100; /* Set default */
 		printf("Fixing samplerate at %i\n", audiomain->samplerate);
-		if ((samplerate = audiomain->samplerate) == 0)
-			samplerate = audiomain->samplerate = 44100; /* Set default */
 	}
 
 	midiRoutines[0].callback = midiNoteOff;
@@ -833,8 +827,8 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 	}
 
 	/*
-	 * It would be better to have this burried in the baudio so it runs on a
-	 * single emulation or midi channel, that is for later study.
+	 * It would be better to have this buried in the baudio so it runs on a
+	 * single emulation or MIDI channel, that is for later study.
 	 */
 	if (audiomain->microTonalMappingFile != NULL)
 	{
@@ -849,7 +843,7 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 			--n;
 
 			/*
-			 * This was just for my purposesi
+			 * This was just for my purposes
 			for (i = 0; i <= n; i++)
 				printf("Note: %f\n", notes[i]);
 			if (notes[n] != 2.0)
@@ -860,7 +854,7 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 			 * We need to do some mapping to the keyboard and these are not
 			 * necessarily obvious. If we have 12 notes then map them to the
 			 * keyboard sequentially basing the notes around A=440 = 69 on the
-			 * midi keyboard. For 20 notes do similar up and down.
+			 * MIDI keyboard. For 20 notes do similar up and down.
 			 *
 			 * For 7 and 8 notes then just use the whites? 5 Notes just the
 			 * blacks? No, leave this until we have implemented MIDI key
@@ -903,8 +897,8 @@ initMidiRoutines(audioMain *audiomain, midiHandler midiRoutines[])
 	 * more options. Either way, these need to be converted into wave table
 	 * steps.
 	 */
-	initMicrotonalTable(&midiRoutines[7].floatmap[0]);
+	initMicrotonalTable(&midiRoutines[7].floatmap[0], audiomain->samplerate);
 
-	initFrequencyTable((float) audiomain->samplerate);
+	initFrequencyTable(audiomain->samplerate);
 }
 

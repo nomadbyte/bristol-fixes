@@ -32,7 +32,7 @@
  * Fixed Legato waveforms and waveform selection (alternate osc1/osc2). DONE
  *
  * Fixed Osc2 trill - Osc-1 trill is a function of joystick plus mod routing,
- * Osc-2 trill is a funtion of this button? DONE
+ * Osc-2 trill is a function of this button? DONE
  *
  * Fixed glides DONE
  *
@@ -74,7 +74,7 @@
  *
  * Fix envelope touch sense, emulation touch sense DONE
  *
- * Doublecheck options DONE
+ * Double-check options DONE
  *
  * Fix sync. This could be postponed but can try and look into whether the 
  * noise comes from the syncing waveform or the synced waveform.
@@ -593,12 +593,12 @@ stratusMidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, synth->resources->name, 0, synth->bank + synth->location,
 				synth->mem.active, 0, 0);
@@ -606,7 +606,7 @@ stratusMidiCallback(brightonWindow *win, int controller, int value, float n)
 //				0, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -622,7 +622,7 @@ stratusLoadMemory(guiSynth *synth, int fd, int chan, int c, int o, int v)
 	/*
 	 * This is now a shim to map the opts and mods, we have to send the events
 	 * twice since these controls are in the basic set and the shadow set since
-	 * the different emulations have the envelope parameters in differents
+	 * the different emulations have the envelope parameters in different
 	 * panels.
 	 */
 	event.type = BRISTOL_FLOAT;

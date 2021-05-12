@@ -271,7 +271,7 @@ to the server from the audio thread.
 
 The BME-700 Glide on/off switch was not active.
 
-Roadrunner Vibrato was too deep, by a long way. Scaled back the tremelo at the
+Roadrunner Vibrato was too deep, by a long way. Scaled back the tremolo at the
 same time. Gentle vibrato was still possible but not under mouse control, it 
 had to be done with keyboard accel/deccel.
 
@@ -1846,7 +1846,7 @@ to force the save settings into the active set.
 The Polysix emulation would clip excessively with the modgroup was routed
 fully to the VCA. The signal gain from the LFO would result in an overdriven
 output. Reduced all the respective output stage signal levels, which are still
-quite strong anyway, and also some of the tremelo depth when mod routed. This
+quite strong anyway, and also some of the tremolo depth when mod routed. This
 will have a minor effect on some patches.
 
 Incorporated Andrew Coughlan's manual page for the Polysix emulator.

@@ -32,7 +32,7 @@
 #define ARP_OSC3_LFO		0x0080
 
 /*
- * These are the output indeces.
+ * These are the output indexes.
  */
 #define ARP_O_PREAMP	0
 #define ARP_O_RINGMOD	1

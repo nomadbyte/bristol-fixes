@@ -436,19 +436,19 @@ midiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->bank = value - (value % 8);
 			synth->location = value % 8;
 			loadMemory(synth, "pro1", 0, synth->bank * 10 + synth->location,
 				synth->mem.active, 0, 0);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -836,23 +836,23 @@ pro1Midi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 static void
 pro1ShowParam(guiSynth *synth, int index, float value)
 {
-	char showthis[64];
+	char showthis[32];
 
 	if (index >= pro1App.resources[0].ndevices)
 		return;
 
 	if (pro1App.resources[0].devlocn[index].name[0] == '\0') {
 		if (pro1App.resources[0].devlocn[index].to == 1.0)
-			sprintf(showthis, "%i: %1.3f", index, value);
+			snprintf(showthis, 32, "%i: %1.3f", index, value);
 		else
-			sprintf(showthis, "%i: %1.1f", index, value);
+			snprintf(showthis, 32, "%i: %1.1f", index, value);
 	} else {
 		if (pro1App.resources[0].devlocn[index].to == 1.0)
-			sprintf(showthis, "%s: %1.3f",
+			snprintf(showthis, 32, "%s: %1.3f",
 				pro1App.resources[0].devlocn[index].name,
 				value);
 		else
-			sprintf(showthis, "%s: %1.1f",
+			snprintf(showthis, 32, "%s: %1.1f",
 				pro1App.resources[0].devlocn[index].name,
 				value);
 	}

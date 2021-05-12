@@ -163,7 +163,7 @@ displayPanel(guiSynth *synth, char *text, int value, int panel, int index)
 
 	memset(&event, 0, sizeof(brightonEvent));
 
-	sprintf(display, "%s", text);
+	snprintf(display, 32, "%s", text);
 	event.type = BRIGHTON_MEM;
 	event.m = (void *) &display[0];
 	brightonParamChange(synth->win, panel, index, &event);
@@ -177,7 +177,7 @@ displayPanelText(guiSynth *synth, char *text, int value, int panel, int index)
 
 	memset(&event, 0, sizeof(brightonEvent));
 
-	sprintf(display, "%s: %i", text, value);
+	snprintf(display, 32, "%s: %i", text, value);
 	event.type = BRIGHTON_MEM;
 	event.m = (void *) &display[0];
 	brightonParamChange(synth->win, panel, index, &event);
@@ -193,7 +193,7 @@ displayText(guiSynth *synth, char *text, int value, int index)
 
 	memset(&event, 0, sizeof(brightonEvent));
 
-	sprintf(display, "%s: %i", text, value);
+	snprintf(display, 32, "%s: %i", text, value);
 	event.type = BRIGHTON_MEM;
 	event.m = (void *) &display[0];
 	brightonParamChange(synth->win, synth->panel, index, &event);
@@ -400,7 +400,7 @@ bsmCopy(char *src, char *dst)
 
 /*
  * The next two will copy files into and out of the bristol cache. Read is only
- * really used on system startup if a session file has been given by Jack SM but
+ * really used on system startup if a session file has been given by JACK SM but
  * it could be more general. Write will copy cache files out to wherever they 
  * have been requested.
  */

@@ -25,7 +25,7 @@
  * Due to the complex routing here, there will be some odd effects of voice
  * cross modulation, especially using a lot of SHMix information - the mix
  * may come from a previously sounded voice for this synth, there is not other
- * way to have a device modulate itself currently. It could be extende to use
+ * way to have a device modulate itself currently. It could be extended to use
  * per voice buffers, but this is FFS. Mono operation should be correct.
  */
 
@@ -434,7 +434,7 @@ bristolVoice *voice, register float *startbuf)
 	bristolbzero(filtbuf, audiomain->segmentsize);
 	/*
 	 * There are a lot of mods in this synth, each operator will produce its
-	 * output buffer, and then they will modulate eachother.
+	 * output buffer, and then they will modulate each other.
 	 *
 	 * Noise is done, run the LFO and ADSR.
 	 */

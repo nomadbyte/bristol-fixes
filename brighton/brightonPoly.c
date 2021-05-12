@@ -239,7 +239,7 @@ static brightonLocations locations[DEVICE_COUNT] = {
 	{"", 2, C5, R3d, B1, B2, 0, 1, 0, "bitmaps/buttons/pressoffw.xpm",
 		"bitmaps/buttons/pressonw.xpm", BRIGHTON_CHECKBUTTON},
 
-	/* Midi */
+	/* MIDI */
 	{"", 2, C15, R3, B1, S1, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
 		"bitmaps/buttons/presson.xpm", BRIGHTON_CHECKBUTTON},
 	{"", 2, C15 + BOFF * 2, R3, B1, S1, 0, 1, 0, "bitmaps/buttons/pressoff.xpm",
@@ -387,19 +387,19 @@ pmidiCallback(brightonWindow *win, int controller, int value, float n)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", controller, value);
+	printf("MIDI callback: %x, %i\n", controller, value);
 
 	switch(controller)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", controller, value);
+			printf("MIDI program: %x, %i\n", controller, value);
 			synth->location = value;
 			loadMemory(synth, "mono", 0, synth->bank + synth->location,
 				synth->mem.active, FIRST_DEV, 0);
 			fixModes(synth);
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", controller, value);
+			printf("MIDI banksel: %x, %i\n", controller, value);
 			synth->bank = value;
 			break;
 	}
@@ -675,10 +675,10 @@ polyMidi(guiSynth *synth, int fd, int chan, int c, int o, int v)
 #warning if we do not check for ack then socket might hang on exit
 		 * To overcome that we should consider checking a sequence number in
 		 * the message library? That is non trivial since it requires that
-		 * our midi messges have a 'ack' flag included - we cannot check for
+		 * our MIDI messages have a 'ack' flag included - we cannot check for
 		 * ack here (actually, we could, and in the app is probably the right
 		 * place to do it rather than the lib however both would have to be
-		 * changed to suppor this - nc).
+		 * changed to support this - nc).
 		 */
 		bristolMidiSendMsg(global.controlfd, synth->sid,
 			127, 0, BRISTOL_MIDICHANNEL|newchan);

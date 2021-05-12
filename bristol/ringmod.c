@@ -134,14 +134,14 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	 * See if we have a gain configured on the second input. If we do then
 	 * take that as the ringmod input. If not then take that as the input
 	 * selector - ib1 if +ve, otherwise zero. This emulates the DC capabilities
-	 * of the original rinngmod, although it could better be another option.
+	 * of the original ringmod, although it could better be another option.
 	 */
 	if (param->param[1].float_val > 0)
 	{
 		gain = 0.0833 * param->param[0].float_val * param->param[1].float_val
 			* param->param[2].float_val;
 
-		for (; count > 0;count-=8)
+		for (; count > 0; count-=8)
 		{
 			*ob++ = *ib1++ * *ib2++ * gain;
 			*ob++ = *ib1++ * *ib2++ * gain;
@@ -155,7 +155,7 @@ static int operate(register bristolOP *operator, bristolVoice *voice,
 	} else {
 		gain = param->param[0].float_val;
 
-		for (; count > 0;count-=8)
+		for (; count > 0; count-=8)
 		{
 			if (*ib2++ >= 0)
 				*ob++ = *ib1++ * gain;
@@ -184,7 +184,7 @@ ringmodinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;

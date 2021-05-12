@@ -38,7 +38,7 @@
 #include "bristol.h"
 #include "lfo.h"
 
-float note_diff;
+static float note_diff;
 
 /*
  * The name of this operator, IO count, and IO names.
@@ -330,7 +330,7 @@ lfoinit(bristolOP **operator, int index, int samplerate, int samplecount)
 
 	/*
 	 * Then the local parameters specific to this operator. These will be
-	 * the same for each operator, but must be inited in the local code.
+	 * the same for each operator, but must be init'ed in the local code.
 	 */
 	(*operator)->operate = operate;
 	(*operator)->destroy = destroy;
@@ -492,7 +492,7 @@ fillWave(float *mem, int count, int type)
 			 * 2PI radians in a full sine wave. Thus we take
 			 * 		(2PI * i / count) * 2048.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = sin(2 * M_PI * ((double) i) / count) * BRISTOL_LFO;
 			return;
 		case 1:
@@ -500,18 +500,18 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a square wave.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = BRISTOL_LFO * 2.0 / 3.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_LFO * 2.0 / 3.0;
 			return;
 		case 2:
 			/* 
 			 * This is a pulse wave (we do not have PWM yet).
 			 */
-			for (i = 0;i < count / 3; i++)
+			for (i = 0; i < count / 3; i++)
 				mem[i] = BRISTOL_LFO * 2.0 / 3.0;
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = -BRISTOL_LFO * 2.0 / 3.0;
 			return;
 		case 3:
@@ -520,7 +520,7 @@ fillWave(float *mem, int count, int type)
 			 * multiply by the range. We go from rear to front to table to make
 			 * the ramp wave have a positive leading edge.
 			 */
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_LFO * 2.0;
 			return;
 		case 4:
@@ -528,10 +528,10 @@ fillWave(float *mem, int count, int type)
 			 * Triangular wave. From MIN point, ramp up at twice the rate of
 			 * the ramp wave, then ramp down at same rate.
 			 */
-			for (i = 0;i < count / 2; i++)
+			for (i = 0; i < count / 2; i++)
 				mem[i] = -BRISTOL_LFO
 					+ ((float) i * 2 / (count / 2)) * BRISTOL_LFO; 
-			for (;i < count; i++)
+			for (; i < count; i++)
 				mem[i] = BRISTOL_LFO -
 					(((float) (i - count / 2) * 2) / (count / 2)) * BRISTOL_LFO;
 			return;
@@ -560,11 +560,11 @@ fillWave(float *mem, int count, int type)
 			return;
 		case 6:
 			/*
-			 * Tangiential wave. We limit some of the values, since they do get
+			 * Tangential wave. We limit some of the values, since they do get
 			 * excessive. This is only half a tan as well, to maintain the
 			 * base frequency.
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 			{
 				if ((mem[i] =
 					tan(M_PI * ((double) i) / count) * BRISTOL_LFO / 16)
@@ -578,10 +578,10 @@ fillWave(float *mem, int count, int type)
 			/* 
 			 * This is a downramp wave. We scale the index from .5 to -.5, and
 			 * multiply by the range. We go from rear to front to table to make
-			for (i = count - 1;i >= 0; i--)
+			for (i = count - 1; i >= 0; i--)
 				mem[i] = (((float) i / count) - 0.5) * BRISTOL_LFO * 2.0;
 			 */
-			for (i = 0;i < count; i++)
+			for (i = 0; i < count; i++)
 				mem[i] = (0.5 - ((float) i / count)) * BRISTOL_LFO * 2.0;
 			return;
 	}

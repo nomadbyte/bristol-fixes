@@ -166,7 +166,7 @@ u_char controller, float value)
 			break;
 		case 6:
 			/*
-			 * This is a correct midi paninng calculation roughly as taken from
+			 * This is a correct MIDI panning calculation roughly as taken from
 			 * MMA corrective notes for stereo panning. It does not work
 			 * too well for an L/R mix though as it applies a constant power 
 			 * algorithm and gets very unbalanced at full throws.

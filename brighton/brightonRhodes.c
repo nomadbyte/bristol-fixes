@@ -347,7 +347,7 @@ rhodesProgramme(guiSynth *synth, int fd, int chan, int cont, int op, int value)
 		/*
 		 * Each of the 8 voices has an associated set of DX parameters. We
 		 * need to get hold of these, and send them directly over our config
-		 * interface tap - we cannot forward via the normal GUi interface since
+		 * interface tap - we cannot forward via the normal GUI interface since
 		 * we do not have these parameters mapped.
 		 *
 		 * The memories are mapped as 6 operators, each with 20 parameters,
@@ -439,12 +439,12 @@ rhodesMidiCallback(brightonWindow *win, int command, int value, float v)
 {
 	guiSynth *synth = findSynth(global.synths, win);
 
-	printf("midi callback: %x, %i\n", command, value);
+	printf("MIDI callback: %x, %i\n", command, value);
 
 	switch(command)
 	{
 		case MIDI_PROGRAM:
-			printf("midi program: %x, %i\n", command, value);
+			printf("MIDI program: %x, %i\n", command, value);
 			synth->location = value;
 
 			rhodesProgramme(synth, global.controlfd, synth->sid,
@@ -453,7 +453,7 @@ rhodesMidiCallback(brightonWindow *win, int command, int value, float v)
 
 			break;
 		case MIDI_BANK_SELECT:
-			printf("midi banksel: %x, %i\n", command, value);
+			printf("MIDI banksel: %x, %i\n", command, value);
 			synth->bank = value;
 			break;
 	}

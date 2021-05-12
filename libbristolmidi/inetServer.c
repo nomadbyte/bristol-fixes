@@ -1,6 +1,6 @@
 
 /*
- *  Diverse Bristol midi routines.
+ *  Diverse Bristol MIDI routines.
  *  Copyright (c) by Nick Copeland <nickycopeland@hotmail.com> 1996,2012
  *
  *
@@ -80,7 +80,7 @@ int (*callback)(), void *param, int dev, int handle)
 			printf("Opened listening control socket: %i\n", chan);
 	} else {
 		/*
-		 * Open a unix domain control socket.
+		 * Open a Unix domain control socket.
 		 */
 		unlink(devname);
 
@@ -124,7 +124,7 @@ int (*callback)(), void *param, int dev, int handle)
 
 	/*
 	 * Configure this device as used, with decoding using the ALSA interface.
-	 * We use ALSA basically since it workd.
+	 * We use ALSA basically since it works.
 	 */
 	bmidi.dev[dev].flags = BRISTOL_ACCEPT_SOCKET|BRISTOL_CONN_TCP;
 
@@ -190,8 +190,8 @@ acceptConnection(int acceptdev)
 		return(-1);
 	}
 
-	bmidi.handle[handle].handle = handle; /* That looks kind of wierd! */
-	bmidi.handle[handle].handle = handle; /* That looks kind of wierd! */
+	bmidi.handle[handle].handle = handle; /* That looks kind of weird! */
+	bmidi.handle[handle].handle = handle; /* That looks kind of weird! */
 	bmidi.handle[handle].state = BRISTOL_MIDI_OK;
 	bmidi.handle[handle].channel = bmidi.handle[chandle].channel;
 	bmidi.handle[handle].dev = dev;
