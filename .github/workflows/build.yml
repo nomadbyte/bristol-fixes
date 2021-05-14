@@ -1,0 +1,53 @@
+name: build
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build_for_ubuntu:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update && \
+        sudo apt-get install \
+          libasound2-dev \
+          libjack-jackd2-dev \
+          libx11-dev
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Configure
+      shell: bash
+      run: |
+        "$GITHUB_WORKSPACE"/configure
+    - name: Make
+      shell: bash
+      run: |
+        make -j "$(nproc)"
+  build_for_arch:
+    runs-on: ubuntu-20.04
+    container:
+      image: archlinux
+    steps:
+    - name: Set up dependencies
+      shell: bash
+      run: |
+        pacman -Sqyu --noconfirm
+        pacman -Sq --needed --noconfirm base-devel git jack2 alsa-lib libx11
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Configure
+      shell: bash
+      run: |
+        "$GITHUB_WORKSPACE"/configure
+    - name: Make
+      shell: bash
+      run: |
+        make -j "$(nproc)"
