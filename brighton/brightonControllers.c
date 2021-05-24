@@ -112,7 +112,10 @@ static void
 brightonMapKeyboard(brightonWindow *bwin, brightonApp *app,
 int channel, char *param)
 {
-	int from, to, chan;
+	// int from, to, chan;
+	unsigned char from;
+	int to, chan;
+ 
 
 	from = param[0];
 
