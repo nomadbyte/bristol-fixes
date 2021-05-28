@@ -1220,7 +1220,7 @@ bristolVoice *voice, register float *startbuf)
 							||
 							/* VCO and effects and not SINGLE and osc-1/3 */
 							(((baudio->mixflags & P_MOD_SING) == 0)
-								&& ((o_act == 1) && (o_act == 3)))
+								&& ((o_act == 1) || (o_act == 3)))
 						)
 					)
 				)
