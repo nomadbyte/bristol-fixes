@@ -1448,7 +1448,7 @@ bSidIOClockrate(int id, float param)
 	if (_B_SID_DEBUG_A)
 		printf("s %i: Clock %f\n", id, param);
 
-	if ((param > 0.5) || (param < 3))
+	if ((param > 0.5) && (param < 3))
 	{
 		SID[id]->nominalclock = param * 1000000;
 		/* And reload the frequency registers from current value to retune */
