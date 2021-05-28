@@ -872,7 +872,7 @@ bSidControl(int id, unsigned char comm, unsigned char param)
 		sid_register(id, B_SID_FILT_RES_F, SID[id]->reg[B_SID_FILT_RES_F]);
 		sid_register(id, B_SID_FILT_M_VOL, SID[id]->reg[B_SID_FILT_M_VOL]);
 
-		SID[id]->filter.amf = SID[id]->filter.az1 = SID[id]->filter.az2
+		SID[id]->filter.az1 = SID[id]->filter.az2
 			= SID[id]->filter.az3 = SID[id]->filter.az4 = SID[id]->filter.az5
 			= SID[id]->filter.ay1 = SID[id]->filter.ay2 = SID[id]->filter.ay3
 			= SID[id]->filter.ay4 = SID[id]->filter.amf = SID[id]->filter.fmix
