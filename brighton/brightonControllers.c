@@ -112,7 +112,9 @@ static void
 brightonMapKeyboard(brightonWindow *bwin, brightonApp *app,
 int channel, char *param)
 {
-	int from, to, chan;
+	// int from, to, chan;
+	unsigned char from;
+	int to, chan, key;
 
 	from = param[0];
 
@@ -135,6 +137,17 @@ int channel, char *param)
 	bwin->kbdmap[from][KM_CHAN] = chan;
 
 /*	printf("Keymap %c to %i on channel %i\n", from, to, chan); */
+	if ((param = index(++param, ' ')) == NULL)
+	{
+		/* printf("Keymap %c to %i on channel %i\n", from, to, chan); */
+		return;
+	}
+
+	key = atoi(++param);
+
+	addInAndOutKeysToKeymapFilter(key, from, bwin->filter);
+	/* printf("Keymap %i (%i) to %i on channel %i with key %i\n",
+	getOutkeyForInkeyFromKeymapFilter(key, bwin->filter), from, to, chan, key); */
 }
 
 static void
@@ -952,6 +965,60 @@ brightonControlKeyInput(brightonWindow *cid, int asckey, int on)
  * one. For best results we would need to disable key repeat on entering the
  * window. FFS.
  */
+
+brightonKeymapFilter*
+brightonCreateKeymapFilter()
+{
+	brightonKeymapFilter* filter = malloc(sizeof(brightonKeymapFilter));
+	filter->keyin = NULL;
+	filter->keyout = NULL;
+	filter->size = 0;
+	return filter;
+}
+
+int
+addInAndOutKeysToKeymapFilter(BRIGHTON_MAP_BASE_TYPE in, BRIGHTON_MAP_BASE_TYPE out, brightonKeymapFilter* filter)
+{
+	if (!filter) return BRIGHTON_INVALID_KEYMAP_FILTER;
+	if (in < 0) return BRIGHTON_INVALID_INPUT_KEY;
+	if (out < 0) return BRIGHTON_INVALID_OUTPUT_KEY;
+
+	filter->size++;
+	filter->keyin = realloc(filter->keyin, (filter->size) * sizeof(in));
+	filter->keyout = realloc(filter->keyout, (filter->size) * sizeof(out));
+	filter->keyin[filter->size - 1] = in;
+	filter->keyout[filter->size - 1] = out;
+	return filter->size;
+}
+
+BRIGHTON_MAP_BASE_TYPE
+getOutkeyForInkeyFromKeymapFilter(BRIGHTON_MAP_BASE_TYPE in, brightonKeymapFilter* filter)
+{
+	if (!filter || filter->size == 0) return in;
+
+	int i;
+	for (i = 0; i < filter->size; i++)
+	{
+		if (filter->keyin[i] == in) return filter->keyout[i];
+	}
+	return in;
+}
+
+void*
+deleteKeymapFilter(brightonKeymapFilter* filter)
+{
+	free(filter->keyin);
+	free(filter->keyout);
+	free(filter);
+	return NULL;
+}
+
+void* 
+brightonFreeKeymapFilter(brightonWindow * bwin)
+{
+	return deleteKeymapFilter(bwin->filter);
+}
+
 void
 brightonKeyInput(brightonWindow *cid, int asckey, int on)
 {
@@ -961,6 +1028,7 @@ brightonKeyInput(brightonWindow *cid, int asckey, int on)
 	event.type = BRIGHTON_FLOAT;
 	event.value = 1.0;
 
+	asckey = getOutkeyForInkeyFromKeymapFilter(asckey, cid->filter);
 	if ((asckey < 0) || (asckey > 255))
 		return;
 

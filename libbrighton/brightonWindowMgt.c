@@ -98,6 +98,8 @@ int cmapsize, int flags, int quality, int gs, int x, int y)
 	bwin->next = winlist;
 	winlist = bwin;
 
+	bwin->filter = brightonCreateKeymapFilter();
+
 	/*
 	 * Force a fake size to ensure the first configure notify is picked up.
 	 */
@@ -145,6 +147,7 @@ brightonDestroyWindow(brightonWindow *bwin)
 			bwin->bitmaps->name);
 
 	bwin->flags = 0;
+	brightonFreeKeymapFilter(bwin);
 	brightonfree(bwin);
 }
 

@@ -192,6 +192,17 @@ typedef struct BrightonNRPcontrol {
 #define BRIGHTON_NRP_COUNT 128
 #define BRIGHTON_GANG_COUNT 8
 
+#define BRIGHTON_MAP_BASE_TYPE int
+#define BRIGHTON_INVALID_KEYMAP_FILTER -1
+#define BRIGHTON_INVALID_INPUT_KEY -2
+#define BRIGHTON_INVALID_OUTPUT_KEY -3
+typedef struct BrightonKeymapFilter
+{
+	BRIGHTON_MAP_BASE_TYPE* keyin;
+	BRIGHTON_MAP_BASE_TYPE* keyout;
+	int size;
+} brightonKeymapFilter;
+
 typedef struct BrightonWindow {
 	unsigned int flags;
 	struct BrightonWindow *next, *last;
@@ -247,6 +258,7 @@ typedef struct BrightonWindow {
 	/* CC value mapping tables */
 	u_char valuemap[128][128];
 	int kbdmap[256][2];
+	brightonKeymapFilter* filter;
 	int dcTimeout;
 } brightonWindow;
 
@@ -368,6 +380,9 @@ extern int brightonDoubleClick();
 extern void brightonfree(void *);
 
 extern void brightonRegisterController(brightonDevice *);
+
+extern void* brightonFreeKeymapFilter(brightonWindow *);
+extern brightonKeymapFilter* brightonCreateKeymapFilter();
 
 #endif /* BRIGHTONINTERNALS_H */
 

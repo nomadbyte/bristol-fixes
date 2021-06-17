@@ -135,7 +135,7 @@ sudo make install
 This step need to be run as root as, unless you have been very selective with
 the ./configure options then parts of bristol will be written to parts of the
 /usr filesystem which is typically read-only for user accounts. By default this
-should install bristol and associated apps to /usr/local/ with data commponets
+should install bristol and associated apps to /usr/local/ with data components
 into /usr/local/share. To run the application you should now be able to use the
 startBristol script however that does depend on /usr/local/bin being in your
 path.
@@ -201,11 +201,11 @@ Many more options, along with the full list of synths can be found by doing
 	4. ALSA Interface Configuration
 
 To see the MIDI connections that can be built you need to look at aconnect
-commmand:
+command:
 
 aconnect -io
 
-Here is a sammple of its output:
+Here is a sample of its output:
 
 client 0: 'System' [type=kernel]
 0 'Timer '
@@ -263,7 +263,7 @@ audio and midi.
 
 	5.1 Using qjackctl
 
-Using qjackctl you can easily connect midi controlloers by clicking on either
+Using qjackctl you can easily connect midi controllers by clicking on either
 the 'Midi' tab or 'Alsa' tab, depending on which midi driver you've selected to
 use with bristol and then clicking the controller you want on the left pane and
 the 'Bristol' input on the right and clicking 'connect'.
@@ -279,7 +279,7 @@ work in a specific environment gives it flexibility but also makes it sometimes
 difficult to use. To quote one person, "It can be an inspiration killer".
 
 There are a few third party apps such as monoBristol that provide graphical
-front ends to the commandline options to make starting bristol easier. Bristol
+front ends to the command line options to make starting bristol easier. Bristol
 itself supports a runcom file where a user can specify common preferred params
 that are then included with every invocation.
 
@@ -302,7 +302,7 @@ or
 	-jack -jackstats -count 256 -rate 48000
 
 Both of these will have the same affect as they are all summed together. If
-bristol is started as 'startBristol -mini' then the actual commmandline will be
+bristol is started as 'startBristol -mini' then the actual command line will be
 
 	startBristol -jack -jackstats -count 256 -rate 48000 -mini
 
@@ -370,14 +370,16 @@ cutoff/resonance, etc.
 
 	8.1 Keyboard Mappings.
 
-Bristol supports GUI shortcuts and playing the synths via a QWERTY keyboard.
-Playing bristol via the QWERTY on the B3 has C2 starting on '\' and going up
+Bristol supports GUI shortcuts and playing the synths with any keyboard. A set of 
+emulator profile files is provided by default for QWERTY keyboards.
+
+For alternative keyboards such as AZERTY ones, it is necessary to customize the
+emulator profile files (see § 8.3 below).
+
+Playing bristol with a QWERTY keyboard on the B3 has C2 starting on '\' and going up
 to F3 on '/' on the bottom manual, while the top manual goes from C4 on Q to
 G5 on ']'. On a single keyboard synth, such as the polysix, C1 starts on '\'
 and goes up F2 on '/' and C3 starts on Q and ends at G4 on ']'.
-
-For alternative mappings such as AZERTY it is necessary to manually edit the
-emulator profile files.
 
 	8.2 Keyboard Accelerators
 
@@ -395,7 +397,38 @@ Arrow keys can control pot/slider movement with Shift being an accelerator.
 The GUI devices also support VI style j/k up/down with Shift and Control 
 options.
 
+	8.3 Customizing profile
 
+Any keyboard can be used, e.g. AZERTY. But only QWERTY emulator profile files are provided by default.
+
+A bash script is provided to generate french AZERTY emulator profile files. Run:
+
+		[PROFILE_FILE_NAME=<emulator name>] [PROFILE_SRC_DIR=<qwerty emulator file directory>] azerty4bristol.sh
+
+The result may not be what you expected. Tune the map with a text editor.		
+
+By default:
+- PROFILE_FILE_NAME: mini,
+- PROFILE_SRC_DIR: /usr/local/share/bristol/memory/profiles/ (i.e. default bristol manual installation, see § 2.5 above).
+
+Any key can be used to map a note, even dead keys (e.g. the key "^" between "p" and "$" on 
+a french azerty keyboard is one of them...) or extended ascii keys.
+
+The format of key mapping entries is:
+		KM: Extended_ASCII	MIDI_note	[MIDI_chan	[key_code]]
+
+To map a dead key, you have to provide:
+- Extended_ASCII: an arbitrary extended ASCII code not used on the keyboard or with another dead key,
+- key_code: the key code returned by the keyboard on hitting the dead key.
+
+If any extended ascii character is used then the profile file must be coded in some ISO 8859 encoding scheme(°)
+to keep such a character on one byte(°°).
+
+If the changes are made with an editor, the profile file must be saved with some ISO 8859 encoding scheme(°).
+
+Note. (°) To avoid any surprise, stay with ISO 8859-1.
+
+Note. (°°) At the moment, bristol doesn't manage characters with C type wchar_t, then is unable to deal with UTF-8.
 
 	9. Basics of Subtractive Synthesis.
 
@@ -431,8 +464,8 @@ Low Pass Filter
 High Pass
 Band Reject
 
-Low Pass filters remove high frequencies (i.e they pass low freqencies).
-High Pass filters remove low freqencies
+Low Pass filters remove high frequencies (i.e they pass low frequencies).
+High Pass filters remove low frequencies
 Band Reject filters remove both low and high filters in a specific range and
 allow a certain 'mid-range' of frequencies through.
 
@@ -443,7 +476,7 @@ Frequency Resonance.
 Frequency Cutoff allows you to control how much of the sound gets filtered.
 Resonance amplifies the narrow band of frequencies that are close to the cutoff point.
 
-	9.3.Low Frequency Oscillators (LFOs)
+	9.3. Low Frequency Oscillators (LFOs)
 
 LFOs are exactly like normal oscillators (they have waveforms, like sine,
 square and triangle), but they sound below what a human can hear.  In this way,
